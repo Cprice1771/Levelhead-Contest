@@ -41,7 +41,7 @@ router.post('/', function(req, res){
   });
   newSubmission.save(function(err, submission){
     if(err){
-      res.status(404).json({ msg: `${err}`})
+      res.status(500).json({ msg: `${err}`})
     } else {
       res.send(submission);
     }
