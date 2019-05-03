@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "42504fc9-708b-4314-ad4a-7781dc3b197e",
+		"name": "LevelHead",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/api/contests/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/contests/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/contests/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"The Dark Knight Ascends\",\n\t\"theme\": \"Batman\",\n\t\"prizes\": \"\",\n\t\"rules\": \"\",\n\t\"startDate\":1554163140,\n\t\"endDate\": 1559433540\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/contests/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/contests/5ccb38a9a60c5628346eb1e3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/contests/5ccb38a9a60c5628346eb1e3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contests",
+						"5ccb38a9a60c5628346eb1e3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/submissions/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/submissions/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"submissions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/submissions/5ccb38a9a60c5628346eb1e3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/submissions/5ccb38a9a60c5628346eb1e3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"submissions",
+						"5ccb38a9a60c5628346eb1e3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/submissions/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contestId\": \"5ccb42aa5c53d616f4cf83a0\",\r\n    \"dateSubmitted\": 1556827793,\r\n    \"rumpusCreatorId\": \"dasdasdsad\",\r\n    \"lookupCode\": \"fff\",\r\n    \"submittedByEmail\": \"buddybud@buddy.com\",\r\n    \"submittedByDiscordId\": \"someDiscordId4\",\r\n    \"overwrite\": \"false\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/submissions/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"submissions",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
