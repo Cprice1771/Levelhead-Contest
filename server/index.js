@@ -17,22 +17,26 @@ app.use('/api/contests', contests)
 let submissions = require('./routes/submissions')
 app.use('/api/submissions', submissions)
 
-// // Set up a whitelist and check against it:
-// var whitelist = ['localhost:3000', 'localhost:3001']
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
+// Set up a whitelist and check against it:
+var whitelist = ['http://localhost:3000', 'http://localhost:3001']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
-// // Then pass them to cors:
-// app.use(cors(corsOptions));
+// Then pass them to cors:
+app.use(cors(corsOptions));
 
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(

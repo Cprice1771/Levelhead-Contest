@@ -2,10 +2,10 @@ import { EventEmitter } from 'events'
 
 var _state = {
     local : {
-        api             : 'localhost:3000',
+        api             : 'http://localhost:3000',
     },
     production : {
-        api             : 'localhost:3000',
+        api             : 'http://localhost:3000',
     },
     
 };
