@@ -6,4 +6,3 @@ axios.defaults.proxy = {
     port: "3000"
 };
 axios.defaults.baseURL = ConfigStore.getUrl();
-debugger;

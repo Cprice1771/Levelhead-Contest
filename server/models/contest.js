@@ -21,7 +21,11 @@ let contestSchema = mongoose.Schema({
     type: Date,
     // required: true
   },
-  endDate: {
+  submissionEndDate: {
+    type: Date,
+    // required: true
+  },
+  votingEndDate: {
     type: Date,
     // required: true
   }

@@ -43,7 +43,8 @@ router.post('/', function(req, res){
     prizes: req.body.prizes,
     rules: req.body.rules,
     startDate: req.body.startDate,
-    endDate: req.body.endDate
+    submissionEndDate: req.body.submissionEndDate,
+    votingEndDate: req.body.votingEndDate
   });
   newContest.save(function(err, contest){
     if(err){

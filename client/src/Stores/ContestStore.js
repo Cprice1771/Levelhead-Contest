@@ -14,10 +14,15 @@ class ContestStoreClass {
     }
 
     getContests() {
-        axios.get(endPoints.GET_ALL_CONTESTS)
+        axios.get(endPoints.GET_CONTEST('5ccb38a9a60c5628346eb1e3'))
         .then( response => {
-            _state.submissions = response;
-        })
+            _state.contests = [response.data];
+            this.emitChange(_state);
+        });
+    }
+
+    contests() {
+        return _state.contests;
     }
 
     getSubmissions() {
