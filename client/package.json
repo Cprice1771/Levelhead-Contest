@@ -1,7 +1,12 @@
 {
+  "/api": {
+    "target": "https://localhost:3001",
+    "changeOrigin": true
+  },
   "name": "contest",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.8.6",
