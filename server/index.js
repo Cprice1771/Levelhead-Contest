@@ -3,7 +3,7 @@ const app = express()
 const port = 3000
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
-var cors = require('cors');
+const cors = require('cors');
 
 require('dotenv').config()
 
@@ -16,6 +16,9 @@ app.use('/api/contests', contests)
 
 let submissions = require('./routes/submissions')
 app.use('/api/submissions', submissions)
+
+let votes = require('./routes/votes')
+app.use('/api/votes', votes)
 
 // Set up a whitelist and check against it:
 var whitelist = ['http://localhost:3000', 'http://localhost:3001']

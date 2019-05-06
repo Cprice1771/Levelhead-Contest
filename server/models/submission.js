@@ -26,8 +26,10 @@ let submissionSchema = mongoose.Schema({
     // required: true
   },
   votes: {
-    type: Number,
-    // required: true
+    type: Array,
+    voteId: {
+      type: String
+    }
   },
   overwrite: {
     type: Boolean,
