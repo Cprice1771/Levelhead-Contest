@@ -17,8 +17,8 @@ let submissionSchema = mongoose.Schema({
     type: String,
     // required: true
   },
-  submittedByEmail: {
-    type: String,
+  levelMetaData : {
+    type: Object,
     // required: true
   },
   submittedByDiscordId: {
@@ -28,10 +28,6 @@ let submissionSchema = mongoose.Schema({
   votes: {
     type: Number,
     // required: true
-  },
-  overwrite: {
-    type: Boolean,
-    required: true
   }
 })
 let Submission = module.exports = mongoose.model('Submission', submissionSchema);

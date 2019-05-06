@@ -7,6 +7,33 @@ $primaryBlue: #66FCF1;
 $secondaryBlue: #45A29E;
 
 
+.error {
+  color: red;
+  position: absolute;
+  bottom: 10px;
+  padding-right: 100px;
+}
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  background-color: $secondaryBackgorund;
+  color: $grey;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+}
+
+.modalClose {
+  top:10px;
+  right:10px;
+  position: absolute;
+  cursor: pointer;
+}
+
 .timeBox {
   background: $secondaryBlue;
   border-radius: 5px;
@@ -16,6 +43,12 @@ $secondaryBlue: #45A29E;
   text-align: center;
   margin: 5px;
   border: 2px $grey;
+}
+
+.pull-right-down {
+  right: 10px;
+  bottom: 10px;
+  position: absolute;
 }
 
 .contest {
@@ -31,6 +64,10 @@ h1 {
 }
 
 h2 {
+  color: $secondaryBlue
+}
+
+h3 {
   color: $secondaryBlue
 }
 

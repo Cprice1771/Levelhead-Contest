@@ -5,8 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './Util/Axios';
 import 'bootstrap/dist/css/bootstrap.css';
-import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-
+import '@fortawesome/fontawesome-free/css/all.css';
+import 'react-notifications/lib/notifications.css';
+import Modal from 'react-modal'
+Modal.setAppElement(document.getElementById('root'))
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
