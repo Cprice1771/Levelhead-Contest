@@ -6,7 +6,6 @@ import Contest from './Contest';
 
 
 
-
 function App() {
   return (
     <div className="App">

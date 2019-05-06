@@ -4,6 +4,20 @@ import ContestStore from './Stores/ContestStore';
 import ConfigStore from './Stores/ConfigStore';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
+import ReactModal from 'react-modal';
+import Submit from './Submit';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
+const customStyles = {
+    content : {
+    //   top                   : '50%',
+    //   left                  : '50%',
+    //   right                 : 'auto',
+    //   bottom                : 'auto',
+    //   marginRight           : '-50%',
+    //   transform             : 'translate(-50%, -50%)'
+    }
+  };
 
 class Contest extends Component {
 
@@ -13,12 +27,16 @@ class Contest extends Component {
             contest: null,
             currDate : moment(),
             timer: null,
+            showModal: false,
         };
 
         this.contestsLoaded = this.contestsLoaded.bind(this);
         this.formatTime = this.formatTime.bind(this);
-        this.updateTimeLeft = this.updateTimeLeft.bind(this);
+        this.updateTimeLeft = this.updateTimeLeft.bind(this); 
         this.intervalHandle = null;
+
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +56,14 @@ class Contest extends Component {
             contest: ContestStore.contests()[0]
         })
     }
+
+    handleOpenModal () {
+        this.setState({ showModal: true });
+      }
+      
+      handleCloseModal () {
+        this.setState({ showModal: false });
+      }
 
     formatTime(num) {
         return ('0' + num).substr(-2);
@@ -91,7 +117,20 @@ class Contest extends Component {
             
             
 
-            <button className='btn btn-primary'>Submit a Level</button>
+            <button className='btn btn-primary' onClick={this.handleOpenModal}>Submit a Level</button>
+
+            <ReactModal
+          isOpen={this.state.showModal}
+         
+          onRequestClose={this.handleCloseModal}
+          
+          contentLabel="Level Submit"
+          className='Modal'
+        >
+                <i className="fas fa-times modalClose"  onClick={this.handleCloseModal}></i>
+                <Submit  onClose={this.handleCloseModal}/>
+            </ReactModal>
+            <NotificationContainer/>
         </div>
     }
 

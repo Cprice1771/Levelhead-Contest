@@ -17,8 +17,8 @@ let submissionSchema = mongoose.Schema({
     type: String,
     // required: true
   },
-  submittedByEmail: {
-    type: String,
+  levelMetaData : {
+    type: Object,
     // required: true
   },
   submittedByDiscordId: {

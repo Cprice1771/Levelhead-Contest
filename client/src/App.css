@@ -1,3 +1,27 @@
+.error {
+  color: red;
+  position: absolute;
+  bottom: 10px;
+  padding-right: 100px; }
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  background-color: #1F2833;
+  color: #C5C6C7;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px; }
+
+.modalClose {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  cursor: pointer; }
+
 .timeBox {
   background: #45A29E;
   border-radius: 5px;
@@ -7,6 +31,11 @@
   text-align: center;
   margin: 5px;
   border: 2px #C5C6C7; }
+
+.pull-right-down {
+  right: 10px;
+  bottom: 10px;
+  position: absolute; }
 
 .contest {
   background: #1F2833;
@@ -19,6 +48,9 @@ h1 {
   color: #66FCF1; }
 
 h2 {
+  color: #45A29E; }
+
+h3 {
   color: #45A29E; }
 
 .App {
