@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import * as _ from 'lodash';
-import SubmissionStore from './Stores/SubmissionStore';
+import SubmissionStore from '../Stores/SubmissionStore';
 import Axios from 'axios';
-import { endPoints } from './Constants/Endpoints';
+import { endPoints } from '../Constants/Endpoints';
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
@@ -60,6 +60,10 @@ class Submit extends Component {
     }
 
     render() {
+
+
+        
+
         return (
         <div style={{width: '600px', height: '500px', padding: '30px'}}>
             <h3>
@@ -101,6 +105,7 @@ class Submit extends Component {
             </div>
 
             <button className='btn btn-primary pull-right-down' disabled={!this.validate()} onClick={this.submitLevel}>Submit</button>
+            
         </div>);
     }
     

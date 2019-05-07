@@ -16,7 +16,8 @@ class SubmissionStoreClass {
     loadSubmissionsForContest(contestId) {
         axios.get(endPoints.GET_SUMISSIONS_FOR_CONTEST(contestId))
         .then( response => {
-            _state.submissions = response;
+            _state.submissions = response.data;
+            this.emitChange(response.data);
         })
     }
 

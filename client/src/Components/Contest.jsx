@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import * as _ from 'lodash';
-import ContestStore from './Stores/ContestStore';
-import ConfigStore from './Stores/ConfigStore';
+import ContestStore from '../Stores/ContestStore';
+import ConfigStore from '../Stores/ConfigStore';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import Submit from './Submit';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NavLink } from 'react-router-dom';
 
 const customStyles = {
     content : {
@@ -99,7 +100,6 @@ class Contest extends Component {
             return <div>Loading...</div>
         }
        
-
         return <div className="contest"> 
             <h1>{this.state.contest.name}</h1>
             <h2>Theme</h2> <ReactMarkdown source={this.state.contest.theme} />
@@ -116,8 +116,12 @@ class Contest extends Component {
             </p>
             
             
-
-            <button className='btn btn-primary' onClick={this.handleOpenModal}>Submit a Level</button>
+        
+            <button className='btn btn-primary' onClick={this.handleOpenModal} style={{marginRight: '10px'}}>Submit a Level</button>
+            <button className='btn btn-primary' >
+                <NavLink exact to='/submissions' 
+                    className="NavButton"
+                    activeClassName="activeRoute">View Entries</NavLink></button>
 
             <ReactModal
           isOpen={this.state.showModal}

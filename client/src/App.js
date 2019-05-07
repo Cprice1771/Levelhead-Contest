@@ -1,15 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
 
-import Contest from './Contest';
+import Main from './Components/Main';
 
 
 
 function App() {
   return (
     <div className="App">
-      <Contest />
+      <Main />
     </div>
   );
 }

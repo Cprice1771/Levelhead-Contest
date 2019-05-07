@@ -7,7 +7,10 @@ export const endPoints = {
     CREATE_CONTEST: '/api/contests',
 
     //Submissions
-    GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/sumissions/${contestId}`,
+    GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,
     GET_SUBMISSION: (submisionId) => `/api/submissions/${submisionId}`,
-    CREATE_SUBMISSION: '/api/submissions'
+    CREATE_SUBMISSION: '/api/submissions',
+
+    //User Actions
+    VOTE: '/api/votes',
 }

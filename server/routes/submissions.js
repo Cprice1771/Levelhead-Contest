@@ -63,15 +63,14 @@ router.get('/:contestId', function(req, res){
 // @@ POST /api/submissions
 // @@ Creates a new level submission
 router.post('/', async function(req, res){
-
-
   const newSubmission = new Submission({
     contestId: req.body.contestId,
     dateSubmitted: new Date(),
     lookupCode: req.body.lookupCode,
     submittedByDiscordId: req.body.submittedByDiscordId,
     overwrite: req.body.overwrite,
-    rumpusCreatorId: '123456'
+    rumpusCreatorId: '123456',
+    rumpusUserName: null
   });
 
   try {
@@ -98,7 +97,10 @@ router.post('/', async function(req, res){
         return;
       }
 
-      newSubmission.rumpusCreatorId = levelResult.collaborators[0];
+      let userReuslt = (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${levelResult.userId}`)).data.data[0]; //don't ask....
+
+      newSubmission.rumpusUserName = userReuslt.alias;
+      newSubmission.rumpusCreatorId = levelResult.userId;
       newSubmission.levelMetaData = levelResult;
 
       //Validate if user has already submitted a level

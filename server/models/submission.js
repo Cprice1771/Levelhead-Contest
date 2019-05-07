@@ -13,6 +13,10 @@ let submissionSchema = mongoose.Schema({
     type: String,
     // required: true
   },
+  rumpusUserName: {
+    type: String,
+    // required: true
+  },
   lookupCode: {
     type: String,
     // required: true

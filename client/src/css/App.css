@@ -1,3 +1,28 @@
+html, body, #root {
+  height: 100%; }
+
+.levelLink {
+  color: #66FCF1; }
+  .levelLink:hover {
+    color: #45A29E;
+    text-decoration: none; }
+
+.NavButton {
+  color: white; }
+
+.submission {
+  border: 5px;
+  border-color: #45A29E;
+  background: #1F2833;
+  border-radius: 3px;
+  margin: 5px;
+  height: 75px;
+  border-style: solid; }
+
+.submissionsList {
+  max-width: 1000px;
+  margin: 0 auto; }
+
 .error {
   color: red;
   position: absolute;
