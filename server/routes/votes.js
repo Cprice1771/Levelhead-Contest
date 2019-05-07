@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Vote = require("../models/vote")
 const Submission = require("../models/submission")
+const Contest = require("../models/contest")
 
 
 router.use(function(req, res, next) {
@@ -37,20 +38,28 @@ router.get('/:contestId', async (req, res) => {
 //@@ Votes for a new submission
 router.post('/', async (req, res) => {
   try {
+    var dateNow = new Date(Date.now());
+
     let alreadyVoted = await Vote.find({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}]})
-    if(alreadyVoted.length > 0){
-      res.status(200).json({ success: false, msg: 'You have already voted in this contest.'})
+    let contestInfo = await Contest.find({ _id: req.body.contestId})
+
+    // if the vote is being cast in the valid contest window, execute vote
+    if((dateNow > contestInfo[0].startDate) && (dateNow < contestInfo[0].votingEndDate)){
+      if((alreadyVoted.length >= contestInfo[0].maxVotePerUser)){
+        res.status(200).json({ success: false, msg: `You have exceeded the maximum allowed votes in this contest.`})
+      } else {
+        let newVote = new Vote({
+          submissionId: req.body.submissionId,
+          contestId: req.body.contestId,
+          discordId: req.body.discordId,
+          dateVoted: dateNow
+        })
+        let vote = await newVote.save();
+        let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$push: {votes: vote._id}})
+        res.status(200).json({ success: true, msg: `Vote submitted successfully. You have ${ contestInfo[0].maxVotePerUser - alreadyVoted.length - 1} votes remaining in this contest.`})
+      }
     } else {
-      let newVote = new Vote({
-        submissionId: req.body.submissionId,
-        contestId: req.body.contestId,
-        discordId: req.body.discordId,
-        dateVoted: new Date()
-      })
-  
-      let vote = await newVote.save();
-      let update  = await Submission.findOneAndUpdate( {_id: req.body.submissionId}, {$push: {votes: vote._id}})
-      res.status(200).json({ success: true, msg: 'Vote submitted successfully'})
+      throw {msg: `Voting for this contest ended on ${contestInfo[0].votingEndDate}`}
     }
   } catch (err){
     res.status(500).json({ success: false, msg: `${err}` });

@@ -28,6 +28,9 @@ let contestSchema = mongoose.Schema({
   votingEndDate: {
     type: Date,
     // required: true
+  },
+  maxVotePerUser: {
+    type: Number,
   }
 })
 let Contest = module.exports = mongoose.model('Contest', contestSchema);
