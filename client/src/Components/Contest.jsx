@@ -123,11 +123,16 @@ class Contest extends Component {
         let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
         let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
 
-        return <div className="contest"> 
-            <h1>{this.state.contest.name}</h1>
-            <h2>Theme</h2> <ReactMarkdown source={this.state.contest.theme} />
-            <h2>Rules</h2> 
-            <div style={{ width: '75%', display: 'block', marginLeft: 'auto', marginRight: 'auto', textAlign:'left'}}><ReactMarkdown source={this.state.contest.rules} />
+        return <div className="card"> 
+            <div class="card-header">
+                <div class="card-text">
+                    <h2>{this.state.contest.name}</h2>
+                    <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>
+                    <h5><ReactMarkdown source={this.state.contest.theme} /></h5>
+                </div>
+            </div>
+
+            <div class="card-rules"><ReactMarkdown source={this.state.contest.rules} />
             </div>
             { (waitingToStart || submissionOpen || votingOpen) &&
             <p>
@@ -142,13 +147,13 @@ class Contest extends Component {
             </p>
             }
             
-        
-    { submissionOpen && <button className='btn btn-primary' onClick={this.handleOpenModal} style={{marginRight: '10px'}}>Submit a Level</button> }
-            <button className='btn btn-primary' >
-                <NavLink exact to='/submissions' 
-                    className="NavButton"
-                    activeClassName="activeRoute">View Entries</NavLink></button>
-
+            <div class="card-body">
+                { submissionOpen && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
+                <button className='b2' >
+                    <NavLink exact to='/submissions' 
+                        className="NavButton"
+                        activeClassName="activeRoute">View Entries</NavLink></button>
+                </div>
             <ReactModal
           isOpen={this.state.showModal}
          

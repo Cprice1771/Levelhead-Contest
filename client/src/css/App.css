@@ -1,6 +1,3 @@
-html, body, #root {
-  height: 100%; }
-
 .selected-arrow {
   color: orange;
   text-shadow: 0 0 3px #FF0000; }
@@ -65,51 +62,3 @@ html, body, #root {
   right: 10px;
   bottom: 10px;
   position: absolute; }
-
-.contest {
-  background: #1F2833;
-  width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 50px; }
-
-h1 {
-  color: #66FCF1; }
-
-h2 {
-  color: #45A29E; }
-
-h3 {
-  color: #45A29E; }
-
-.App {
-  background: #0B0C10;
-  position: relative;
-  padding: 0 0 0 0;
-  height: 100%;
-  text-align: center;
-  color: #C5C6C7; }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none; }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white; }
-
-.App-link {
-  color: #61dafb; }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg); }
-  to {
-    transform: rotate(360deg); } }

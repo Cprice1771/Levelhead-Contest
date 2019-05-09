@@ -1,0 +1,212 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background: url('./assets/38ec33d9.png');
+  /* background-color: #202368; */
+  font-family: 'Ubuntu';
+}
+
+.container {
+  width: 1000px;
+  background-color: #D4D3E1;
+  background: linear-gradient( #D4D3E1, rgb(180, 178, 196) );
+  margin: 0px auto;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
+
+}
+
+.header {
+  /* width: 1000px; */
+  height: 275px;
+  text-align: center;
+  background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./assets/sandCropped.png');
+  /* background-image: url('./assets/sandCropped.png'); */
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid white;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
+
+}
+
+
+
+
+.header h1 {
+  font-size: 64px;
+  font-weight: bold;
+  color: white;
+  margin: 0px;
+  padding: 0px;
+  letter-spacing: 12px;
+}
+
+.header h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* CARD CSS */
+.card {
+  margin: 40px auto;
+  background-color: white;
+  width: 650px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
+  border-radius: 5px;
+}
+
+.card-header {
+  background: linear-gradient( rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.6) ), url('./assets/treeCropped.png');
+  background-size: cover;
+
+  height: 250px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+.card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.card-body button {
+  font-size: 14px;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 5px;
+  margin: 25px 10px;
+}
+
+.b1 {
+  color: white;
+  background-color: #7D6B91;
+}
+
+.b2 {
+  color: white;
+  background-color: #202368;
+}
+
+.b3 {
+  background-color: #272838;
+  color: white;
+}
+
+.b1:hover {
+  background-color: rgb(197, 171, 228);
+  transition: .2s ease-in;
+}
+.b2:hover {
+  background-color: #3b40bd;
+  transition: .2s ease-in;
+}
+.b3:hover {
+  background-color: #595b7c;
+  transition: .2s ease-in;
+}
+
+.card h1, h2, h3, h4, h5 {
+  padding: 5px;
+  font-weight: normal;
+}
+
+.card h2 {
+  font-size: 36px;
+  color: white;
+  margin: 0px;
+  padding: 0px;
+}
+
+.card h3 {
+  font-size: 18px;
+  color: #D08CEF;
+}
+
+.card h5 {
+  font-size: 18px;
+  color: white;
+}
+
+.card-rules {
+  padding: 25px 35px;
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 1300px) {
+  .container {
+    width: 900px;
+  }
+  .header {
+    width: 900px;
+  }
+
+}
+
+@media only screen and (max-width: 800px){
+  .container {
+    width: 100%;
+  }
+  .header {
+    width: 100%;
+  }
+  .card{ 
+    width: 100%;
+    margin: 0px auto;
+  }
+}
+
+@media only screen and (max-width: 600px){
+  .container {
+    width: 100%;
+  }
+  .header {
+    height: 200px;
+  }
+  .header h1 {
+    font-size: 32px;
+  }
+  .header h3 {
+    font-size: 18px;
+  }
+  .card{ 
+    width: 100%;
+    margin: 0px auto;
+  }
+  .card-header{
+    height: 150px;
+  }
+  .card h2 {
+    font-size: 24px;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+  }
+  .card h3 {
+    font-size: 14px;
+    color: #D08CEF;
+  }
+  .card h5 {
+    font-size: 14px;
+    color: white;
+  }
+  .card-rules {
+    font-size: 14px;
+    padding: 20px;
+  }
+  .card button {
+    padding: 10px 15px;
+  }
+}
