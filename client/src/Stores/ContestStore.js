@@ -4,7 +4,8 @@ import ConfigStore from './ConfigStore';
 import axios from 'axios'
 
 var _state = {
-    contests: []
+    contests: [],
+    selectedContest: null,
 }
 
 class ContestStoreClass {
@@ -17,8 +18,13 @@ class ContestStoreClass {
         axios.get(endPoints.GET_CONTEST('5ccb38a9a60c5628346eb1e3'))
         .then( response => {
             _state.contests = [response.data];
+            _state.selectedContest = response.data;
             this.emitChange(_state);
         });
+    }
+
+    getSelectedContest() {
+        return _state.selectedContest;
     }
 
     contests() {

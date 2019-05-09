@@ -13,4 +13,5 @@ export const endPoints = {
 
     //User Actions
     VOTE: '/api/votes',
+    UNVOTE: '/api/votes/remove'
 }

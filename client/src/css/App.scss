@@ -12,6 +12,11 @@ html, body, #root {
   height: 100%;
 }
 
+.selected-arrow {
+  color: orange;
+  text-shadow: 0 0 3px #FF0000;
+}
+
 .levelLink {
   color: $primaryBlue;
   &:hover {
