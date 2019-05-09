@@ -76,8 +76,26 @@ class Contest extends Component {
             return;
         }
 
+
+
         let currDate = moment();
-        let endDate = moment(this.state.contest.submissionEndDate);
+        let endDate;
+
+
+        let waitingToStart = new Date(this.state.contest.startDate) > new Date();
+        let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
+        let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+
+        if(waitingToStart) {
+            endDate = moment(this.state.contest.startDate);
+        } else if (submissionOpen) {
+            endDate = moment(this.state.contest.submissionEndDate);
+        } else if(votingOpen) {
+            endDate = moment(this.state.contest.votingEndDate);
+        } else {
+            endDate = moment();
+        }
+        
 
         let days = endDate.diff(currDate, 'days');
         currDate = currDate.add(days, 'days');
@@ -100,24 +118,32 @@ class Contest extends Component {
             return <div>Loading...</div>
         }
        
+
+        let waitingToStart = new Date(this.state.contest.startDate) > new Date();
+        let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
+        let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+
         return <div className="contest"> 
             <h1>{this.state.contest.name}</h1>
             <h2>Theme</h2> <ReactMarkdown source={this.state.contest.theme} />
             <h2>Rules</h2> 
             <div style={{ width: '75%', display: 'block', marginLeft: 'auto', marginRight: 'auto', textAlign:'left'}}><ReactMarkdown source={this.state.contest.rules} />
             </div>
-
+            { (waitingToStart || submissionOpen || votingOpen) &&
             <p>
-            <div>Time Left </div>
+                
+            {waitingToStart && <div>Time Left till submission open</div>}
+            {submissionOpen && <div>Time Left till submissions close</div>}
+            {votingOpen && <div>Time Left till voting closes</div>}
             <span className="timeBox">{this.formatTime(this.state.days)} </span> :
             <span className="timeBox">{this.formatTime(this.state.hours)}</span> :
             <span className="timeBox">{this.formatTime(this.state.minutes)}</span> :
             <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
             </p>
-            
+            }
             
         
-            <button className='btn btn-primary' onClick={this.handleOpenModal} style={{marginRight: '10px'}}>Submit a Level</button>
+    { submissionOpen && <button className='btn btn-primary' onClick={this.handleOpenModal} style={{marginRight: '10px'}}>Submit a Level</button> }
             <button className='btn btn-primary' >
                 <NavLink exact to='/submissions' 
                     className="NavButton"

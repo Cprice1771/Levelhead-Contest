@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Submission = require("../models/submission")
-
+const Contest = require('../models/contest');
 const Axios = require('axios');
 
 const httpClient = Axios.create({
@@ -43,7 +43,6 @@ router.get('/', function(req, res){
   })
 })
 
-
 //@@ GET /api/submissions/:contestId
 //@@ Display submissions belonging to a certain contest
 router.get('/:contestId', function(req, res){
@@ -55,10 +54,6 @@ router.get('/:contestId', function(req, res){
     }
   })
 })
-
-
-
-
 
 // @@ POST /api/submissions
 // @@ Creates a new level submission
@@ -74,6 +69,21 @@ router.post('/', async function(req, res){
   });
 
   try {
+
+    let contestInfo = await Contest.find({ _id: req.body.contestId})
+    let dateNow = new Date();
+    
+    if(dateNow < contestInfo[0].startDate) {
+      res.status(422).json({ success: false, msg: `Submission aren't accepted until ${moment(contestInfo[0].startDate).format('MM/DD/YYYY')}`});
+      return;
+    } 
+
+    if(dateNow > contestInfo[0].submissionEndDate) {
+      res.status(422).json({ success: false, msg: `Submissions ended on ${moment(contestInfo[0].submissionEndDate).format('MM/DD/YYYY')}`});
+      return;
+    } 
+
+
       //Validate level hasn't already been submitted
       let existingSubmissions = await Submission.find( {$and:[{ lookupCode: req.body.lookupCode }, { contestId: req.body.contestId }]});
       if(existingSubmissions.length > 0) {
@@ -94,6 +104,13 @@ router.post('/', async function(req, res){
         res.status(200).json({ 
           success: false,
           msg: 'Lookup code not found in rumpus, are you sure you typed it in correctly?'});
+        return;
+      }
+
+      if(new Date(levelResult.createdAt) < new Date(contestInfo[0].startDate)) {
+        res.status(200).json({ 
+          success: false,
+          msg: 'Cannot submit levels created before the contest began.'});
         return;
       }
 

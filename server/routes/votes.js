@@ -44,9 +44,6 @@ router.post('/', async (req, res) => {
     let contestInfo = await Contest.find({ _id: req.body.contestId})
 
     // if the vote is being cast in the valid contest window, execute vote
-    console.log(contestInfo);
-
-
     if(dateNow < contestInfo[0].submissionEndDate) {
       res.status(422).json({ success: false, msg: `Voting for this contest doesn't begin until ${moment(contestInfo[0].submissionEndDate).format('MM/DD/YYYY')}`});
       return;
