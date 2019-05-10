@@ -3,8 +3,6 @@ import { Route, Redirect  } from 'react-router';
 import Contest from './Contest';
 import SubmissionList from './SubmissionList';
 
-
-
 class Main extends Component {
 
     render() {
@@ -15,15 +13,15 @@ class Main extends Component {
                 </div>
                 <div class="header">
                     <div class="header-text">
-                        <h1>levelcup</h1>
-                        <h3>community levelhead design contests</h3>
+                        <h1>LEVELCUP</h1>
+                        <h3>Community levelhead design contests</h3>
 
                     </div>
                 </div>
                 <div class="content-body">
-                    <Route exact path="/" render={() => (<Redirect to="/contest"/>)}/>
-                    <Route path='/contest' render={() => <Contest />} />
-                    <Route path='/submissions' render={() => <SubmissionList />} />
+                    <Route exact path="/" render={() => (<Redirect to="/contest/5ccb38a9a60c5628346eb1e3"/>)}/>
+                    <Route path='/contest/:contestId' component={Contest} />
+                    <Route path='/submissions/:contestId' component={SubmissionList} />
                 </div>
             </div>
         );

@@ -3,21 +3,32 @@
   text-shadow: 0 0 3px #FF0000; }
 
 .levelLink {
-  color: #66FCF1; }
+  color: #45A29E; }
   .levelLink:hover {
-    color: #45A29E;
+    color: #66FCF1;
     text-decoration: none; }
 
 .NavButton {
   color: white; }
+  .NavButton:hover {
+    color: white;
+    text-decoration: none; }
+
+.clock-container {
+  text-align: center; }
+
+.header-row {
+  text-align: center; }
 
 .submission {
-  border: 5px;
-  border-color: #45A29E;
-  background: #1F2833;
+  border: 2px;
+  border-color: #202368;
+  background: #D4D3E1;
   border-radius: 3px;
-  margin: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
   height: 75px;
+  text-align: center;
   border-style: solid; }
 
 .submissionsList {
@@ -30,14 +41,23 @@
   bottom: 10px;
   padding-right: 100px; }
 
+.submit-box {
+  width: 450px;
+  height: 300px;
+  padding: 5px; }
+
+.input-group {
+  padding: 5px; }
+
 .Modal {
   position: absolute;
   top: 50%;
   left: 50%;
   right: auto;
   bottom: auto;
-  background-color: #1F2833;
-  color: #C5C6C7;
+  background-color: white;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  color: black;
   margin-right: -50%;
   transform: translate(-50%, -50%);
   border-radius: 5px; }
@@ -49,14 +69,15 @@
   cursor: pointer; }
 
 .timeBox {
-  background: #45A29E;
+  background: #D4D3E1;
   border-radius: 5px;
   height: auto;
   width: auto;
   padding: 5px;
   text-align: center;
-  margin: 5px;
-  border: 2px #C5C6C7; }
+  margin: 10px;
+  border: 2px #C5C6C7;
+  font-size: 50px; }
 
 .pull-right-down {
   right: 10px;

@@ -103,7 +103,7 @@ router.post('/', async function(req, res){
       if(!levelResult) {
         res.status(200).json({ 
           success: false,
-          msg: 'Lookup code not found in rumpus, are you sure you typed it in correctly?'});
+          msg: 'Lookup code not found in rumpus. Be careful, they are case sensitive!'});
         return;
       }
 

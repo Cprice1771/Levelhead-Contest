@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
     } 
     
     if((alreadyVoted.length >= contestInfo[0].maxVotePerUser)){
-        res.status(422).json({ success: false, msg: `You have exceeded the maximum allowed votes in this contest.`});
+        res.status(422).json({ success: false, msg: `You can only vote ${contestInfo[0].maxVotePerUser} times in this contest.`});
         return;
     } 
 

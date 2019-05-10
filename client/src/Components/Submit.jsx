@@ -31,7 +31,7 @@ class Submit extends Component {
 
     submitLevel() {
         Axios.post(endPoints.CREATE_SUBMISSION, {
-            contestId: '5ccb38a9a60c5628346eb1e3',
+            contestId: this.props.contestId,
             lookupCode: this.state.levelCode,
             submittedByDiscordId: this.state.discordId,
             overwrite: this.state.overwrite,
@@ -65,17 +65,17 @@ class Submit extends Component {
         
 
         return (
-        <div style={{width: '600px', height: '500px', padding: '30px'}}>
+        <div class="submit-box">
             <h3>
                Submit a level to the contest!  
             </h3>
-            <div className='row'>
+            <div className='row input-group'>
             <div className='col-md-4'>
-                Level Code:
+                Level Code
             </div>
             <div className='col-md-8'>
                 
-                <input type='text'
+                <input type='text' class="form-control"
                     value={this.state.levelCode} 
                     onChange={(e) => {
                         this.setState({ levelCode: e.target.value });
@@ -85,13 +85,13 @@ class Submit extends Component {
                
             </div>
 
-             <div className='row'>
+             <div className='row input-group'>
             <div className='col-md-4'>
-                Discord Id:
+                Discord Id
             </div>
             <div className='col-md-8'>
                 
-                <input type='text'
+                <input type='text' class="form-control"
                     value={this.state.discordId} 
                     onChange={(e) => {
                         this.setState({ discordId: e.target.value });

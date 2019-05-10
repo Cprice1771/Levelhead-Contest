@@ -19,19 +19,21 @@ class SubmissionList extends Component {
         this.state = {
             submissions: SubmissionStore.getSubmissions(),
             canVote: this.getCanVote(ContestStore.getSelectedContest()),
-            showVotes: this.contestOver(ContestStore.getSelectedContest())
+            showVotes: this.contestOver(ContestStore.getSelectedContest()),
+            shuffle: true,
         };
 
         this.submissionsChanged = this.submissionsChanged.bind(this);
         this.vote = this.vote.bind(this);
+        this.unvote = this.unvote.bind(this);
         this.contestChange = this.contestChange.bind(this);
     }
 
     componentDidMount() {
+        this.setState({shuffle: true});
         ContestStore.addChangeListener(this.contestChange);
-        ContestStore.getContests();
+        ContestStore.getContest(this.props.match.params.contestId);        
         SubmissionStore.addChangeListener(this.submissionsChanged);
-        SubmissionStore.loadSubmissionsForContest('5ccb38a9a60c5628346eb1e3');
     }
 
     componentWillUnmount() {
@@ -67,13 +69,15 @@ class SubmissionList extends Component {
 
     unvote(levelId) {
         axios.post(endPoints.UNVOTE, {
-            contestId: '5ccb38a9a60c5628346eb1e3',
+            contestId: this.props.match.params.contestId,
             submissionId: levelId,
             discordId: discordId,
         }).then(res => {
             if(res.data.success) {
-               // NotificationManager.success(res.data.msg);
-                SubmissionStore.loadSubmissionsForContest('5ccb38a9a60c5628346eb1e3');
+               let submissionCopy = _.cloneDeep(this.state.submissions);
+               let itemIdx = _.findIndex(submissionCopy, x => x._id === levelId);
+               submissionCopy[itemIdx].votes =  _.remove(submissionCopy[itemIdx].votes, discordId);
+               this.setState({ submissions: submissionCopy});
             } else {
 
                 NotificationManager.error(res.data.msg);
@@ -85,13 +89,15 @@ class SubmissionList extends Component {
 
     vote(levelId) {
         axios.post(endPoints.VOTE, {
-            contestId: '5ccb38a9a60c5628346eb1e3',
+            contestId: this.props.match.params.contestId,
             submissionId: levelId,
             discordId: discordId,
         }).then(res => {
             if(res.data.success) {
-                //NotificationManager.success(res.data.msg);
-                SubmissionStore.loadSubmissionsForContest('5ccb38a9a60c5628346eb1e3');
+                let submissionCopy = _.cloneDeep(this.state.submissions);
+               let itemIdx = _.findIndex(submissionCopy, x => x._id === levelId);
+               submissionCopy[itemIdx].votes.push(discordId);
+               this.setState({ submissions: submissionCopy});
             } else {
 
                 NotificationManager.error(res.data.msg);
@@ -118,24 +124,29 @@ class SubmissionList extends Component {
             discordId={discordId}/>
         })
 
-        return <div>
+        return <div >
             <div className="submissionsList">
-            <div className="row">
-                <div className="col-md-2">Lookup code</div>
-                <div className="col-md-2">Creator</div>
-                <div className="col-md-4">Title</div>
-                <div className="col-md-2">Created At</div>
+            <div className="row header-row">
+                <div className="col-md-2"><h5>Lookup code</h5></div>
+                <div className="col-md-2"><h5>Creator</h5></div>
+                <div className="col-md-4"><h5>Title</h5></div>
+                <div className="col-md-1"><h5>Clear Rate</h5></div>
+                <div className="col-md-1"><h5>Attempts</h5></div>
                 {this.state.showVotes && <div className="col-md-2">Votes</div>}
                 <div className="col-md-2"></div>
             </div>
             {submissions}
             </div>
 
-            <button className='btn btn-primary' >
-                <NavLink exact to='/contest' 
-                    className="NavButton"
-                    activeClassName="activeRoute">Back To Contest</NavLink></button>
+            <div class="card-body">
+                <NavLink exact to={`/contest/${this.props.match.params.contestId}`} 
+                        className="NavButton"
+                        activeClassName="activeRoute">
+                    <button className='b1' >Back To Contest</button> 
+                </NavLink>
+            </div>
                 <NotificationContainer/>
+                
         </div>
 
     }

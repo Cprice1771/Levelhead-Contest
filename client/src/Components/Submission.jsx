@@ -12,7 +12,9 @@ function Submission (props) {
             <div className="col-md-2"><a href={`https://lvlhd.co/+${submision.lookupCode}`} target="_blank" className="levelLink">{submision.lookupCode}</a></div>
             <div className="col-md-2">{submision.rumpusUserName}</div>
             <div className="col-md-4">{submision.levelMetaData.map.Title}</div>
-            <div className="col-md-2">{moment(submision.levelMetaData.createdAt).format("MM/DD/YYYY")}</div>
+            <div className="col-md-1">{submision.levelMetaData.stats.Attempts == 0 ? 0 : _.round(((submision.levelMetaData.stats.Successes / submision.levelMetaData.stats.Attempts) * 100), 2)}%</div>
+            <div className="col-md-1">{submision.levelMetaData.stats.Attempts}</div>
+            
             {props.showVotes &&<div className="col-md-2"> {submision.votes.length}</div>}
             <div className="col-md-2">
             {props.canVote &&

@@ -42,9 +42,9 @@ class Contest extends Component {
 
     componentDidMount() {
         ContestStore.addChangeListener(this.contestsLoaded);
-        ContestStore.getContests();
+        ContestStore.getContest(this.props.match.params.contestId);
 
-        this.intervalHandle = setInterval(this.updateTimeLeft, 500);
+        this.intervalHandle = setInterval(this.updateTimeLeft, 1000);
     }
 
     componentWillUnmount() {
@@ -54,7 +54,7 @@ class Contest extends Component {
 
     contestsLoaded(data) {
         this.setState({
-            contest: ContestStore.contests()[0]
+            contest: ContestStore.getSelectedContest()
         })
     }
 
@@ -135,24 +135,27 @@ class Contest extends Component {
             <div class="card-rules"><ReactMarkdown source={this.state.contest.rules} />
             </div>
             { (waitingToStart || submissionOpen || votingOpen) &&
-            <p>
-                
-            {waitingToStart && <div>Time Left till submission open</div>}
-            {submissionOpen && <div>Time Left till submissions close</div>}
-            {votingOpen && <div>Time Left till voting closes</div>}
-            <span className="timeBox">{this.formatTime(this.state.days)} </span> :
-            <span className="timeBox">{this.formatTime(this.state.hours)}</span> :
-            <span className="timeBox">{this.formatTime(this.state.minutes)}</span> :
-            <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
-            </p>
+
+            <div className="clock-container"> 
+                {waitingToStart && <h4>Time left until submission open</h4>}
+                {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
+                {votingOpen && <h4>Time left until voting closes</h4>}
+
+                <span className="timeBox">{this.formatTime(this.state.days)} </span>
+                <span className="timeBox">{this.formatTime(this.state.hours)}</span> 
+                <span className="timeBox">{this.formatTime(this.state.minutes)}</span> 
+                <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
+            </div>
             }
             
             <div class="card-body">
                 { submissionOpen && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
-                <button className='b2' >
-                    <NavLink exact to='/submissions' 
+
+                <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
                         className="NavButton"
-                        activeClassName="activeRoute">View Entries</NavLink></button>
+                        activeClassName="activeRoute">
+                    <button className='b2' >View Entries</button>
+                </NavLink>
                 </div>
             <ReactModal
           isOpen={this.state.showModal}
@@ -163,7 +166,7 @@ class Contest extends Component {
           className='Modal'
         >
                 <i className="fas fa-times modalClose"  onClick={this.handleCloseModal}></i>
-                <Submit  onClose={this.handleCloseModal}/>
+                <Submit  onClose={this.handleCloseModal} contestId={this.props.match.params.contestId}/>
             </ReactModal>
             <NotificationContainer/>
         </div>

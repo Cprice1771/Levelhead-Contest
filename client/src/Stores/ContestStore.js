@@ -4,7 +4,6 @@ import ConfigStore from './ConfigStore';
 import axios from 'axios'
 
 var _state = {
-    contests: [],
     selectedContest: null,
 }
 
@@ -14,10 +13,9 @@ class ContestStoreClass {
         this.emitter = new EventEmitter();        
     }
 
-    getContests() {
-        axios.get(endPoints.GET_CONTEST('5ccb38a9a60c5628346eb1e3'))
+    getContest(id) {
+        axios.get(endPoints.GET_CONTEST(id))
         .then( response => {
-            _state.contests = [response.data];
             _state.selectedContest = response.data;
             this.emitChange(_state);
         });
@@ -25,10 +23,6 @@ class ContestStoreClass {
 
     getSelectedContest() {
         return _state.selectedContest;
-    }
-
-    contests() {
-        return _state.contests;
     }
 
     getSubmissions() {
