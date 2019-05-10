@@ -1,5 +1,3 @@
-
-
 .selected-arrow {
   color: orange;
   text-shadow: 0 0 3px #FF0000; }
@@ -75,11 +73,11 @@
   border-radius: 5px;
   height: auto;
   width: auto;
-  padding: 5px;
+  padding: 8px;
   text-align: center;
-  margin: 10px;
+  margin: 5px;
   border: 2px #C5C6C7;
-  font-size: 50px; }
+  font-size: 34px; }
 
 .pull-right-down {
   right: 10px;
