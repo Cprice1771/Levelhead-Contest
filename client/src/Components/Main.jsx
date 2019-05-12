@@ -14,7 +14,7 @@ class Main extends Component {
                 <div class="header">
                     <div class="header-text">
                         <h1>LEVELCUP</h1>
-                        <h3>Community levelhead design contests</h3>
+                        <h3>Community Levelhead Contests</h3>
 
                     </div>
                 </div>
