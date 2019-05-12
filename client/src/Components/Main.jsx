@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Redirect  } from 'react-router';
 import Contest from './Contest';
 import SubmissionList from './SubmissionList';
+import DiscordLogin from './DiscordLogin';
 
 class Main extends Component {
 
@@ -9,8 +10,9 @@ class Main extends Component {
         return (
             <div className='container'>
                 <div className="nav">
-      
+
                 </div>
+                <DiscordLogin />
                 <div className="header">
                     <div className="header-text">
                         <h1>LEVELCUP</h1>

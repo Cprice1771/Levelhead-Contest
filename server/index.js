@@ -15,6 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
+let users = require('./routes/users')
+app.use('/api/users', users)
+
 let contests = require('./routes/contests')
 app.use('/api/contests', contests)
 

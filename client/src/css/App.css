@@ -1,3 +1,15 @@
+.discord-login {
+  cursor: pointer;
+  background: #7289DA;
+  text-align: center;
+  width: auto;
+  border-radius: 0 0 2px 2px;
+  position: absolute;
+  top: 0px;
+  right: 100px;
+  font-family: 'Whitney';
+  color: white; }
+
 .selected-arrow {
   color: orange;
   text-shadow: 0 0 3px #FF0000; }
