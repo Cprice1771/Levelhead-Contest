@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import * as _ from 'lodash';
-import SubmissionStore from '../Stores/SubmissionStore';
 import Axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationManager} from 'react-notifications';
 
 class Submit extends Component {
 
@@ -55,7 +53,7 @@ class Submit extends Component {
     
 
     validate() {
-        return !!this.state.levelCode && this.state.levelCode.length == 7
+        return !!this.state.levelCode && this.state.levelCode.length === 7
                 && !!this.state.discordId && this.state.discordId.length > 3;
     }
 
@@ -65,7 +63,7 @@ class Submit extends Component {
         
 
         return (
-        <div class="submit-box">
+        <div className="submit-box">
             <h3>
                Submit a level to the contest!  
             </h3>
@@ -75,7 +73,7 @@ class Submit extends Component {
             </div>
             <div className='col-md-8'>
                 
-                <input type='text' class="form-control"
+                <input type='text' className="form-control"
                     value={this.state.levelCode} 
                     onChange={(e) => {
                         this.setState({ levelCode: e.target.value });
@@ -91,7 +89,7 @@ class Submit extends Component {
             </div>
             <div className='col-md-8'>
                 
-                <input type='text' class="form-control"
+                <input type='text' className="form-control"
                     value={this.state.discordId} 
                     onChange={(e) => {
                         this.setState({ discordId: e.target.value });

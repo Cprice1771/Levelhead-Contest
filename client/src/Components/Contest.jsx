@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
-import * as _ from 'lodash';
 import ContestStore from '../Stores/ContestStore';
-import ConfigStore from '../Stores/ConfigStore';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import Submit from './Submit';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationContainer} from 'react-notifications';
 import { NavLink } from 'react-router-dom';
-
-const customStyles = {
-    content : {
-    //   top                   : '50%',
-    //   left                  : '50%',
-    //   right                 : 'auto',
-    //   bottom                : 'auto',
-    //   marginRight           : '-50%',
-    //   transform             : 'translate(-50%, -50%)'
-    }
-  };
 
 class Contest extends Component {
 
@@ -124,15 +111,15 @@ class Contest extends Component {
         let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
 
         return <div className="card"> 
-            <div class="card-header">
-                <div class="card-text">
+            <div className="card-header">
+                <div className="card-text">
                     <h2>{this.state.contest.name}</h2>
                     <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>
                     <h5><ReactMarkdown source={this.state.contest.theme} /></h5>
                 </div>
             </div>
 
-            <div class="card-rules"><ReactMarkdown source={this.state.contest.rules} />
+            <div className="card-rules"><ReactMarkdown source={this.state.contest.rules} />
             </div>
             { (waitingToStart || submissionOpen || votingOpen) &&
 
@@ -148,7 +135,7 @@ class Contest extends Component {
             </div>
             }
             
-            <div class="card-body">
+            <div className="card-body">
                 { submissionOpen && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
 
                 <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 

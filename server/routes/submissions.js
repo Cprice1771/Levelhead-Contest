@@ -55,6 +55,18 @@ router.get('/:contestId', function(req, res){
   })
 })
 
+//@@ GET /api/submissions/:contestId
+//@@ Display submissions belonging to a certain contest
+router.get('leaders/:contestId', function(req, res){
+  Submission.find({ contestId: req.params.contestId}, function(err, submissions){
+    if(err){
+      res.status(404).json({msg: `Error Retrieving Submission ${req.params.contestId}.`})
+    } else {
+      res.send(submissions);
+    }
+  })
+})
+
 // @@ POST /api/submissions
 // @@ Creates a new level submission
 router.post('/', async function(req, res){
@@ -66,7 +78,8 @@ router.post('/', async function(req, res){
     overwrite: req.body.overwrite,
     rumpusCreatorId: '123456',
     rumpusUserName: null,
-    submittedIp: req.connection.remoteAddress
+    submittedIp: req.connection.remoteAddress,
+    votes: 0,
   });
 
 
@@ -156,7 +169,8 @@ router.post('/', async function(req, res){
           rumpusCreatorId: levelResult.userId,
           rumpusUserName: userReuslt.alias,
           levelMetaData: levelResult,
-          submittedIp: req.connection.remoteAddress
+          submittedIp: req.connection.remoteAddress,
+          votes: 0
         });
         res.status(200).json({
           success: true,

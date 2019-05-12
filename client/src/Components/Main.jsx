@@ -8,17 +8,17 @@ class Main extends Component {
     render() {
         return (
             <div className='container'>
-                <div class="nav">
+                <div className="nav">
       
                 </div>
-                <div class="header">
-                    <div class="header-text">
+                <div className="header">
+                    <div className="header-text">
                         <h1>LEVELCUP</h1>
                         <h3>Community Levelhead Contests</h3>
 
                     </div>
                 </div>
-                <div class="content-body">
+                <div className="content-body">
                     <Route exact path="/" render={() => (<Redirect to="/contest/5ccb38a9a60c5628346eb1e3"/>)}/>
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />

@@ -13,10 +13,10 @@ router.use(function(req, res, next) {
 
 //@@ GET /api/votes
 //@@ Displays all submitted votes
-router.get('/', async (req, res) => {
+router.get('/:contestId/:discordId', async (req, res) => {
   try {
-    const votes = await Vote.find();
-    res.send(votes);
+    const votes = await Vote.find({$and:[{ discordId: req.params.discordId }, { contestId: req.params.contestId}]});
+    res.send({ success: true, data: votes});
   } catch(err){
     res.status(500).json({ msg: `${err}` });
   }
@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
       submittedIp: req.connection.remoteAddress
     })
     let vote = await newVote.save();
-    let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$push: {votes: vote.discordId}})
+    let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$inc: {votes: 1}})
     res.status(200).json({ success: true, msg: `Vote submitted successfully. You have ${ contestInfo[0].maxVotePerUser - alreadyVoted.length - 1} votes remaining in this contest.`})
     
     
@@ -95,11 +95,20 @@ router.post('/remove', async (req, res) => {
     } 
      
 
+    var vote = await await Vote.findOne({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}, { submissionId: req.body.submissionId }]});
+    if(!vote) {
+      res.status(200).json({ 
+        success: false, 
+        msg: `You haven't voted for that.`})
+      return
+    }
+
+
     var deleted = await Vote.deleteOne({ discordId: req.body.discordId, 
                   submissionId: req.body.submissionId,
                   contestId: req.body.contestId  });
 
-    let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$pullAll: {votes: [req.body.discordId]}})
+    let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$inc: {votes: -1}})
     
     
     let alreadyVoted = await Vote.find({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}]});

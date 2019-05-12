@@ -12,6 +12,7 @@ export const endPoints = {
     CREATE_SUBMISSION: '/api/submissions',
 
     //User Actions
+    GET_VOTES: (contestId, discordId) => `/api/votes/${contestId}/${discordId}`,
     VOTE: '/api/votes',
     UNVOTE: '/api/votes/remove'
 }

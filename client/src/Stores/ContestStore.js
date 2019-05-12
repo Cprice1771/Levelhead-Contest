@@ -1,6 +1,5 @@
 import { endPoints} from '../Constants/Endpoints';
 import { EventEmitter } from 'events'
-import ConfigStore from './ConfigStore';
 import axios from 'axios'
 
 var _state = {
