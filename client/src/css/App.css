@@ -73,11 +73,11 @@
   border-radius: 5px;
   height: auto;
   width: auto;
-  padding: 8px;
+  padding: 5px;
   text-align: center;
-  margin: 5px;
+  margin: 10px;
   border: 2px #C5C6C7;
-  font-size: 34px; }
+  font-size: 50px; }
 
 .pull-right-down {
   right: 10px;

@@ -1,0 +1,10 @@
+{
+  "name": "heroku",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+	"heroku-postbuild": "cd client && npm install && npm run build"
+	"start": "cd server && npm install && nodemon server.js"
+  },
+}
