@@ -14,7 +14,7 @@ function Submission (props) {
             <td>{submision.levelMetaData.stats.Attempts}</td>
             {(props.showVotes || true) &&<td>{submision.votes}</td>}
             <td>{(true || props.canVote) &&
-                <i className={"" + (props.hasVotedFor ? 'fas fa-arrow-alt-circle-up' : 'fas fa-arrow-alt-circle-down')} onClick={() => {
+                <i className={"fas fa-arrow-alt-circle-up " + (props.hasVotedFor ? 'fa-arrow-alt-circle-selected' : 'fa-arrow-alt-circle-delescted')} onClick={() => {
                     
                     if(props.hasVotedFor) {
                         props.unvote(submision._id);
