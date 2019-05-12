@@ -16,7 +16,7 @@
     "react-notifications": "^1.4.3",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.0",
-	"@fortawesome/fontawesome-free": "^5.8.1"
+    "@fortawesome/fontawesome-free": "^5.8.1"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
