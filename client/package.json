@@ -15,7 +15,8 @@
     "react-modal": "^3.8.1",
     "react-notifications": "^1.4.3",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.0"
+    "react-scripts": "3.0.0",
+	"@fortawesome/fontawesome-free": "^5.8.1"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
@@ -42,7 +43,4 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.1"
-  }
 }
