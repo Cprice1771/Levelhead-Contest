@@ -1,5 +1,7 @@
 import React from 'react';
 import './css/App.css';
+import './css/Submission.scss';
+
 import Main from './Components/Main';
 
 

@@ -149,19 +149,24 @@ class SubmissionList extends Component {
             discordId={discordId}/>
         })
 
-        return <div >
-            <div className="submissionsList">
-            <div className="row header-row">
-                <div className="col-md-2"><h5>Lookup code</h5></div>
-                <div className="col-md-2"><h5>Creator</h5></div>
-                <div className="col-md-4"><h5>Title</h5></div>
-                <div className="col-md-1"><h5>Clear Rate</h5></div>
-                <div className="col-md-1"><h5>Attempts</h5></div>
-                {this.state.showVotes && <div className="col-md-2">Votes</div>}
-                <div className="col-md-2"></div>
-            </div>
-            {submissions}
-            </div>
+        return (<div class="submission-container" >
+            <table class="table submission-header table-striped">
+                <thead>
+                    <tr>
+                        <th>Lookup Code</th>
+                        <th>Creator</th>
+                        <th>Title</th>
+                        <th>Clear Rate</th>
+                        <th>Attempts</th>
+                        {/* <th>{this.state.showVotes && <div className="col-md-2">Votes</div>}</th> */}
+                        <th>Votes</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {submissions}
+                </tbody>
+            </table>
 
             <div className="card-body">
                 <NavLink exact to={`/contest/${this.props.match.params.contestId}`} 
@@ -171,9 +176,8 @@ class SubmissionList extends Component {
                 </NavLink>
             </div>
                 <NotificationContainer/>
-                
         </div>
-
+        )
     }
 }
 
