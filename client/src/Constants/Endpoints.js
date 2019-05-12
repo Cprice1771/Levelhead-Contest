@@ -19,5 +19,6 @@ export const endPoints = {
     //Profile
     GET_DISCORD_LOGIN_LINK: '/api/users/discord-auth',
     GET_USER: (discordId) => `api/users/${discordId}`,
-    CREATE_UPDATE_USER: '/apu/users'
+    CREATE_UPDATE_USER: '/apu/users',
+    LOGIN: '/api/users/login',
 }

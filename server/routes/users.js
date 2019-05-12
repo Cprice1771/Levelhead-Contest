@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user");
+const fetch = require('node-fetch');
+const btoa = require('btoa');
+const Axios = require('axios');
 
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -9,61 +12,60 @@ router.use(function(req, res, next) {
   });
   
 
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-router.get('/discord-auth', async(req, res) => {
-    res
-    .status(200)
-    .json({ link: 'https://discordapp.com/api/oauth2/authorize?client_id=574425968303669259&redirect_uri=https%3A%2F%2Flevelcup.herokuapp.com&response_type=code&scope=identify' });
-})
+router.post('/discord-auth', async(req, res) => {
 
 
-//@@ GET /api/users/:discordId
-//@@ get user info
-router.get('/:discordId', async (req, res) => {
-    try {
-        let user = await Users.findOne({$and:[{ discordId: req.body.discordId}]});
-
-        if(!!user) {
-            res.status(200).json({
-                success: true,
-                data: user
-            });
-        } else {
-            res.status(404).json({
-                success: false
-            });
-        }
-    } catch(err) {
-        res.status(500).json({
-            success: false, msg: err
-        });
-    }
+    res.status(200).json({
+        success: true,
+        link: `https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=token&redirect_uri=${encodeURIComponent(req.body.redirect)}`
+    });
 });
 
-//@@ POST /api/users/
-//@@ create user
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
-        const newUser = new User({
-            discordId: req.body.discordId,
-            discordDisplayName: null,
-            rumpusId: null,
-            discordAccessToken: null,
-            dateRegistered: new Date(),
+
+
+        const httpClient = Axios.create({
+            baseURL: 'https://discordapp.com/api/',  
+            timeout: 5000,
+            headers : {
+                authorization: `${req.body.tokenType} ${req.body.accessToken}`
+            }
           });
 
-        let user = await newUser.save();
+        const response = (await httpClient.get(`users/@me`)).data;
+
+        const { username, discriminator } = response;
+
+        var user = await User.findOne({$and:[{ discordId: `${username}#${discriminator}`}]});
+        if(!user) {
+            const newUser = new User({
+                discordId: `${username}#${discriminator}`,
+                discordDisplayName: username,
+                rumpusId: null,
+                dateRegistered: new Date(),
+              });
+    
+            user = await newUser.save();
+        }
+        
 
         res.status(200).json({
             success: true,
-            data: user
+            user: user
         });
-    } catch(err) {
+        
+        
+    } catch (err) {
         res.status(500).json({
             success: false, msg: err
         });
     }
-});
+  });
+
 
 //@@ put /api/users/:userId
 //@@ update user

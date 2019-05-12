@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationManager} from 'react-notifications';
 import { debug } from 'util';
 
 const discordId = 'ab12a3'
@@ -170,7 +170,6 @@ class SubmissionList extends Component {
                     <button className='b1' >Back To Contest</button> 
                 </NavLink>
             </div>
-                <NotificationContainer/>
                 
         </div>
 

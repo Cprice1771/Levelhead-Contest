@@ -4,7 +4,6 @@ import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import Submit from './Submit';
-import {NotificationContainer} from 'react-notifications';
 import { NavLink } from 'react-router-dom';
 
 class Contest extends Component {
@@ -155,7 +154,6 @@ class Contest extends Component {
                 <i className="fas fa-times modalClose"  onClick={this.handleCloseModal}></i>
                 <Submit  onClose={this.handleCloseModal} contestId={this.props.match.params.contestId}/>
             </ReactModal>
-            <NotificationContainer/>
         </div>
     }
 

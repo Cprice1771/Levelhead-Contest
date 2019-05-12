@@ -3,7 +3,8 @@ import { Route, Redirect  } from 'react-router';
 import Contest from './Contest';
 import SubmissionList from './SubmissionList';
 import DiscordLogin from './DiscordLogin';
-
+import LoginLanding from './LoginLanding';
+import {NotificationContainer} from 'react-notifications';
 class Main extends Component {
 
     render() {
@@ -24,7 +25,9 @@ class Main extends Component {
                     <Route exact path="/" render={() => (<Redirect to="/contest/5ccb38a9a60c5628346eb1e3"/>)}/>
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />
+                    <Route path='/login' component={LoginLanding} />
                 </div>
+                <NotificationContainer />
             </div>
         );
     }

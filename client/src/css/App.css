@@ -7,7 +7,8 @@
   position: absolute;
   top: 0px;
   right: 100px;
-  font-family: 'Whitney';
+  padding: 5px;
+  font-family: 'helvetica';
   color: white; }
 
 .selected-arrow {

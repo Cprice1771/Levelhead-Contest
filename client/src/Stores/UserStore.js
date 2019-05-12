@@ -12,18 +12,14 @@ class UserStoreClass {
         this.emitter = new EventEmitter();        
     }
 
-    getUser(discordId) {
-        axios.get(endPoints.GET_USER(discordId))
-        .then( response => {
-            _state.loggedInUser = response.data;
-            this.emitChange(response.data);
-        }).catch(err => {
-            Console.log(err);
-        })
+    setLoggedInUser(user) {
+        _state.loggedInUser = user;
+        this.emitChange();
     }
 
     logout() {
         _state.loggedInUser = null;
+        localStorage.removeItem('discord-token');
         this.emitChange();
     }
 
