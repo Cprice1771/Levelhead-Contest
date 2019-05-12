@@ -21,7 +21,7 @@ let votes = require('./routes/votes')
 app.use('/api/votes', votes)
 
 // Set up a whitelist and check against it:
-var whitelist = ['http://localhost:3000', 'http://localhost:3001']
+var whitelist = ['http://localhost:3000', 'http://localhost:3001', 'https://levelcup.herokuapp.com/']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
