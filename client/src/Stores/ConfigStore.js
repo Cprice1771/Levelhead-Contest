@@ -5,7 +5,7 @@ var _state = {
         api             : 'http://localhost:3000',
     },
     production : {
-        api             : 'http://localhost:3000',
+        api             : 'https://levelcup.herokuapp.com',
     },
     
 };
