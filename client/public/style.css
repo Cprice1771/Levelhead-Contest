@@ -108,16 +108,16 @@ body {
 }
 
 .b1:hover {
-  background-color: rgb(197, 171, 228);
-  transition: .2s ease-in;
+  background-color: rgb(87, 34, 146);
+  transition: .15s ease-in;
 }
 .b2:hover {
   background-color: #3b40bd;
-  transition: .2s ease-in;
+  transition: .15s ease-in;
 }
 .b3:hover {
   background-color: #595b7c;
-  transition: .2s ease-in;
+  transition: .15s ease-in;
 }
 
 .card h1, h2, h3, h4, h5 {

@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/App.css';
+import './css/Submission.css'
 import Main from './Components/Main';
 
 

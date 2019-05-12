@@ -1,3 +1,11 @@
+.fa-arrow-alt-circle-down {
+  color: rgb(162, 140, 187);
+  font-size: 32px;
+ }
+ .fa-arrow-alt-circle-up {
+  color: rgb(87, 34, 146);
+  font-size: 32px;
+ }
 .discord-login {
   cursor: pointer;
   background: #7289DA;
@@ -15,10 +23,24 @@
   color: orange;
   text-shadow: 0 0 3px #FF0000; }
 
+ .fa-arrow-alt-circle-up:hover {
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
+  color: orange;;
+ }
+ .fa-arrow-alt-circle-down:hover {
+  color: orange;;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
+
+}
+
+
 .levelLink {
-  color: #45A29E; }
+  color: rgb(87, 34, 146);
+  font-size: 18px;
+  font-weight: bold; }
+  
   .levelLink:hover {
-    color: #66FCF1;
+    color: orange;
     text-decoration: none; }
 
 .NavButton {
