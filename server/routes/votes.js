@@ -63,7 +63,8 @@ router.post('/', async (req, res) => {
       submissionId: req.body.submissionId,
       contestId: req.body.contestId,
       discordId: req.body.discordId,
-      dateVoted: dateNow
+      dateVoted: dateNow,
+      submittedIp: req.connection.remoteAddress
     })
     let vote = await newVote.save();
     let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$push: {votes: vote.discordId}})

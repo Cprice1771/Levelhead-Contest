@@ -65,8 +65,10 @@ router.post('/', async function(req, res){
     submittedByDiscordId: req.body.submittedByDiscordId,
     overwrite: req.body.overwrite,
     rumpusCreatorId: '123456',
-    rumpusUserName: null
+    rumpusUserName: null,
+    submittedIp: req.connection.remoteAddress
   });
+
 
   try {
 
@@ -120,10 +122,21 @@ router.post('/', async function(req, res){
       newSubmission.rumpusCreatorId = levelResult.userId;
       newSubmission.levelMetaData = levelResult;
 
-      //Validate if user has already submitted a level
-      let existingUserSubmissions = await Submission.find( {$and:[{ rumpusCreatorId: newSubmission.rumpusCreatorId}, { contestId: req.body.contestId}]});
 
-      if(!!existingUserSubmissions.length > 0 && !req.body.overwrite) {
+      let existingRumpusUserSubmissions = await Submission.find( {$and:[{ rumpusCreatorId: newSubmission.rumpusCreatorId}, { contestId: req.body.contestId}]});
+      if(existingRumpusUserSubmissions.length > 0 && 
+        existingRumpusUserSubmissions[0].submittedByDiscordId != newSubmission.submittedByDiscordId) {
+          res.status(200).json({ 
+            success: false,
+            msg: 'Another user has already submitted a level created by this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
+          return;
+
+      }
+
+      //Validate if user has already submitted a level
+      let existingUserSubmissions = await Submission.find( {$and:[{ submittedByDiscordId: newSubmission.submittedByDiscordId}, { contestId: req.body.contestId}]});
+
+      if(existingUserSubmissions.length > 0 && !req.body.overwrite) {
         res.status(200).json({ 
           success: false,
           requiresOverwrite: true,
@@ -131,7 +144,30 @@ router.post('/', async function(req, res){
         return;
       }
       
-      saveSubmission(newSubmission, res);
+      //if the user had an existing submission update it
+      if(existingUserSubmissions.length > 0) {
+        let data = await Submission.updateOne({_id: existingUserSubmissions[0]._id}, 
+          {
+          contestId: req.body.contestId,
+          dateSubmitted: new Date(),
+          lookupCode: req.body.lookupCode,
+          submittedByDiscordId: req.body.submittedByDiscordId,
+          overwrite: req.body.overwrite,
+          rumpusCreatorId: levelResult.userId,
+          rumpusUserName: userReuslt.alias,
+          levelMetaData: levelResult,
+          submittedIp: req.connection.remoteAddress
+        });
+        res.status(200).json({
+          success: true,
+          msg: "Submission successfully entered.",
+          data: newSubmission
+        });
+        return;
+      } else {
+        saveSubmission(newSubmission, res);
+      }
+      
 
     } catch (err) {
       res.status(500).json({ msg: `${err}` });

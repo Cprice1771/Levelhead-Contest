@@ -16,7 +16,11 @@ let voteSchema = mongoose.Schema({
   dateVoted: {
     type: Date,
     required: true
-  }
+  },
+  submittedIp: {
+    type: String,
+    require: true,
+  },
 })
 
 let Vote = module.exports = mongoose.model('Vote', voteSchema);

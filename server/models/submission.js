@@ -9,6 +9,10 @@ let submissionSchema = mongoose.Schema({
     type: Date,
     // required: true
   },
+  submittedIp: {
+    type: String,
+    require: true,
+  },
   rumpusCreatorId: {
     type: String,
     // required: true

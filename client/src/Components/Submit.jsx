@@ -100,11 +100,18 @@ class Submit extends Component {
             </div>
                
             </div>
+
+
             <div className='error'>
                 <span>{this.state.error}</span>
             </div>
-
-            <button className='btn btn-primary pull-right-down' disabled={!this.validate()} onClick={this.submitLevel}>Submit</button>
+            <button 
+                        className={'btn pull-right-down ' + (this.state.overwrite ? 'btn-danger' : 'btn-primary')} 
+                        disabled={!this.validate()} 
+                        onClick={this.submitLevel}>
+                        {this.state.overwrite ? 'Overwrite' : 'Save'}
+                    </button>
+            
             
         </div>);
     }
