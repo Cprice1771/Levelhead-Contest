@@ -9,21 +9,22 @@
 
  .fa-arrow-alt-circle-up:hover {
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
-  color: white;
-
-
+  color: orange;;
  }
  .fa-arrow-alt-circle-down:hover {
-  color: white;
+  color: orange;;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
 
 }
 
 
 .levelLink {
-  color: #45A29E; }
+  color: rgb(87, 34, 146);
+  font-size: 18px;
+  font-weight: bold; }
+  
   .levelLink:hover {
-    color: #66FCF1;
+    color: orange;
     text-decoration: none; }
 
 .NavButton {

@@ -1,0 +1,16 @@
+.submission-row {
+  background-color: white; }
+
+.submission-header {
+  background-color: white; }
+
+.submission-container {
+  width: 100%; }
+
+.table tr:nth-child(n+1):hover {
+  transition: .15s ease-in;
+  color: white;
+  background-color: #5d61d1; }
+
+.table tr {
+  align-content: center; }
