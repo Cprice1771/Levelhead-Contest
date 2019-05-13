@@ -12,8 +12,8 @@ function Submission (props) {
             <td>{submision.levelMetaData.map.Title}</td>
             <td>{submision.levelMetaData.stats.Attempts === 0 ? 0 : _.round(((submision.levelMetaData.stats.Successes / submision.levelMetaData.stats.Attempts) * 100), 2)}%</td>
             <td>{submision.levelMetaData.stats.Attempts}</td>
-            {(props.showVotes || true) &&<td>{submision.votes}</td>}
-            <td>{(true || props.canVote) &&
+            {(props.showVotes) &&<td>{submision.votes}</td>}
+            <td>{(props.canVote) &&
                 <i className={"fas fa-arrow-alt-circle-up " + (props.hasVotedFor ? 'fa-arrow-alt-circle-selected' : 'fa-arrow-alt-circle-delescted')} onClick={() => {
                     
                     if(props.hasVotedFor) {

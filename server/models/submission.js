@@ -29,7 +29,7 @@ let submissionSchema = mongoose.Schema({
     type: Object,
     // required: true
   },
-  submittedByDiscordId: {
+  submittedByUserId: {
     type: String,
     // required: true
   },

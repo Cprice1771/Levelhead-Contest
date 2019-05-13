@@ -51,7 +51,11 @@ class SubmissionList extends Component {
             NotificationManager.error(res.data.msg);
         }
         }).catch(res => {
-            NotificationManager.error(res.response.data.msg);
+            if(res && res.response && res.response.data)
+                NotificationManager.error(res.response.data.msg);
+            else {
+                NotificationManager.error('Connection Error');
+            }
         });
     }
 
@@ -100,7 +104,11 @@ class SubmissionList extends Component {
                 NotificationManager.error(res.data.msg);
             }
         }).catch(res => {
-            NotificationManager.error(res.response.data.msg);
+            if(res && res.response && res.response.data)
+                NotificationManager.error(res.response.data.msg);
+            else {
+                NotificationManager.error('Connection Error');
+            }
         });
     }
 
@@ -133,10 +141,6 @@ class SubmissionList extends Component {
     }
 
     render() {
-        if(!this.state.submissions || this.state.submissions.length === 0) {
-            return <div>No Submissions Yet!</div>;
-        }
-
         let submissions = _.map(this.state.submissions, s => {
             return <Submission 
             vote={this.vote} 
@@ -149,8 +153,8 @@ class SubmissionList extends Component {
             discordId={discordId}/>
         })
 
-        return (<div class="submission-container" >
-            <table class="table submission-header table-striped">
+        return (<div className="submission-container" >
+            <table className="table submission-header table-striped">
                 <thead>
                     <tr>
                         <th>Lookup Code</th>
@@ -159,12 +163,12 @@ class SubmissionList extends Component {
                         <th>Clear Rate</th>
                         <th>Attempts</th>
                         {/* <th>{this.state.showVotes && <div className="col-md-2">Votes</div>}</th> */}
-                        <th>Votes</th>
-                        <th></th>
+                        {this.state.showVotes && <th>Votes</th> }
+                        {this.state.canVote && <th></th> }
                     </tr>
                 </thead>
                 <tbody>
-            {submissions}
+                {submissions.length > 0 ? submissions : <tr><td>No Submissions Yet!</td></tr>}
                 </tbody>
             </table>
 

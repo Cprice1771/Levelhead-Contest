@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import Submit from './Submit';
 import { NavLink } from 'react-router-dom';
+import UserStore from '../Stores/UserStore';
 
 class Contest extends Component {
 
@@ -15,6 +16,7 @@ class Contest extends Component {
             currDate : moment(),
             timer: null,
             showModal: false,
+            loggedIn: !!UserStore.getLoggedInUser()
         };
 
         this.contestsLoaded = this.contestsLoaded.bind(this);
@@ -24,18 +26,25 @@ class Contest extends Component {
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.userChange = this.userChange.bind(this);
     }
 
     componentDidMount() {
         ContestStore.addChangeListener(this.contestsLoaded);
         ContestStore.getContest(this.props.match.params.contestId);
+        UserStore.addChangeListener(this.userChange);
 
         this.intervalHandle = setInterval(this.updateTimeLeft, 1000);
     }
 
     componentWillUnmount() {
         ContestStore.removeChangeListener(this.contestsLoaded);
+        UserStore.removeChangeListener(this.userChange);
         clearInterval(this.intervalHandle);
+    }
+
+    userChange() {
+        this.setState({loggedIn: !!UserStore.getLoggedInUser()});
     }
 
     contestsLoaded(data) {
@@ -135,7 +144,7 @@ class Contest extends Component {
             }
             
             <div className="card-body">
-                { submissionOpen && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
+                { submissionOpen && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
 
                 <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
                         className="NavButton"

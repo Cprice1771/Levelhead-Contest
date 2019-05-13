@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
 
 import { NotificationManager} from 'react-notifications';
+import UserStore from '../Stores/UserStore';
 
 class Submit extends Component {
 
@@ -31,7 +32,7 @@ class Submit extends Component {
         Axios.post(endPoints.CREATE_SUBMISSION, {
             contestId: this.props.contestId,
             lookupCode: this.state.levelCode,
-            submittedByDiscordId: this.state.discordId,
+            submittedByUserId: UserStore.getLoggedInUser()._id,
             overwrite: this.state.overwrite,
         }).then(res => {
             if(res.data.success) {
@@ -44,17 +45,24 @@ class Submit extends Component {
                 })
             }
         }).catch(res => {
-            this.setState({
-                error: res.response.data.msg,
-                overwrite: false
-            })
+            if(res.response) {
+                this.setState({
+                    error: res.response.data.msg,
+                    overwrite: false
+                })
+            } else {
+                this.setState({
+                    error: 'Connection Error',
+                    overwrite: false
+                })
+            }
+            
         });
     }
     
 
     validate() {
-        return !!this.state.levelCode && this.state.levelCode.length === 7
-                && !!this.state.discordId && this.state.discordId.length > 3;
+        return !!this.state.levelCode && this.state.levelCode.length === 7;
     }
 
     render() {
@@ -84,19 +92,6 @@ class Submit extends Component {
             </div>
 
              <div className='row input-group'>
-            <div className='col-md-4'>
-                Discord Id
-            </div>
-            <div className='col-md-8'>
-                
-                <input type='text' className="form-control"
-                    value={this.state.discordId} 
-                    onChange={(e) => {
-                        this.setState({ discordId: e.target.value });
-                    }}
-                />
-            </div>
-               
             </div>
 
 

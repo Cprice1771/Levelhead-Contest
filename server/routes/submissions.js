@@ -3,7 +3,7 @@ const router = express.Router();
 const Submission = require("../models/submission")
 const Contest = require('../models/contest');
 const Axios = require('axios');
-
+const User = require('../models/user');
 const httpClient = Axios.create({
   baseURL: 'https://www.bscotch.net/api/',  
   timeout: 5000,
@@ -74,7 +74,7 @@ router.post('/', async function(req, res){
     contestId: req.body.contestId,
     dateSubmitted: new Date(),
     lookupCode: req.body.lookupCode,
-    submittedByDiscordId: req.body.submittedByDiscordId,
+    submittedByUserId: req.body.submittedByUserId,
     overwrite: req.body.overwrite,
     rumpusCreatorId: '123456',
     rumpusUserName: null,
@@ -106,7 +106,7 @@ router.post('/', async function(req, res){
           success: false,
           msg: `This level code has already been submitted to this contest.`,
           submissionId: `${existingSubmissions[0]._id} `,
-          submittedBy: existingSubmissions[0].submittedByDiscordId
+          submittedBy: existingSubmissions[0].submittedByUserId
         });
         return;
       }
@@ -138,7 +138,7 @@ router.post('/', async function(req, res){
 
       let existingRumpusUserSubmissions = await Submission.find( {$and:[{ rumpusCreatorId: newSubmission.rumpusCreatorId}, { contestId: req.body.contestId}]});
       if(existingRumpusUserSubmissions.length > 0 && 
-        existingRumpusUserSubmissions[0].submittedByDiscordId != newSubmission.submittedByDiscordId) {
+        existingRumpusUserSubmissions[0].submittedByUserId != newSubmission.submittedByUserId) {
           res.status(200).json({ 
             success: false,
             msg: 'Another user has already submitted a level created by this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
@@ -146,8 +146,21 @@ router.post('/', async function(req, res){
 
       }
 
+      let existingUser = await User.findById(newSubmission.submittedByUserId)
+
+      if(!existingUser.rumpusId) {
+        existingUser.rumpusId = levelResult.userId;
+        await existingUser.save();
+      } else if(existingUser.rumpusId !== levelResult.userId) {
+        res.status(200).json({ 
+          success: false,
+          msg: 'Your account is not linked to this rumpus user, if you think this is in error please contact us.'});
+        return;
+      }
+
+      
       //Validate if user has already submitted a level
-      let existingUserSubmissions = await Submission.find( {$and:[{ submittedByDiscordId: newSubmission.submittedByDiscordId}, { contestId: req.body.contestId}]});
+      let existingUserSubmissions = await Submission.find( {$and:[{ submittedByUserId: newSubmission.submittedByUserId}, { contestId: req.body.contestId}]});
 
       if(existingUserSubmissions.length > 0 && !req.body.overwrite) {
         res.status(200).json({ 
@@ -164,7 +177,7 @@ router.post('/', async function(req, res){
           contestId: req.body.contestId,
           dateSubmitted: new Date(),
           lookupCode: req.body.lookupCode,
-          submittedByDiscordId: req.body.submittedByDiscordId,
+          submittedByUserId: req.body.submittedByUserId,
           overwrite: req.body.overwrite,
           rumpusCreatorId: levelResult.userId,
           rumpusUserName: userReuslt.alias,
