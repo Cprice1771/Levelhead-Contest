@@ -9,7 +9,7 @@ let voteSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  discordId: {
+  userId: {
     type: String,
     required: true
   },

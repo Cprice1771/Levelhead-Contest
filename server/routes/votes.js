@@ -13,9 +13,9 @@ router.use(function(req, res, next) {
 
 //@@ GET /api/votes
 //@@ Displays all submitted votes
-router.get('/:contestId/:discordId', async (req, res) => {
+router.get('/:contestId/:userId', async (req, res) => {
   try {
-    const votes = await Vote.find({$and:[{ discordId: req.params.discordId }, { contestId: req.params.contestId}]});
+    const votes = await Vote.find({$and:[{ userId: req.params.userId }, { contestId: req.params.contestId}]});
     res.send({ success: true, data: votes});
   } catch(err){
     res.status(500).json({ msg: `${err}` });
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   try {
     var dateNow = new Date(Date.now());
 
-    let alreadyVoted = await Vote.find({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}]})
+    let alreadyVoted = await Vote.find({$and:[{ userId: req.body.userId }, { contestId: req.body.contestId}]})
     let contestInfo = await Contest.find({ _id: req.body.contestId})
 
     // if the vote is being cast in the valid contest window, execute vote
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
     let newVote = new Vote({
       submissionId: req.body.submissionId,
       contestId: req.body.contestId,
-      discordId: req.body.discordId,
+      userId: req.body.userId,
       dateVoted: dateNow,
       submittedIp: req.connection.remoteAddress
     })
@@ -95,7 +95,7 @@ router.post('/remove', async (req, res) => {
     } 
      
 
-    var vote = await await Vote.findOne({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}, { submissionId: req.body.submissionId }]});
+    var vote = await await Vote.findOne({$and:[{ userId: req.body.userId }, { contestId: req.body.contestId}, { submissionId: req.body.submissionId }]});
     if(!vote) {
       res.status(200).json({ 
         success: false, 
@@ -104,14 +104,14 @@ router.post('/remove', async (req, res) => {
     }
 
 
-    var deleted = await Vote.deleteOne({ discordId: req.body.discordId, 
+    var deleted = await Vote.deleteOne({ userId: req.body.userId, 
                   submissionId: req.body.submissionId,
                   contestId: req.body.contestId  });
 
     let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$inc: {votes: -1}})
     
     
-    let alreadyVoted = await Vote.find({$and:[{ discordId: req.body.discordId }, { contestId: req.body.contestId}]});
+    let alreadyVoted = await Vote.find({$and:[{ userId: req.body.userId }, { contestId: req.body.contestId}]});
     res.status(200).json({ success: true, msg: `Vote removed successfully. You have ${ contestInfo[0].maxVotePerUser - alreadyVoted.length} votes remaining in this contest.`})
     
     

@@ -9,15 +9,15 @@ import axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
 import { debug } from 'util';
+import UserStore from '../Stores/UserStore';
 
-const discordId = 'ab12a3'
 
 class SubmissionList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             submissions: SubmissionStore.getSubmissions(),
-            canVote: this.getCanVote(ContestStore.getSelectedContest()),
+            canVote: false,
             showVotes: this.contestOver(ContestStore.getSelectedContest()),
             myVotes: [],
         };
@@ -27,22 +27,37 @@ class SubmissionList extends Component {
         this.unvote = this.unvote.bind(this);
         this.contestChange = this.contestChange.bind(this);
         this.getMyVotes = this.getMyVotes.bind(this);
+        this.getCanVote = this.getCanVote.bind(this);
+        this.userChanged = this.userChanged.bind(this);
     }
 
     componentDidMount() {
+        this.setState({canVote: this.getCanVote(ContestStore.getSelectedContest())});
         this.getMyVotes();
         ContestStore.addChangeListener(this.contestChange);
         ContestStore.getContest(this.props.match.params.contestId);        
         SubmissionStore.addChangeListener(this.submissionsChanged);
+        UserStore.addChangeListener(this.userChanged)
     }
 
     componentWillUnmount() {
         ContestStore.removeChangeListener(this.contestChange);
         SubmissionStore.removeChangeListener(this.submissionsChanged);
+        UserStore.removeChangeListener(this.userChanged)
+    }
+
+    userChanged() {
+        this.setState({canVote: this.getCanVote(ContestStore.getSelectedContest())});
+        this.setState({ myVotes: [] })
+        this.getMyVotes();
     }
 
     getMyVotes() {
-        axios.get(endPoints.GET_VOTES(this.props.match.params.contestId, discordId))
+        if(!UserStore.getLoggedInUser()){
+            return;
+        }
+
+        axios.get(endPoints.GET_VOTES(this.props.match.params.contestId, UserStore.getLoggedInUser()._id))
         .then(res => {
         if(res.data.success) {
             let myVotes = _.map(res.data.data, x => x.submissionId);
@@ -78,7 +93,7 @@ class SubmissionList extends Component {
             return false;
         }
         let dateNow = new Date();
-        return dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
+        return dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate) && !!UserStore.getLoggedInUser();
     }
 
     submissionsChanged() {
@@ -89,7 +104,7 @@ class SubmissionList extends Component {
         axios.post(endPoints.UNVOTE, {
             contestId: this.props.match.params.contestId,
             submissionId: levelId,
-            discordId: discordId,
+            userId: UserStore.getLoggedInUser()._id,
         }).then(res => {
             if(res.data.success) {
                 let myVotes = _.cloneDeep(this.state.myVotes);
@@ -116,7 +131,7 @@ class SubmissionList extends Component {
         axios.post(endPoints.VOTE, {
             contestId: this.props.match.params.contestId,
             submissionId: levelId,
-            discordId: discordId,
+            userId: UserStore.getLoggedInUser()._id,
         }).then(res => {
             if(res.data.success) {
                 let myVotes = _.cloneDeep(this.state.myVotes);
@@ -150,7 +165,7 @@ class SubmissionList extends Component {
             key={s._id}  
             canVote={this.state.canVote} 
             showVotes={this.state.showVotes}
-            discordId={discordId}/>
+            />
         })
 
         return (<div className="submission-container" >

@@ -136,12 +136,12 @@ router.post('/', async function(req, res){
       newSubmission.levelMetaData = levelResult;
 
 
-      let existingRumpusUserSubmissions = await Submission.find( {$and:[{ rumpusCreatorId: newSubmission.rumpusCreatorId}, { contestId: req.body.contestId}]});
-      if(existingRumpusUserSubmissions.length > 0 && 
-        existingRumpusUserSubmissions[0].submittedByUserId != newSubmission.submittedByUserId) {
+      let existingRumpusUser = await User.find( {$and:[{ rumpusId: newSubmission.rumpusCreatorId}]});
+      if(existingRumpusUser.length > 0 && 
+        existingRumpusUser[0]._id != newSubmission.submittedByUserId) {
           res.status(200).json({ 
             success: false,
-            msg: 'Another user has already submitted a level created by this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
+            msg: 'Another user has already claimed this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
           return;
 
       }
