@@ -88,10 +88,17 @@ class DiscordLogin extends Component {
 
         var loggedIn = !!this.state.loggedInUser;
 
+        let content = null;
+        if(loggedIn) {
+            content = <div><span>{this.state.loggedInUser.discordDisplayName}</span> <i className='fas fa-times' onClick={this.logout}></i></div>;
+        } else {
+            content =  <img src={discordLogoText} width='auto' height='25'/>;
+        }
+
+
         return (
             <div className='discord-login' onClick={!loggedIn ? this.initiateLogin : () => {}}>
-                { loggedIn ? this.state.loggedInUser.discordDisplayName :  <img src={discordLogoText} width='auto' height='25'/> }
-                { loggedIn && <button className='btn btn-secondary' onClick={this.logout}>Logout</button>}
+                {content}
             </div>
         );
     }
