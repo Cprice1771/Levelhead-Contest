@@ -33,7 +33,7 @@ class Contest extends Component {
         ContestStore.addChangeListener(this.contestsLoaded);
         ContestStore.getContest(this.props.match.params.contestId);
         UserStore.addChangeListener(this.userChange);
-
+        
         this.intervalHandle = setInterval(this.updateTimeLeft, 1000);
     }
 
@@ -50,6 +50,8 @@ class Contest extends Component {
     contestsLoaded(data) {
         this.setState({
             contest: ContestStore.getSelectedContest()
+        }, () => {
+            this.updateTimeLeft();
         })
     }
 
