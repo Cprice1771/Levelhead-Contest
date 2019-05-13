@@ -1,11 +1,11 @@
 .fa-arrow-alt-circle-delescted {
-  color: rgb(162, 140, 187);
-  font-size: 32px;
- }
- .fa-arrow-alt-circle-selected {
-  color: rgb(87, 34, 146);
-  font-size: 32px;
- }
+  color: #a28cbb;
+  font-size: 32px; }
+
+.fa-arrow-alt-circle-selected {
+  color: #572292;
+  font-size: 32px; }
+
 .discord-login {
   cursor: pointer;
   background: #7289DA;
@@ -23,24 +23,10 @@
   color: orange;
   text-shadow: 0 0 3px #FF0000; }
 
- .fa-arrow-alt-circle-up:hover {
-  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
-  color: rgb(87, 34, 146);
- }
- .fa-arrow-alt-circle-down:hover {
-  color: rgb(87, 34, 146);
-  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.452);
-
-}
-
-
 .levelLink {
-  color: rgb(87, 34, 146);
-  font-size: 18px;
-  font-weight: bold; }
-  
+  color: #45A29E; }
   .levelLink:hover {
-    color: orange;
+    color: #66FCF1;
     text-decoration: none; }
 
 .NavButton {
