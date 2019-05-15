@@ -134,7 +134,7 @@ class Contest extends Component {
             { (waitingToStart || submissionOpen || votingOpen) &&
 
             <div className="clock-container"> 
-                {waitingToStart && <h4>Time left until submission open</h4>}
+                {waitingToStart && <h4>Time left until submissions open</h4>}
                 {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
                 {votingOpen && <h4>Time left until voting closes</h4>}
 
@@ -148,11 +148,11 @@ class Contest extends Component {
             <div className="card-body">
                 { submissionOpen && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
 
-                <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
+                { !waitingToStart && <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
                         className="NavButton"
                         activeClassName="activeRoute">
                     <button className='b2' >View Entries</button>
-                </NavLink>
+        </NavLink> }
                 </div>
             <ReactModal
           isOpen={this.state.showModal}
