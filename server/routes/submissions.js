@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const Config = require('../models/config');
 const Submission = require("../models/submission")
 const Contest = require('../models/contest');
 const Axios = require('axios');
 const User = require('../models/user');
-const rumpusConfig = require('../models/rumpusConfig');
-const httpClient = Axios.create({
-  baseURL: 'https://www.bscotch.net/api/',  
-  timeout: 5000,
-})
+
+
+
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -110,10 +109,15 @@ router.post('/', async function(req, res){
       }
 
 
-      let config = await rumpusConfig.find();
-      httpClient.headers = {
-        'rumpus-credentials' : '5ccf2752555eae00bbfca8ca-SWwG8EKfPSm7sE8T'
-      };
+      let cfg = await Config.findOne();
+
+      const httpClient = Axios.create({
+        baseURL: 'https://www.bscotch.net/api/',  
+        timeout: 5000,
+        headers: {
+          'rumpus-credentials' : cfg.key
+        }
+      })
       //Validate level is real with rumpus
       let levelResult = (await httpClient.get(`storage/crates/lh-published-levels/items?names=${req.body.lookupCode}&limit=1`)).data.data[0]; //don't ask....
 
@@ -140,7 +144,7 @@ router.post('/', async function(req, res){
 
       let existingRumpusUser = await User.find( {$and:[{ rumpusId: newSubmission.rumpusCreatorId}]});
       if(existingRumpusUser.length > 0 && 
-        existingRumpusUser[0]._id != newSubmission.submittedByUserId) {
+        existingRumpusUser[0].id != newSubmission.submittedByUserId) {
           res.status(200).json({ 
             success: false,
             msg: 'Another user has already claimed this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
