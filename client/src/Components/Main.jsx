@@ -28,7 +28,16 @@ class Main extends Component {
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />
                     <Route path='/login' component={LoginLanding} />
+
+
+
                 </div>
+                <div className="footer">
+                    This site and contest are not created by or endorsed by Butterscotch Shenanigans.  This project solely exists for the benefit of the community and fans of Levelhead.
+                    <br/>
+                    For support requests, please email <b>levelheaders@gmail.com</b>
+                </div>
+
                 <NotificationContainer />
             </div>
         );
