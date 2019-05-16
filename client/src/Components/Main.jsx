@@ -18,7 +18,9 @@ class Main extends Component {
                     <div className="header-text">
                         <h1>LEVELCUP</h1>
                         <h3>Community Levelhead Contests</h3>
-
+                    </div>
+                    <div className="header-nav">
+                        <button>Sign in <i class="fab fa-discord fa-lg"></i></button>
                     </div>
                 </div>
                 <div className="content-body">
