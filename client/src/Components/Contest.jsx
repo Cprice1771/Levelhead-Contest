@@ -6,6 +6,7 @@ import ReactModal from 'react-modal';
 import Submit from './Submit';
 import { NavLink } from 'react-router-dom';
 import UserStore from '../Stores/UserStore';
+import LoginActions from '../actions/LoginActions';
 
 class Contest extends Component {
 
@@ -147,7 +148,7 @@ class Contest extends Component {
             
             <div className="card-body">
                 { submissionOpen && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
-
+                { submissionOpen && !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Submit</button> }
                 { !waitingToStart && <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
                         className="NavButton"
                         activeClassName="activeRoute">

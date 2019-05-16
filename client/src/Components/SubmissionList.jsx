@@ -10,7 +10,7 @@ import { endPoints } from '../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
 import { debug } from 'util';
 import UserStore from '../Stores/UserStore';
-
+import LoginActions from '../actions/LoginActions';
 
 class SubmissionList extends Component {
     constructor(props) {
@@ -156,6 +156,12 @@ class SubmissionList extends Component {
     }
 
     render() {
+        let contest = ContestStore.getSelectedContest();
+        let dateNow = new Date();
+        let inVotingPhase = !!contest && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
+        let loggedIn = !!UserStore.getLoggedInUser();
+        debugger;
+
         let submissions = _.map(this.state.submissions, s => {
             return <Submission 
             vote={this.vote} 
@@ -188,6 +194,14 @@ class SubmissionList extends Component {
             </table>
 
             <div className="card-body">
+
+             { inVotingPhase && !loggedIn && 
+                        <button className='b1'
+                         onClick={() => { LoginActions.initiateLogin(); }}>
+                            Login to Vote!
+                         </button> 
+            }
+
                 <NavLink exact to={`/contest/${this.props.match.params.contestId}`} 
                         className="NavButton"
                         activeClassName="activeRoute">

@@ -8,18 +8,16 @@
 
 .discord-login {
   cursor: pointer;
-  background: rgb(164, 140, 190);
+  background: #7289DA;
   text-align: center;
   width: auto;
   border-radius: 0 0 2px 2px;
   position: absolute;
   top: 0px;
-  right: 0px;
-  padding: 20px;
+  right: 100px;
+  padding: 5px;
   font-family: 'helvetica';
-  color: white;
-  z-index: 3;
- }
+  color: white; }
 
 .selected-arrow {
   color: orange;

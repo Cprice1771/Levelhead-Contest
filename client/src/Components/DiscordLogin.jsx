@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { NotificationManager} from 'react-notifications';
 import { endPoints} from '../Constants/Endpoints';
 import axios from 'axios'
-import discordLogo from '../assets/Discord-Logo-White.png';
-import discordLogoText from '../assets/Discord-Logo_Wordmark-White.png';
 import UserStore from '../Stores/UserStore';
+
+import LoginActions from '../actions/LoginActions';
 
 class DiscordLogin extends Component {
 
@@ -13,74 +13,34 @@ class DiscordLogin extends Component {
         this.state = {
             loggedInUser: UserStore.getLoggedInUser()
         };
-        this.login = this.login.bind(this);
         this.initiateLogin = this.initiateLogin.bind(this);
-        this.generateRandomString = this.generateRandomString.bind(this);
         this.logout = this.logout.bind(this);
+        this.userStoreChange = this.userStoreChange.bind(this);
     }
 
-    generateRandomString() {
-        const rand = Math.floor(Math.random() * 10);
-        let randStr = '';
     
-        for (let i = 0; i < 20 + rand; i++) {
-            randStr += String.fromCharCode(33 + Math.floor(Math.random() * 94));
-        }
-    
-        return randStr;
-    }
 
     componentDidMount() {
+        UserStore.addChangeListener(this.userStoreChange);
         if(!!localStorage.getItem('discord-token')) {
-            this.login();
+            LoginActions.login();
         }
     }
 
-    async login() {
-        try {
-            var x = await axios.post(endPoints.LOGIN, JSON.parse(localStorage.getItem('discord-token')))
-            UserStore.setLoggedInUser(x.data.user)
-            this.setState({ loggedInUser: x.data.user });
-            
-        } catch(err) {
-            localStorage.removeItem('discord-token');
-            NotificationManager.error('Failed to login, please try again');
-        }
+    componentWillUnmount() {
+        UserStore.removeChangeListener(this.userStoreChange);
+    }
+
+    userStoreChange() {
+        this.setState({ loggedInUser: UserStore.getLoggedInUser() })
     }
 
     logout() {
-        UserStore.logout();
-        this.setState({
-            loggedInUser: null
-        })
+        LoginActions.logout();
     }
 
     initiateLogin() {
-        if(!!this.state.timer) {
-            return;
-        }
-
-
-        axios.post(endPoints.GET_DISCORD_LOGIN_LINK, { 
-            redirect: `${window.location.origin}/login`,
-         }).then(res => {
-            let childWindow = window.open(res.data.link, '_blank', 'width=600 height=800');
-            
-            var timer = setInterval(() => {
-                if (childWindow.closed) {
-                    clearInterval(this.state.timer);
-                    this.setState({ timer: null });
-                    if(!localStorage.getItem('discord-token')) {
-                        NotificationManager.error('Failed to login, please try again');
-                        return;
-                    }
-
-                    this.login();
-                }
-            }, 500);
-
-            this.setState({ timer: timer });
-        })
+       LoginActions.initiateLogin();
     }
 
 
@@ -90,14 +50,14 @@ class DiscordLogin extends Component {
 
         let content = null;
         if(loggedIn) {
-            content = <div><span>{this.state.loggedInUser.discordDisplayName}</span> <i className='fas fa-times' onClick={this.logout}></i></div>;
+            content = <button onClick={this.logout}>Logout</button>;
         } else {
-            content =  <img src={discordLogoText} width='auto' height='25'/>;
+            content =  <button onClick={this.initiateLogin}>Sign in <i class="fab fa-discord fa-lg"></i></button>;
         }
 
 
         return (
-            <div className='discord-login' onClick={!loggedIn ? this.initiateLogin : () => {}}>
+            <div>
                 {content}
             </div>
         );
