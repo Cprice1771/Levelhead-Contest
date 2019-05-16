@@ -13,9 +13,11 @@ body {
   width: 1000px;
   background-color: #D4D3E1;
   background: linear-gradient( #D4D3E1, rgb(180, 178, 196) );
-  margin: 0px auto;
+  margin: 0px auto 0px auto;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
   padding: 0px !important;
+  position: relative;
+  min-height: 100vh;
 
 }
 
@@ -83,13 +85,14 @@ body {
 
 /* CARD CSS */
 .card {
-  margin: 40px auto 20px auto;
+  margin: 40px auto 100px auto;
   background-color: white;
-  width: 650px;
+  width: 750px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
   border-radius: 5px;
   /* margin: 0px 0px 10px 0px; */
 }
+
 
 .card-header {
   background: linear-gradient( rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40) ), url('./assets/treeCropped.png');
@@ -186,9 +189,9 @@ body {
   color: #AD9DBE;
   font-size: 14px;
   padding: 20px 50px 20px 50px;
-  /* position: fixed;
-  left: 0;
-  bottom: 0; */
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 @media only screen and (max-width: 1300px) {
