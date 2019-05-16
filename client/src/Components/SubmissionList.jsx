@@ -191,7 +191,7 @@ class SubmissionList extends Component {
                 <NavLink exact to={`/contest/${this.props.match.params.contestId}`} 
                         className="NavButton"
                         activeClassName="activeRoute">
-                    <button className='b1' >Back To Contest</button> 
+                    <button className='b2' >Back To Contest</button> 
                 </NavLink>
             </div>
         </div>

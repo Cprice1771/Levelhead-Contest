@@ -124,7 +124,8 @@ body {
 
 .b1 {
   color: white;
-  background-color: #7D6B91;
+  background-color: rgb(164, 140, 190);
+  /* background-color: #7D6B91; */
 }
 
 .b2 {
@@ -185,6 +186,9 @@ body {
   color: #AD9DBE;
   font-size: 14px;
   padding: 20px 50px 20px 50px;
+  /* position: fixed;
+  left: 0;
+  bottom: 0; */
 }
 
 @media only screen and (max-width: 1300px) {
