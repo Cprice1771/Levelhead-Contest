@@ -7,6 +7,7 @@ import Submit from './Submit';
 import { NavLink } from 'react-router-dom';
 import UserStore from '../Stores/UserStore';
 import LoginActions from '../actions/LoginActions';
+import Results from './Results';
 
 class Contest extends Component {
 
@@ -120,17 +121,26 @@ class Contest extends Component {
         let waitingToStart = new Date(this.state.contest.startDate) > new Date();
         let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
         let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+        let contestOver = new Date(this.state.contest.votingEndDate) < new Date();
 
         return <div className="card"> 
             <div className="card-header">
                 <div className="card-text">
                     <h2>{this.state.contest.name}</h2>
                     <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>
+
                     <h5><ReactMarkdown source={this.state.contest.theme} /></h5>
+                   
                 </div>
             </div>
 
-            <div className="card-rules"><ReactMarkdown source={this.state.contest.rules} />
+            <div className="card-rules">
+                {!contestOver && <ReactMarkdown source={this.state.contest.rules} /> }
+                { contestOver && 
+                    <div>
+                    <h1>Results</h1>
+                    <Results />
+                    </div>}
             </div>
             { (waitingToStart || submissionOpen || votingOpen) &&
 

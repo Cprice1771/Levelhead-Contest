@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Contest = require("../models/contest")
+const Contest = require("../models/contest");
+const Submission = require('../models/submission');
+const _ = require('lodash');
+
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,6 +21,20 @@ router.get('/', function(req, res){
       res.send(contests);
     }
   })
+})
+
+//@@ GET /api/contests/results
+//@@ Display all submissions
+router.get('/results/:contestId', async function(req, res){
+  try {
+    
+    let submissions = await Submission.find({ contestId: req.params.contestId});
+    submissions = _.orderBy(submissions, ['votes'], ['desc']);
+    res.send(submissions);
+
+  } catch (err) {
+    res.status(500).json({msg: "Error Retrieving Submissions."})
+  }
 })
 
 //@@ GET /api/contests/:contestId

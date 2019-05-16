@@ -104,3 +104,23 @@
   right: 10px;
   bottom: 10px;
   position: absolute; }
+
+.first {
+  color: #dbcd07 !important;
+  font-size: 36px;
+  font-weight: 500 !important; }
+
+.second {
+  color: #8a9cafd3 !important;
+  font-weight: 450 !important;
+  font-size: 30px !important; }
+
+.third {
+  color: #836f00 !important;
+  font-weight: 450 !important;
+  font-size: 24px; }
+
+.other {
+  color: #212529 !important;
+  font-weight: 350 !important;
+  font-size: 18px; }

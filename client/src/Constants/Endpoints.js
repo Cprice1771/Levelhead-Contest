@@ -6,6 +6,8 @@ export const endPoints = {
     GET_CONTEST: (contestId) => `/api/contests/${contestId}`,
     CREATE_CONTEST: '/api/contests',
 
+    GET_CONTEST_RESULTS: (contestId) => `/api/contests/results/${contestId}`,
+
     //Submissions
     GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,
     GET_SUBMISSION: (submisionId) => `/api/submissions/${submisionId}`,

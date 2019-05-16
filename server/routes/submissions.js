@@ -28,6 +28,7 @@ var saveSubmission = (newSubmission, res) => {
 
 }
 
+
 //@@ GET /api/submissions/
 //@@ Display all submissions
 router.get('/', function(req, res){
@@ -39,6 +40,7 @@ router.get('/', function(req, res){
     }
   })
 })
+
 
 //@@ GET /api/submissions/:contestId
 //@@ Display submissions belonging to a certain contest
