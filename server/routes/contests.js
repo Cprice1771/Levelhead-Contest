@@ -24,6 +24,27 @@ router.get('/', function(req, res){
   })
 });
 
+
+async function bulkGetLevels(levelIds) {
+  let cfg = await Config.findOne();
+  const httpClient = Axios.create({
+    baseURL: 'https://www.bscotch.net/api/',  
+    timeout: 5000,
+    headers: {
+      'rumpus-credentials' : cfg.key
+    }
+  });
+
+  let newLevelData = [];
+  while(levelIds.length > 0) {
+    let toGet = levelIds.splice(0, Math.min(64, levelIds.length));
+    let levelResults = (await httpClient.get(`storage/crates/lh-published-levels/items?names=${toGet.join(',')}&limit=64`)).data.data;
+    newLevelData = newLevelData.concat(levelResults);
+  }
+
+  return newLevelData;
+}
+
 async function bulkGetUsers(users) {
   let cfg = await Config.findOne();
   const httpClient = Axios.create({
@@ -105,8 +126,28 @@ router.get('/update-results-cache/:contestId', async function(req, res){
   try {
     let contest = await Contest.findById(req.params.contestId);
     let submissions = await Submission.find({ contestId: req.params.contestId});
+
+    if(submissions.length === 0){
+      res.send(contest);
+      return;
+    }
+
+    let levelIds = _.map(submissions, x => x.lookupCode);
+    levels = await bulkGetLevels(levelIds);
+
+    for(var i = 0; i < submissions.length; i++) {
+      let foundLevel = _.find(levels, x => x.name === submissions[i].lookupCode);
+      if(!!foundLevel) {
+        submissions[i].levelMetaData = foundLevel;
+      }
+    }
+
+    for(var submission of submissions){
+      await submission.save();
+    }
+    
+
     let scores = await getTopScores(submissions);
-    console.log(scores);
     contest.topScores = scores;
     await contest.save();
 
