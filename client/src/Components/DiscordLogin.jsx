@@ -52,7 +52,7 @@ class DiscordLogin extends Component {
         if(loggedIn) {
             content = <button onClick={this.logout}>Logout</button>;
         } else {
-            content =  <button onClick={this.initiateLogin}>Sign in <i class="fab fa-discord fa-lg"></i></button>;
+            content =  <button onClick={this.initiateLogin}>Sign in <i className="fab fa-discord fa-lg"></i></button>;
         }
 
 

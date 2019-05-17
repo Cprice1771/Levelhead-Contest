@@ -8,9 +8,9 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
-import { debug } from 'util';
 import UserStore from '../Stores/UserStore';
 import LoginActions from '../actions/LoginActions';
+import TopScores from './TopScores';
 
 class SubmissionList extends Component {
     constructor(props) {
@@ -160,7 +160,6 @@ class SubmissionList extends Component {
         let dateNow = new Date();
         let inVotingPhase = !!contest && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
         let loggedIn = !!UserStore.getLoggedInUser();
-        debugger;
 
         let submissions = _.map(this.state.submissions, s => {
             return <Submission 
@@ -193,7 +192,9 @@ class SubmissionList extends Component {
                 </tbody>
             </table>
 
-            <div className="card-body">
+            <TopScores />
+
+            <div className="card-body" style={{paddingBottom: '50px '}}>
 
              { inVotingPhase && !loggedIn && 
                         <button className='b1'

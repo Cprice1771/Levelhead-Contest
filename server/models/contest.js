@@ -31,6 +31,9 @@ let contestSchema = mongoose.Schema({
   },
   maxVotePerUser: {
     type: Number,
+  },
+  topScores: {
+    type: Array
   }
 })
 let Contest = module.exports = mongoose.model('Contest', contestSchema);

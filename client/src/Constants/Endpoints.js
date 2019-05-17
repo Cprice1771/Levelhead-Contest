@@ -5,8 +5,11 @@ export const endPoints = {
     GET_ALL_CONTESTS: '/api/contests',
     GET_CONTEST: (contestId) => `/api/contests/${contestId}`,
     CREATE_CONTEST: '/api/contests',
-
+    UPDATE_RESULTS_CACHE: (contestId) =>  `/api/contests/update-results-cache/${contestId}`,
     GET_CONTEST_RESULTS: (contestId) => `/api/contests/results/${contestId}`,
+    GET_CONTEST_TOP_SCORES: (contestId) => `/api/contests/top-scores/${contestId}`,
+
+
 
     //Submissions
     GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,

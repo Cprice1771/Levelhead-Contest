@@ -14,14 +14,14 @@ import ResultRow from './ResultRow';
 import { timingSafeEqual } from 'crypto';
 import ScoreRow from './ScoreRow';
 
-class Results extends Component {
+class TopScores extends Component {
     constructor(props) {
         super(props);
         this.state = {
             results: []
         };
 
-        this.contestChange = this.getContestResults.bind(this);
+        this.getContestResults = this.getContestResults.bind(this);
         this.assignPlace = this.assignPlace.bind(this);
     }
 
@@ -37,11 +37,13 @@ class Results extends Component {
     }
 
     assignPlace(results, column) {
+
         if(results.length === 0) {
             return;
         }
 
         let currentPlace = 1;
+
         results[0].position = currentPlace;
         for(var i = 1; i < results.length; i++) {
             if(results[i][column] < results[i-1][column]) {
@@ -54,29 +56,18 @@ class Results extends Component {
 
     async getContestResults() {
         try {
-            let resp = await axios.get(endPoints.GET_CONTEST_RESULTS(ContestStore.getSelectedContest()._id));
-            this.assignPlace(resp.data.submissions, 'votes');
-            this.assignPlace(resp.data.scores, 'total');
-            this.setState({ results: resp.data.submissions, scores: resp.data.scores });
+            let resp = await axios.get(endPoints.GET_CONTEST_TOP_SCORES(ContestStore.getSelectedContest()._id));
+            this.assignPlace(resp.data, 'total');
+            this.setState({ scores: resp.data });
         } catch (ex) {
             NotificationManager.error('Failed to load contest results');
+            console.log(ex);
         }
     }
 
     
     render() {
        
-
-        let results = _.map(this.state.results, (res, idx) => {
-            return <ResultRow 
-                key={idx}
-                votes={res.votes}
-                title={res.levelMetaData.map.Title}
-                position={res.position}
-                rumpusUserName={res.rumpusUserName}
-            />
-        })
-
         let scores = _.map(this.state.scores, (res, idx) => {
             return <ScoreRow 
                 key={idx}
@@ -86,24 +77,9 @@ class Results extends Component {
 
         return (
         <>
-        <div className="submission-container" >
-            <table className="table submission-header table-striped">
-                <thead>
-                    <tr>
-                        <th>Place</th>
-                        <th>Creator</th>
-                        <th>Title</th>
-                        <th>Votes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {results}
-                </tbody>
-            </table>
-        </div>
         
-        <h1>Top Scores</h1>
         <div className="submission-container" >
+        <h1>Top Scores</h1>
             <table className="table submission-header table-striped">
                 <thead>
                     <tr>
@@ -125,4 +101,4 @@ class Results extends Component {
     }
 }
 
-export default Results;
+export default TopScores;

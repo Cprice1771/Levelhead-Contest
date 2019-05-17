@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
-
+import ContestStore from '../Stores/ContestStore';
 import { NotificationManager} from 'react-notifications';
 import UserStore from '../Stores/UserStore';
 
@@ -34,8 +34,14 @@ class Submit extends Component {
             lookupCode: this.state.levelCode,
             submittedByUserId: UserStore.getLoggedInUser()._id,
             overwrite: this.state.overwrite,
-        }).then(res => {
+        }).then(async res => {
             if(res.data.success) {
+                try {
+                    await Axios.get(endPoints.UPDATE_RESULTS_CACHE(ContestStore.getSelectedContest()._id));
+                } catch(err) {
+                    console.log(err);
+                }
+
                 this.props.onClose();
                 NotificationManager.success('Level Successfully Submitted!');
             } else {
@@ -84,7 +90,10 @@ class Submit extends Component {
                 <input type='text' className="form-control"
                     value={this.state.levelCode} 
                     onChange={(e) => {
-                        this.setState({ levelCode: e.target.value });
+                        let newVal = e.target.value;
+                        newVal = newVal.substring(0, Math.min(newVal.length, 7))
+
+                        this.setState({ levelCode: newVal });
                     }}
                 />
             </div>
