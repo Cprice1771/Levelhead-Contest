@@ -190,11 +190,13 @@ body {
   color: #AD9DBE;
   font-size: 14px;
   padding: 20px 50px 20px 50px;
-  height: 130px;
+  height: 155px;
   /* margin: 100px 0px 0px 0px; */
   position: absolute;
   bottom: 0;
   right: 0;
+  /* display: flex; */
+  /* align-items: center; */
 }
 
 @media only screen and (max-width: 1300px) {
@@ -275,5 +277,11 @@ body {
   }
   .content-body {
     padding: 0px 0px 0px 0px;
+  }
+}
+
+@media only screen and (max-width: 990px){
+  .card {
+    max-width:720px;
   }
 }
