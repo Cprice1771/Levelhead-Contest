@@ -13,6 +13,7 @@ import LoginActions from '../actions/LoginActions';
 import ResultRow from './ResultRow';
 import { timingSafeEqual } from 'crypto';
 import ScoreRow from './ScoreRow';
+import moment from 'moment';
 
 class TopScores extends Component {
     constructor(props) {
@@ -75,11 +76,27 @@ class TopScores extends Component {
             />
         })
 
+        let lastUpdatedDate = 'N/A';
+        if(ContestStore.getSelectedContest()) {
+            lastUpdatedDate = moment(ContestStore.getSelectedContest().lastUpdatedScores).format('MM/DD/YYYY hh:mm A');
+        }
+        
+
         return (
         <>
         
         <div className="submission-container" >
-        <h1>Top Scores</h1>
+        <div className='row'>
+            <div className='col-9'>
+                <h1>Top Scores</h1>
+            </div>
+            <div className='col-3'>
+                <div style={{  position: 'absolute',
+                                bottom: 0,
+                                left: 0, }}>Last updated ({lastUpdatedDate})</div>
+            </div>
+        </div>
+        
             <table className="table submission-header table-striped">
                 <thead>
                     <tr>

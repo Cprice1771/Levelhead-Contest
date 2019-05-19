@@ -3,8 +3,10 @@ const app = express()
 const port = 3000
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
-const cors = require('cors');
 const path = require('path');
+const cron = require("node-cron");
+const RumpusAPI = require('./uitl/rumpusAPI');
+const contest = require('./models/contest');
 
 require('dotenv').config()
 
@@ -26,21 +28,6 @@ app.use('/api/submissions', submissions)
 
 let votes = require('./routes/votes')
 app.use('/api/votes', votes)
-
-// Set up a whitelist and check against it:
-// var whitelist = ['http://localhost:3000', 'http://localhost:3001', 'https://levelcup.herokuapp.com/']
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-
-// // Then pass them to cors:
-// app.use(cors(corsOptions));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -66,3 +53,25 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(
     console.log(err)
   }
 );
+
+//Update level metadata every minute
+cron.schedule("0 * * * *", async function() {
+
+  console.log('Running job');
+  const rapi = new RumpusAPI();
+  let contests = await contest.find();
+  const runDate = new Date();
+  //Make sure we run at midnight when the contest closes 1 last time.
+  runDate.setMinutes(runDate.getMinutes() - 10);
+  for(const contest of contests) {
+    try {
+      if(runDate < contest.votingEndDate) {
+        await rapi.updateTopScores(contest._id);
+      }
+    } catch(err) {
+      console.log(`Error: ${err}`);
+    }
+  }
+
+  console.log('Job finished');
+});

@@ -36,12 +36,6 @@ class Submit extends Component {
             overwrite: this.state.overwrite,
         }).then(async res => {
             if(res.data.success) {
-                try {
-                    await Axios.get(endPoints.UPDATE_RESULTS_CACHE(ContestStore.getSelectedContest()._id));
-                } catch(err) {
-                    console.log(err);
-                }
-
                 this.props.onClose();
                 NotificationManager.success('Level Successfully Submitted!');
             } else {

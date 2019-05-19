@@ -5,7 +5,7 @@ const Submission = require("../models/submission")
 const Contest = require('../models/contest');
 const Axios = require('axios');
 const User = require('../models/user');
-
+const RumpusAPI = require('../uitl/rumpusAPI');
 
 
 
@@ -14,19 +14,6 @@ router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-var saveSubmission = (newSubmission, res) => {
-  newSubmission.save().then(sub => {
-      res.status(200).json({
-        success: true,
-        msg: "Submission successfully entered.",
-        data: sub
-      });
-  }).catch(err => {
-    res.status(500).json({ msg: `${err}`})
-  });
-
-}
 
 
 //@@ GET /api/submissions/
@@ -111,17 +98,9 @@ router.post('/', async function(req, res){
       }
 
 
-      let cfg = await Config.findOne();
-
-      const httpClient = Axios.create({
-        baseURL: 'https://www.bscotch.net/api/',  
-        timeout: 5000,
-        headers: {
-          'rumpus-credentials' : cfg.key
-        }
-      })
+      const rapi = new RumpusAPI();
       //Validate level is real with rumpus
-      let levelResult = (await httpClient.get(`storage/crates/lh-published-levels/items?names=${req.body.lookupCode}&limit=1`)).data.data[0]; //don't ask....
+      let levelResult = await rapi.getLevel(req.body.lookupCode); 
 
       if(!levelResult) {
         res.status(200).json({ 
@@ -137,7 +116,7 @@ router.post('/', async function(req, res){
         return;
       }
 
-      let userReuslt = (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${levelResult.userId}`)).data.data[0]; //don't ask....
+      let userReuslt = await rapi.getUser(levelResult.userId); //don't ask....
 
       newSubmission.rumpusUserName = userReuslt.alias;
       newSubmission.rumpusCreatorId = levelResult.userId;
@@ -193,16 +172,18 @@ router.post('/', async function(req, res){
           submittedIp: req.connection.remoteAddress,
           votes: 0
         });
-        res.status(200).json({
-          success: true,
-          msg: "Submission successfully entered.",
-          data: newSubmission
-        });
-        return;
+        
       } else {
-        saveSubmission(newSubmission, res);
+        await newSubmission.save();
       }
       
+      await rapi.updateTopScores(req.body.contestId);
+
+      res.status(200).json({
+        success: true,
+        msg: "Submission successfully entered.",
+        data: newSubmission
+      });
 
     } catch (err) {
       res.status(500).json({ msg: `${err}` });

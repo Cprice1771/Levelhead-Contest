@@ -34,6 +34,9 @@ let contestSchema = mongoose.Schema({
   },
   topScores: {
     type: Array
+  },
+  lastUpdatedScores: {
+    type: Date,
   }
 })
 let Contest = module.exports = mongoose.model('Contest', contestSchema);
