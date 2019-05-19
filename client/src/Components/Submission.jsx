@@ -13,7 +13,7 @@ function Submission (props) {
             <td>{submision.levelMetaData.stats.Attempts === 0 ? 0 : _.round(((submision.levelMetaData.stats.Successes / submision.levelMetaData.stats.Attempts) * 100), 2)}%</td>
             <td>{submision.levelMetaData.stats.Attempts}</td>
             {(props.showVotes) &&<td>{submision.votes}</td>}
-            <td>{(props.canVote) &&
+            {(props.canVote) &&<td>
                 <i className={"fas fa-arrow-alt-circle-up " + (props.hasVotedFor ? 'fa-arrow-alt-circle-selected' : 'fa-arrow-alt-circle-delescted')} onClick={() => {
                     
                     if(props.hasVotedFor) {
@@ -22,7 +22,7 @@ function Submission (props) {
                         props.vote(submision._id);
                     }
                 }}></i>
-            }</td>
+            </td>}
         </tr>);
 
 }
