@@ -134,37 +134,44 @@ class Contest extends Component {
                 </div>
             </div>
 
+            { (waitingToStart || submissionOpen || votingOpen) &&
+
+                <div className="clock-container"> 
+                    {waitingToStart && <h4>Time left until submissions open</h4>}
+                    {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
+                    {votingOpen && <h4>Time left until voting closes</h4>}
+
+                    <span className="timeBox">{this.formatTime(this.state.days)} </span>
+                    <span className="timeBox">{this.formatTime(this.state.hours)}</span> 
+                    <span className="timeBox">{this.formatTime(this.state.minutes)}</span> 
+                    <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
+                </div>
+                }
+
+                <div className="card-body">
+                    { submissionOpen && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
+                    { submissionOpen && !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Submit</button> }
+                    { !waitingToStart && 
+                        <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
+                            className="NavButton"
+                            activeClassName="activeRoute">
+                            <button className='b2' >View Entries</button>
+                        </NavLink> }
+                </div>
+
             <div className="card-rules">
-                {!contestOver && <ReactMarkdown source={this.state.contest.rules} /> }
+                {!contestOver && 
+                <>
+                <h1 style={{ textAlign: 'center' }}>Rules</h1>
+                <ReactMarkdown source={this.state.contest.rules} />
+                </> }
                 { contestOver && 
                     <div>
                     <h1>Results</h1>
                     <Results />
                     </div>}
             </div>
-            { (waitingToStart || submissionOpen || votingOpen) &&
-
-            <div className="clock-container"> 
-                {waitingToStart && <h4>Time left until submissions open</h4>}
-                {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
-                {votingOpen && <h4>Time left until voting closes</h4>}
-
-                <span className="timeBox">{this.formatTime(this.state.days)} </span>
-                <span className="timeBox">{this.formatTime(this.state.hours)}</span> 
-                <span className="timeBox">{this.formatTime(this.state.minutes)}</span> 
-                <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
-            </div>
-            }
             
-            <div className="card-body">
-                { submissionOpen && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Submit</button> }
-                { submissionOpen && !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Submit</button> }
-                { !waitingToStart && <NavLink exact to={`/submissions/${this.props.match.params.contestId}`} 
-                        className="NavButton"
-                        activeClassName="activeRoute">
-                    <button className='b2' >View Entries</button>
-        </NavLink> }
-                </div>
             <ReactModal
           isOpen={this.state.showModal}
          
