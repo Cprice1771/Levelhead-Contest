@@ -159,7 +159,7 @@ class Contest extends Component {
                         </NavLink> }
                 </div>
 
-            <div className="card-rules">
+            <div className="card-rules pad-bottom">
                 {!contestOver && 
                 <>
                 <h1 style={{ textAlign: 'center' }}>Rules</h1>

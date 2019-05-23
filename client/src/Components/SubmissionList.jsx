@@ -194,7 +194,7 @@ class SubmissionList extends Component {
 
             <TopScores />
 
-            <div className="card-body" style={{paddingBottom: '50px '}}>
+            <div className="card-body pad-bottom" style={{paddingBottom: '50px '}}>
 
              { inVotingPhase && !loggedIn && 
                         <button className='b1'

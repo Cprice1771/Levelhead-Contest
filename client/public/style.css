@@ -114,8 +114,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
- 
+  
 
+}
+
+.pad-bottom {
+  margin-bottom: 120px;
 }
 
 .card-body button {
