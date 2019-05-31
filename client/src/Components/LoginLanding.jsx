@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 
-import { endPoints} from '../Constants/Endpoints';
-import axios from 'axios'
-import discordLogo from '../assets/Discord-Logo-White.png';
-import discordLogoText from '../assets/Discord-Logo_Wordmark-White.png';
-
 class LoginLanding extends Component {
 
     constructor(props) {

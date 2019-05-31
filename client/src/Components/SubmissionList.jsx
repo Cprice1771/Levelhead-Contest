@@ -20,6 +20,7 @@ class SubmissionList extends Component {
             canVote: false,
             showVotes: this.contestOver(ContestStore.getSelectedContest()),
             myVotes: [],
+            hidePlayed: false,
         };
 
         this.submissionsChanged = this.submissionsChanged.bind(this);
@@ -29,6 +30,7 @@ class SubmissionList extends Component {
         this.getMyVotes = this.getMyVotes.bind(this);
         this.getCanVote = this.getCanVote.bind(this);
         this.userChanged = this.userChanged.bind(this);
+        this.togglePlayed = this.togglePlayed.bind(this);
     }
 
     componentDidMount() {
@@ -155,16 +157,31 @@ class SubmissionList extends Component {
         });
     }
 
+    togglePlayed(id) {
+        debugger;
+        let idx = _.findIndex(this.state.submissions, x => x._id === id);
+        let submissionCopy = _.cloneDeep(this.state.submissions);
+        submissionCopy[idx].played = !submissionCopy[idx].played;
+        this.setState({ submissions: submissionCopy });
+    }
+
     render() {
         let contest = ContestStore.getSelectedContest();
         let dateNow = new Date();
         let inVotingPhase = !!contest && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
         let loggedIn = !!UserStore.getLoggedInUser();
+        debugger;
+        let subs = this.state.submissions;
+        if(this.state.hidePlayed) {
+            subs = subs.filter(x => !x.played);
+        }
 
-        let submissions = _.map(this.state.submissions, s => {
+
+        let submissions = _.map(subs, s => {
             return <Submission 
             vote={this.vote} 
             unvote={this.unvote} 
+            togglePlayed={this.togglePlayed}
             submission={s} 
             hasVotedFor={_.includes(this.state.myVotes, s._id )}
             key={s._id}  
@@ -174,21 +191,40 @@ class SubmissionList extends Component {
         })
 
         return (<div className="submission-container" >
+            <div className="row submission-nav-row">
+            <div className="col-md-12">
+                <div className="pull-right">
+                <span className="switch-label">Hide Played</span>
+                <label className="switch ">
+                    
+                    <input type="checkbox" 
+                    checked={this.state.hidePlayed} 
+                    onChange={() => {
+                        this.setState({ hidePlayed: !this.state.hidePlayed});
+                    }}
+                    />
+                    <span className="slider round"></span>
+                </label>
+                </div>
+            </div>
+            </div>
             <table className="table submission-header table-striped">
                 <thead>
                     <tr>
+                        <th>Played</th>
                         <th>Lookup Code</th>
                         <th>Creator</th>
                         <th>Title</th>
+                        <th>Plays</th>
                         <th>Clear Rate</th>
-                        <th>Attempts</th>
+                        <th>Top Scores</th>
                         {/* <th>{this.state.showVotes && <div className="col-md-2">Votes</div>}</th> */}
                         {this.state.showVotes && <th>Votes</th> }
                         {this.state.canVote && <th></th> }
                     </tr>
                 </thead>
                 <tbody>
-                {submissions.length > 0 ? submissions : <tr><td>No Submissions Yet!</td></tr>}
+                {submissions.length > 0 ? submissions : <tr><td>No Submissions!</td></tr>}
                 </tbody>
             </table>
 

@@ -131,14 +131,35 @@ module.exports = class RumpusAPI {
     let levelIds = _.map(submissions, x => x.lookupCode);
     const levels = await this.bulkGetLevels(levelIds);
 
+    let usersToGet = [];
     for(var i = 0; i < submissions.length; i++) {
       let foundLevel = _.find(levels, x => x.name === submissions[i].lookupCode);
       if(!!foundLevel) {
         submissions[i].levelMetaData = foundLevel;
+
+        if(_.indexOf(usersToGet, foundLevel.records.HighScore[0].userId) < 0) {
+          usersToGet.push(usersToGet, foundLevel.records.HighScore[0].userId)
+        }
+
+        if(_.indexOf(usersToGet, foundLevel.records.FastestTime[0].userId) < 0) {
+          usersToGet.push(usersToGet, foundLevel.records.FastestTime[0].userId)
+        }
       }
     }
 
+    let users = await this.bulkGetUsers(usersToGet);
+
     for(var submission of submissions){
+      let foundHighscoreUser = _.find(users, x => x.userId === submission.levelMetaData.records.HighScore[0].userId);
+      if(!!foundHighscoreUser) {
+        submission.levelMetaData.records.HighScore[0].rumpusName = foundHighscoreUser.alias;
+      }
+
+      let foundFastestUser = _.find(users, x => x.userId === submission.levelMetaData.records.FastestTime[0].userId);
+      if(!!foundFastestUser) {
+        submission.levelMetaData.records.FastestTime[0].rumpusName = foundFastestUser.alias;
+      }
+      
       await submission.save();
     }
     

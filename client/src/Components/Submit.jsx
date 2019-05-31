@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
-import ContestStore from '../Stores/ContestStore';
 import { NotificationManager} from 'react-notifications';
 import UserStore from '../Stores/UserStore';
 

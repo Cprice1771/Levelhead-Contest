@@ -27,7 +27,6 @@ export default {
         if(!!timer) {
             return;
         }
-        let self = this;
         axios.post(endPoints.GET_DISCORD_LOGIN_LINK, { 
             redirect: `${window.location.origin}/login`,
          }).then(res => {

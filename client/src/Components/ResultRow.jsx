@@ -1,9 +1,6 @@
 import React from 'react';
-import * as _ from 'lodash';
 
 function ResultRow (props) {
-
-
     let getPosition = (position) => {
         switch(position) {
             case 1:

@@ -6,7 +6,19 @@ $grey: #C5C6C7;
 $primaryBlue: #66FCF1;
 $secondaryBlue: #45A29E;
 
+@import "Checkbox.scss" ;
+@import "toggle.scss" ;
 
+
+.submission-nav-row {
+  height: 50px;
+}
+
+.pull-right {
+  float:right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
 
 .fa-arrow-alt-circle-delescted {
   color: rgb(162, 140, 187);

@@ -1,5 +1,4 @@
 import React from 'react';
-import * as _ from 'lodash';
 
 function ScoreRow (props) {
 
