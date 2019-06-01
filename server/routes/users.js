@@ -37,12 +37,18 @@ router.post('/login', async (req, res) => {
           });
 
         const response = (await httpClient.get(`users/@me`)).data;
+        const { username, discriminator, id } = response;
 
-        const { username, discriminator } = response;
+        var user = await User.findOne({$and:[{ discordUniqueId: id}]});
+        //Dumb legacy method to catch people created before I stored discord unique ids
+        //TODO: delete me after contest ends 
+        if(!user) {
+            user = await User.findOne({$and:[{ discordId: `${username}#${discriminator}`}]});
+        }
 
-        var user = await User.findOne({$and:[{ discordId: `${username}#${discriminator}`}]});
         if(!user) {
             const newUser = new User({
+                discordUniqueId: id, 
                 discordId: `${username}#${discriminator}`,
                 discordDisplayName: username,
                 rumpusId: null,
@@ -50,6 +56,9 @@ router.post('/login', async (req, res) => {
               });
     
             user = await newUser.save();
+        } else {
+            user.discordUniqueId = id;
+            user.save();
         }
         
 

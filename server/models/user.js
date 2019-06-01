@@ -13,6 +13,9 @@ let userSchema = mongoose.Schema({
     },
     dateRegistered: {
         type: Date
+    },
+    discordUniqueId: { 
+        type: String,
     }
 })
 let User = module.exports = mongoose.model('User', userSchema);
