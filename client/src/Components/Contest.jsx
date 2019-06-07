@@ -140,11 +140,12 @@ class Contest extends Component {
                     {waitingToStart && <h4>Time left until submissions open</h4>}
                     {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
                     {votingOpen && <h4>Time left until voting closes</h4>}
-
-                    <span className="timeBox">{this.formatTime(this.state.days)} </span>
-                    <span className="timeBox">{this.formatTime(this.state.hours)}</span> 
-                    <span className="timeBox">{this.formatTime(this.state.minutes)}</span> 
-                    <span className="timeBox">{this.formatTime(this.state.seconds)}</span>
+                    <div className='row justify-content-center'>
+                        <div className="timeBox"><h4 className='timeTitle'>Days</h4> <span>{this.formatTime(this.state.days)} </span> </div>
+                        <div className="timeBox"><h4 className='timeTitle'>Hours</h4>  <span>{this.formatTime(this.state.hours)} </span></div> 
+                        <div className="timeBox"><h4 className='timeTitle'>Minutes</h4>  <span>{this.formatTime(this.state.minutes)} </span></div> 
+                        <div className="timeBox"><h4 className='timeTitle'>Seconds</h4>  <span>{this.formatTime(this.state.seconds)}</span></div>
+                    </div>
                 </div>
                 }
 

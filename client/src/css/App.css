@@ -260,12 +260,15 @@ input:checked + .slider:before {
   background: #D4D3E1;
   border-radius: 5px;
   height: auto;
-  width: auto;
   padding: 5px;
   text-align: center;
   margin: 10px;
   border: 2px #C5C6C7;
-  font-size: 50px; }
+  font-size: 50px;
+  width: 100px; }
+
+.timeTitle {
+  font-size: 20px; }
 
 .pull-right-down {
   right: 10px;

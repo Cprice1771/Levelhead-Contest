@@ -136,12 +136,16 @@ $secondaryBlue: #45A29E;
   background: #D4D3E1;
   border-radius: 5px;
   height: auto;
-  width: auto;
   padding: 5px;
   text-align: center;
   margin: 10px;
   border: 2px $grey;
-  font-size: 50px
+  font-size: 50px;
+  width: 100px;
+}
+
+.timeTitle {
+  font-size: 20px;
 }
 
 .pull-right-down {
@@ -149,8 +153,6 @@ $secondaryBlue: #45A29E;
   bottom: 10px;
   position: absolute;
 }
-
-
 
 .first {
   color: #dbcd07 !important;
