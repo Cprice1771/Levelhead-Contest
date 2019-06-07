@@ -158,7 +158,6 @@ class SubmissionList extends Component {
     }
 
     togglePlayed(id) {
-        debugger;
         let idx = _.findIndex(this.state.submissions, x => x._id === id);
         let submissionCopy = _.cloneDeep(this.state.submissions);
         submissionCopy[idx].played = !submissionCopy[idx].played;
@@ -170,7 +169,6 @@ class SubmissionList extends Component {
         let dateNow = new Date();
         let inVotingPhase = !!contest && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
         let loggedIn = !!UserStore.getLoggedInUser();
-        debugger;
         let subs = this.state.submissions;
         if(this.state.hidePlayed) {
             subs = subs.filter(x => !x.played);
