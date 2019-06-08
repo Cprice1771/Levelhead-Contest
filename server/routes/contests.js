@@ -6,7 +6,8 @@ const _ = require('lodash');
 const Config = require('../models/config');
 const Axios = require('axios');
 const RumpusAPI = require('../uitl/rumpusAPI');
-
+const User = require('../models/user')
+const ResponseStatus = require('../uitl/responseStatus');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -91,25 +92,89 @@ router.get('/:contestId', function(req, res){
   })
 })
 
+function validateContest(contest) {
+
+
+  if(!contest.name || !contest.theme || !contest.rules) {
+    return 'Missing contest info';
+  }
+
+  if(contest.startDate > contest.submissionEndDate || 
+    contest.submissionEndDate > contest.votingEndDate) {
+        return 'Invalid contest dates';
+  }
+
+  if(['building', 'speedrun'].indexOf(contest.contestType) === -1) {
+    return 'Invalid contest type';
+  }
+
+  if(contest.contestType === 'speedrun') {
+    if(!contest.countShoes && !contest.countCrowns) {
+      return 'Speed run contests must be for shoes or crowns or both';
+    }
+  }
+
+  if(contest.contestType === 'building') {
+    if(contest.maxVotePerUser <= 0) {
+      return 'Building contests must allow for at least 1 vote per user';
+    }
+  }
+
+  return null;
+}
 
 //@@ POST /api/contests
 //@@ Creates a new contest
-router.post('/', function(req, res){
+router.post('/', async function(req, res){
   //add new contest
   const newContest = new Contest({
     name: req.body.name,
     theme: req.body.theme,
     prizes: req.body.prizes,
     rules: req.body.rules,
+    createdBy: req.body.createdBy,
     startDate: req.body.startDate,
     submissionEndDate: req.body.submissionEndDate,
-    votingEndDate: req.body.votingEndDate
+    votingEndDate: req.body.votingEndDate,
+    /*Contest Type */
+    contestType: req.body.contestType,
+    /*Speedrun Contest Rules */
+    countCrowns: req.body.countCrowns,
+    countShoes: req.body.countShoes,
+    /*Builder Contest Rules */
+    maxVotePerUser: req.body.maxVotePerUser,
+    displayTopScore: req.body.displayTopScore,
+    allowPreviousLevels: req.body.allowPreviousLevels,
+    requireDailyBuild: req.body.requireDailyBuild,
+    requireLevelInTower: req.body.requireLevelInTower,
+    canVoteForSelf: req.body.canVoteForSelf,
   });
+
+  var user = await User.findById(req.body.createdBy);
+  if(user.role != 'Admin') {
+    var existingContests = await Contest.find({ votingEndDate: { $gt: new Date() }});
+    if(existingContests.length > 0) {
+      res.status(422).json({ success: false, msg: `You can only have 1 contest running at a time! please wait until after ${moment(existingContests[0].votingEndDate).format('MM/DD/YYYY')} to create a new contest.`});
+    }
+  }
+
+  //Validation
+  var error = validateContest(newContest);
+  if(error) {
+    res.status(422).json(new ResponseStatus(false, error));
+  }
+
+  
+
+  if(['building', 'speedrun'].indexOf(newContest.contestType) === -1) {
+    res.status(422).json(new ResponseStatus(false, 'Invalid contest type'));
+  }
+
   newContest.save(function(err, contest){
     if(err){
-      res.status(500).json({ msg: `${err}`})
+      res.status(500).json({ success: false, msg: `${err}`})
     } else {
-      res.send(contest);
+      res.send({ success: true, msg : 'Contest Created'});
     }
   })
 })

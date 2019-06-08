@@ -13,6 +13,10 @@ let userSchema = mongoose.Schema({
     },
     dateRegistered: {
         type: Date
+    },
+    //Admin or User
+    role: {
+        type: String,
     }
 })
 let User = module.exports = mongoose.model('User', userSchema);
