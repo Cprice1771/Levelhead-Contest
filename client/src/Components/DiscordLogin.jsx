@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { NotificationManager} from 'react-notifications';
-import { endPoints} from '../Constants/Endpoints';
-import axios from 'axios'
 import UserStore from '../Stores/UserStore';
 
 import LoginActions from '../actions/LoginActions';
@@ -17,9 +14,7 @@ class DiscordLogin extends Component {
         this.logout = this.logout.bind(this);
         this.userStoreChange = this.userStoreChange.bind(this);
     }
-
     
-
     componentDidMount() {
         UserStore.addChangeListener(this.userStoreChange);
         if(!!localStorage.getItem('discord-token')) {

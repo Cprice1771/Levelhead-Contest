@@ -14,6 +14,9 @@ let userSchema = mongoose.Schema({
     dateRegistered: {
         type: Date
     },
+    discordUniqueId: { 
+        type: String,
+    },
     //Admin or User
     role: {
         type: String,

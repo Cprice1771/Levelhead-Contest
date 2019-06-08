@@ -6,7 +6,19 @@ $grey: #C5C6C7;
 $primaryBlue: #66FCF1;
 $secondaryBlue: #45A29E;
 
+@import "Checkbox.scss" ;
+@import "toggle.scss" ;
 
+
+.submission-nav-row {
+  height: 50px;
+}
+
+.pull-right {
+  float:right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
 
 .fa-arrow-alt-circle-delescted {
   color: rgb(162, 140, 187);
@@ -124,12 +136,16 @@ $secondaryBlue: #45A29E;
   background: #D4D3E1;
   border-radius: 5px;
   height: auto;
-  width: auto;
   padding: 5px;
   text-align: center;
   margin: 10px;
   border: 2px $grey;
-  font-size: 50px
+  font-size: 50px;
+  width: 100px;
+}
+
+.timeTitle {
+  font-size: 20px;
 }
 
 .pull-right-down {
@@ -137,8 +153,6 @@ $secondaryBlue: #45A29E;
   bottom: 10px;
   position: absolute;
 }
-
-
 
 .first {
   color: #dbcd07 !important;

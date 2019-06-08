@@ -1,6 +1,4 @@
-import { endPoints} from '../Constants/Endpoints';
 import { EventEmitter } from 'events'
-import axios from 'axios'
 
 var _state = {
     loggedInUser: null
