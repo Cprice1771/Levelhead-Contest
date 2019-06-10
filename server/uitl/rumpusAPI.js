@@ -141,9 +141,7 @@ class RumpusAPI {
       }
 
       let submissions = await Submission.find({ contestId: contestId});
-
       if(submissions.length === 0){
-        res.send(contest);
         return;
       }
 
