@@ -51,7 +51,7 @@ class Submit extends Component {
                 })
             } else {
                 this.setState({
-                    error: 'Connection Error',
+                    error: 'Something went wrong. Please Try again later.',
                     overwrite: false
                 })
             }
@@ -92,10 +92,6 @@ class Submit extends Component {
             </div>
                
             </div>
-
-             <div className='row input-group'>
-            </div>
-
 
             <div className='error'>
                 <span>{this.state.error}</span>

@@ -21,6 +21,7 @@ class SubmissionList extends Component {
             showVotes: this.contestOver(ContestStore.getSelectedContest()),
             myVotes: [],
             hidePlayed: false,
+            contestInfo: ContestStore.getSelectedContest()
         };
 
         this.submissionsChanged = this.submissionsChanged.bind(this);
@@ -31,6 +32,8 @@ class SubmissionList extends Component {
         this.getCanVote = this.getCanVote.bind(this);
         this.userChanged = this.userChanged.bind(this);
         this.togglePlayed = this.togglePlayed.bind(this);
+        this.bookmarkAll = this.bookmarkAll.bind(this);
+        this.bookmark = this.bookmark.bind(this);
     }
 
     componentDidMount() {
@@ -78,7 +81,8 @@ class SubmissionList extends Component {
 
     contestChange() {
         this.setState({ canVote: this.getCanVote(ContestStore.getSelectedContest()),
-                        showVotes: this.contestOver(ContestStore.getSelectedContest()) 
+                        showVotes: this.contestOver(ContestStore.getSelectedContest()),
+                        contestInfo: ContestStore.getSelectedContest(), 
                     });
         SubmissionStore.loadSubmissionsForContest(ContestStore.getSelectedContest()._id);
     }
@@ -95,7 +99,7 @@ class SubmissionList extends Component {
             return false;
         }
         let dateNow = new Date();
-        return dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate) && !!UserStore.getLoggedInUser();
+        return contest.contestType === 'building' && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate) && !!UserStore.getLoggedInUser();
     }
 
     submissionsChanged() {
@@ -126,6 +130,30 @@ class SubmissionList extends Component {
             else {
                 NotificationManager.error('Connection Error');
             }
+        });
+    }
+
+    bookmarkAll() {
+        this.bookmark(this.state.submissions.map(x => x.lookupCode));
+    }
+
+    bookmark(lookupCodes) {
+        axios.post(endPoints.BOOKMARK_SUBMISSION, {
+            lookupCodes: lookupCodes,
+            apiKey: UserStore.getLoggedInUser().apiKey,
+        }).then(res => {
+            if(res.data.success) {
+                NotificationManager.success('Bookmarked');
+            } else {
+                NotificationManager.error(res.data.msg);
+            }
+        }).catch(res => {
+            if(res && res.response && res.response.data) {
+                NotificationManager.error(res.response.data.msg);
+            } else {
+                NotificationManager.error('Something went wrong');
+            }
+            
         });
     }
 
@@ -177,6 +205,8 @@ class SubmissionList extends Component {
 
         let submissions = _.map(subs, s => {
             return <Submission 
+            canBookmark={!!UserStore.getLoggedInUser() && UserStore.getLoggedInUser().apiKey}
+            bookmark={this.bookmark}
             vote={this.vote} 
             unvote={this.unvote} 
             togglePlayed={this.togglePlayed}
@@ -192,6 +222,18 @@ class SubmissionList extends Component {
             <div className="row submission-nav-row">
             <div className="col-md-12">
                 <div className="pull-right">
+
+                <button 
+                onClick={this.bookmarkAll}
+                 style={{
+                    marginRight: '10px',
+                    borderRadius: '5px',
+                    border: 'none',
+                    padding: '5px',
+                    textDecoration: 'underline',
+                    backgroundColor: 'transparent'
+                }}>Bookmark All</button>
+
                 <span className="switch-label">Hide Played</span>
                 <label className="switch ">
                     
@@ -226,7 +268,7 @@ class SubmissionList extends Component {
                 </tbody>
             </table>
 
-            <TopScores />
+            { this.state.contestInfo && this.state.contestInfo.displayTopScore && <TopScores /> } 
 
             <div className="card-body pad-bottom" style={{paddingBottom: '50px '}}>
 

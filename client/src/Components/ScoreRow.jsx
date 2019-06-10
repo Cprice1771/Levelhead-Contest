@@ -21,8 +21,8 @@ function ScoreRow (props) {
         <tr className="submission-row">
             <td>{getPosition(props.score.position)}</td>
             <td>{props.score.rumpusName}</td>
-            <td>{props.score.fastestTimes}</td>
-            <td>{props.score.highScores}</td>
+            { props.countShoes && <td>{props.score.fastestTimes}</td> }
+            { props.countCrowns && <td>{props.score.highScores}</td> }
             <td>{props.score.total}</td>
         </tr>);
 

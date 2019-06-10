@@ -11,7 +11,8 @@ class Results extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            results: []
+            results: [],
+            contestInfo: ContestStore.getSelectedContest()
         };
 
         this.contestChange = this.getContestResults.bind(this);
@@ -46,6 +47,9 @@ class Results extends Component {
     }
 
     async getContestResults() {
+
+        this.setState({ contestInfo: ContestStore.getSelectedContest()})
+
         try {
             let resp = await axios.get(endPoints.GET_CONTEST_RESULTS(ContestStore.getSelectedContest()._id));
             this.assignPlace(resp.data.submissions, 'votes');
@@ -59,6 +63,9 @@ class Results extends Component {
     
     render() {
        
+
+        let countCrowns = this.state.contestInfo && this.state.contestInfo.countCrowns;
+        let countShoes = this.state.contestInfo && this.state.contestInfo.countShoes;
 
         let results = _.map(this.state.results, (res, idx) => {
             return <ResultRow 
@@ -74,44 +81,54 @@ class Results extends Component {
             return <ScoreRow 
                 key={idx}
                 score={res}
+                countShoes={countShoes}
+                countCrowns={countCrowns}
             />
-        })
+        });
 
         return (
         <>
-        <div className="submission-container" >
-            <table className="table submission-header table-striped">
-                <thead>
-                    <tr>
-                        <th>Place</th>
-                        <th>Creator</th>
-                        <th>Title</th>
-                        <th>Votes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {results}
-                </tbody>
-            </table>
-        </div>
+        {this.props.contestType === 'building' &&
+            <>
+            <h1>Results</h1>
+            <div className="submission-container" >
+                <table className="table submission-header table-striped">
+                    <thead>
+                        <tr>
+                            <th>Place</th>
+                            <th>Creator</th>
+                            <th>Title</th>
+                            <th>Votes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {results}
+                    </tbody>
+                </table>
+            </div>
+            </>
+        }
         
-        <h1>Top Scores</h1>
-        <div className="submission-container" >
-            <table className="table submission-header table-striped">
-                <thead>
-                    <tr>
-                        <th>Place</th>
-                        <th>User</th>
-                        <th>Shoes</th>
-                        <th>Crowns</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {scores}
-                </tbody>
-            </table>
-        </div>
+        { this.state.contestInfo && (this.state.contestInfo.displayTopScore || this.props.contestType === 'speedrun')  && 
+            <><h1>Top Scores</h1> 
+            <div className="submission-container" >
+                <table className="table submission-header table-striped">
+                    <thead>
+                        <tr>
+                            <th>Place</th>
+                            <th>User</th>
+                            { countShoes && <th>Shoes</th> }
+                            { countCrowns && <th>Crowns</th>}
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {scores}
+                    </tbody>
+                </table>
+            </div>
+            </>
+        }
         
         </>
         )

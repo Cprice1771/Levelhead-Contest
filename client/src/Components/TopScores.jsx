@@ -11,7 +11,8 @@ class TopScores extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            results: []
+            results: [],
+            contestInfo: ContestStore.getSelectedContest()
         };
 
         this.getContestResults = this.getContestResults.bind(this);
@@ -20,6 +21,7 @@ class TopScores extends Component {
 
     componentDidMount() {
         ContestStore.addChangeListener(this.getContestResults);
+
         if(!!ContestStore.getSelectedContest()) {
             this.getContestResults();
         }
@@ -48,6 +50,9 @@ class TopScores extends Component {
     }
 
     async getContestResults() {
+
+        this.setState({contestInfo: ContestStore.getSelectedContest()});
+
         try {
             let resp = await axios.get(endPoints.GET_CONTEST_TOP_SCORES(ContestStore.getSelectedContest()._id));
             this.assignPlace(resp.data, 'total');
@@ -60,11 +65,15 @@ class TopScores extends Component {
 
     
     render() {
-       
+        let countCrowns = this.state.contestInfo ? this.state.contestInfo.countCrowns: false;
+        let countShoes = this.state.contestInfo ? this.state.contestInfo.countShoes: false;
+
         let scores = _.map(this.state.scores, (res, idx) => {
             return <ScoreRow 
                 key={idx}
                 score={res}
+                countCrowns={countCrowns}
+                countShoes={countShoes}
             />
         })
 
@@ -73,14 +82,14 @@ class TopScores extends Component {
             lastUpdatedDate = moment(ContestStore.getSelectedContest().lastUpdatedScores).format('MM/DD/YYYY hh:mm A');
         }
         
-
+        
         return (
         <>
         
         <div className="submission-container" >
         <div className='row'>
             <div className='col-9'>
-                <h1>Top Scores</h1>
+                <h1 style={{ marginLeft: '10px'}}>Top Scores</h1>
             </div>
             <div className='col-3'>
                 <div style={{  position: 'absolute',
@@ -94,8 +103,8 @@ class TopScores extends Component {
                     <tr>
                         <th>Place</th>
                         <th>User</th>
-                        <th>Shoes</th>
-                        <th>Crowns</th>
+                        { countShoes  && <th>Shoes</th>}
+                        { countCrowns && <th>Crowns</th>}
                         <th>Total</th>
                     </tr>
                 </thead>

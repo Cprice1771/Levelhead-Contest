@@ -41,23 +41,31 @@ router.post('/', async (req, res) => {
     var dateNow = new Date(Date.now());
 
     let alreadyVoted = await Vote.find({$and:[{ userId: req.body.userId }, { contestId: req.body.contestId}]})
-    let contestInfo = await Contest.find({ _id: req.body.contestId})
+    let contestInfo = await Contest.findById(req.body.contestId);
 
     // if the vote is being cast in the valid contest window, execute vote
-    if(dateNow < contestInfo[0].submissionEndDate) {
-      res.status(422).json({ success: false, msg: `Voting for this contest doesn't begin until ${moment(contestInfo[0].submissionEndDate).format('MM/DD/YYYY')}`});
+    if(dateNow < contestInfo.submissionEndDate) {
+      res.status(422).json({ success: false, msg: `Voting for this contest doesn't begin until ${moment(contestInfo.submissionEndDate).format('MM/DD/YYYY')}`});
       return;
     } 
 
-    if((dateNow > contestInfo[0].votingEndDate)) {
-      res.status(422).json({ success: false, msg: `Voting for this contest ended on ${moment(contestInfo[0].votingEndDate).format('MM/DD/YYYY')}`});
+    if((dateNow > contestInfo.votingEndDate)) {
+      res.status(422).json({ success: false, msg: `Voting for this contest ended on ${moment(contestInfo.votingEndDate).format('MM/DD/YYYY')}`});
       return;
     } 
     
-    if((alreadyVoted.length >= contestInfo[0].maxVotePerUser)){
-        res.status(422).json({ success: false, msg: `You can only vote ${contestInfo[0].maxVotePerUser} times in this contest.`});
+    if((alreadyVoted.length >= contestInfo.maxVotePerUser)){
+        res.status(422).json({ success: false, msg: `You can only vote ${contestInfo.maxVotePerUser} times in this contest.`});
         return;
     } 
+
+    if(!contestInfo.canVoteForSelf) {
+      let voteFor = await Submission.findById(req.body.submissionId);
+      if(voteFor.submittedByUserId === req.body.userId) {
+        res.status(422).json({ success: false, msg: `You can't vote for your own levels in this contest!`});
+        return;
+      }
+    }
 
     let newVote = new Vote({
       submissionId: req.body.submissionId,
@@ -68,7 +76,7 @@ router.post('/', async (req, res) => {
     })
     let vote = await newVote.save();
     let update  = await Submission.findByIdAndUpdate(req.body.submissionId, {$inc: {votes: 1}})
-    res.status(200).json({ success: true, msg: `Vote submitted successfully. You have ${ contestInfo[0].maxVotePerUser - alreadyVoted.length - 1} votes remaining in this contest.`})
+    res.status(200).json({ success: true, msg: `Vote submitted successfully. You have ${ contestInfo.maxVotePerUser - alreadyVoted.length - 1} votes remaining in this contest.`})
     
     
     } catch (err){
@@ -82,15 +90,15 @@ router.post('/', async (req, res) => {
 router.post('/remove', async (req, res) => {
   try {
     
-    let contestInfo = await Contest.find({ _id: req.body.contestId});
+    let contestInfo = await Contest.findById(req.body.contestId);
     let dateNow = new Date();
-    if(dateNow < contestInfo[0].submissionEndDate) {
-      res.status(422).json({ success: false, msg: `Voting for this contest doesn't begin until ${moment(contestInfo[0].submissionEndDate).format('MM/DD/YYYY')}`});
+    if(dateNow < contestInfo.submissionEndDate) {
+      res.status(422).json({ success: false, msg: `Voting for this contest doesn't begin until ${moment(contestInfo.submissionEndDate).format('MM/DD/YYYY')}`});
       return;
     } 
 
-    if((dateNow > contestInfo[0].votingEndDate)) {
-      res.status(422).json({ success: false, msg: `Voting for this contest ended on ${moment(contestInfo[0].votingEndDate).format('MM/DD/YYYY')}`});
+    if((dateNow > contestInfo.votingEndDate)) {
+      res.status(422).json({ success: false, msg: `Voting for this contest ended on ${moment(contestInfo.votingEndDate).format('MM/DD/YYYY')}`});
       return;
     } 
      
@@ -112,7 +120,7 @@ router.post('/remove', async (req, res) => {
     
     
     let alreadyVoted = await Vote.find({$and:[{ userId: req.body.userId }, { contestId: req.body.contestId}]});
-    res.status(200).json({ success: true, msg: `Vote removed successfully. You have ${ contestInfo[0].maxVotePerUser - alreadyVoted.length} votes remaining in this contest.`})
+    res.status(200).json({ success: true, msg: `Vote removed successfully. You have ${ contestInfo.maxVotePerUser - alreadyVoted.length} votes remaining in this contest.`})
     
     
     } catch (err){

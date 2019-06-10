@@ -81,15 +81,16 @@ class Contest extends Component {
         let endDate;
 
 
-        let waitingToStart = new Date(this.state.contest.startDate) > new Date();
-        let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
-        let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+        let waitingToStart = this.state.contest.contestType === 'building' && new Date(this.state.contest.startDate) > new Date();
+        let submissionOpen = this.state.contest.contestType === 'building' && new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
+        let votingOpen = this.state.contest.contestType === 'building' && new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+        let speedrunOpen = this.state.contest.contestType === 'speedrun' && new Date(this.state.contest.votingEndDate) > new Date();
 
         if(waitingToStart) {
             endDate = moment(this.state.contest.startDate);
         } else if (submissionOpen) {
             endDate = moment(this.state.contest.submissionEndDate);
-        } else if(votingOpen) {
+        } else if(votingOpen || speedrunOpen) {
             endDate = moment(this.state.contest.votingEndDate);
         } else {
             endDate = moment();
@@ -117,14 +118,14 @@ class Contest extends Component {
             return <div>Loading...</div>
         }
        
-
-        let waitingToStart = new Date(this.state.contest.startDate) > new Date();
-        let submissionOpen = new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
-        let votingOpen = new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+        let waitingToStart = this.state.contest.contestType === 'building' && new Date(this.state.contest.startDate) > new Date();
+        let submissionOpen = this.state.contest.contestType === 'building' && new Date(this.state.contest.startDate) < new Date() && new Date(this.state.contest.submissionEndDate) > new Date();
+        let votingOpen = this.state.contest.contestType === 'building' && new Date(this.state.contest.submissionEndDate) < new Date() && new Date(this.state.contest.votingEndDate) > new Date();
+        let speedrunOpen = this.state.contest.contestType === 'speedrun' && new Date(this.state.contest.votingEndDate) > new Date();
         let contestOver = new Date(this.state.contest.votingEndDate) < new Date();
 
         return <div className="card"> 
-            <div className="card-header">
+            <div className={"card-header-" + this.state.contest.contestType}>
                 <div className="card-text">
                     <h2>{this.state.contest.name}</h2>
                     <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>
@@ -134,12 +135,13 @@ class Contest extends Component {
                 </div>
             </div>
 
-            { (waitingToStart || submissionOpen || votingOpen) &&
+            { (waitingToStart || submissionOpen || votingOpen || speedrunOpen) &&
 
                 <div className="clock-container"> 
                     {waitingToStart && <h4>Time left until submissions open</h4>}
                     {submissionOpen && <h4>Time Left Until Submissions Close</h4>}
                     {votingOpen && <h4>Time left until voting closes</h4>}
+                    {speedrunOpen && <h4>Time left until contest is over</h4>}
                     <div className='row justify-content-center'>
                         <div className="timeBox"><h4 className='timeTitle'>Days</h4> <span>{this.formatTime(this.state.days)} </span> </div>
                         <div className="timeBox"><h4 className='timeTitle'>Hours</h4>  <span>{this.formatTime(this.state.hours)} </span></div> 
@@ -168,8 +170,7 @@ class Contest extends Component {
                 </> }
                 { contestOver && 
                     <div>
-                    <h1>Results</h1>
-                    <Results />
+                    <Results contestType={this.state.contest.contestType}/>
                     </div>}
             </div>
             

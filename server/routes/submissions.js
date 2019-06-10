@@ -53,6 +53,28 @@ router.get('leaders/:contestId', function(req, res){
   })
 })
 
+//@@ POST /api/submissions/bookmark
+//@@ Bookmark a level
+router.post('/bookmark', async function(req, res){
+  try {
+
+    for(var code of req.body.lookupCodes) {
+      const response = await RumpusAPI.bookmarkLevel(code, req.body.apiKey);
+      if(response.status >= 400) {
+        res.status(response.status).json({ msg: 'Request Failed, please ensure your API key is correct'});
+        return;
+      }
+    }
+    
+
+    res.status(200).json({
+      success: true
+    });
+  } catch (err) {
+    res.status(500).json({ msg: `Request Failed, please ensure your API key is correct. \n ${err}` });
+  }
+})
+
 // @@ POST /api/submissions
 // @@ Creates a new level submission
 router.post('/', async function(req, res){
@@ -71,16 +93,16 @@ router.post('/', async function(req, res){
 
   try {
 
-    let contestInfo = await Contest.find({ _id: req.body.contestId})
+    let contestInfo = await Contest.findOne({ _id: req.body.contestId})
     let dateNow = new Date();
     
-    if(dateNow < contestInfo[0].startDate) {
-      res.status(422).json({ success: false, msg: `Submission aren't accepted until ${moment(contestInfo[0].startDate).format('MM/DD/YYYY')}`});
+    if(dateNow < contestInfo.startDate) {
+      res.status(422).json({ success: false, msg: `Submission aren't accepted until ${moment(contestInfo.startDate).format('MM/DD/YYYY')}`});
       return;
     } 
 
-    if(dateNow > contestInfo[0].submissionEndDate) {
-      res.status(422).json({ success: false, msg: `Submissions ended on ${moment(contestInfo[0].submissionEndDate).format('MM/DD/YYYY')}`});
+    if(dateNow > contestInfo.submissionEndDate) {
+      res.status(422).json({ success: false, msg: `Submissions ended on ${moment(contestInfo.submissionEndDate).format('MM/DD/YYYY')}`});
       return;
     } 
 
@@ -97,10 +119,8 @@ router.post('/', async function(req, res){
         return;
       }
 
-
-      const rapi = new RumpusAPI();
       //Validate level is real with rumpus
-      let levelResult = await rapi.getLevel(req.body.lookupCode); 
+      let levelResult = await RumpusAPI.getLevel(req.body.lookupCode); 
 
       if(!levelResult) {
         res.status(200).json({ 
@@ -109,14 +129,29 @@ router.post('/', async function(req, res){
         return;
       }
 
-      if(new Date(levelResult.createdAt) < new Date(contestInfo[0].startDate)) {
+      if(!contestInfo.allowPreviousLevels && new Date(levelResult.createdAt) < new Date(contestInfo.startDate)) {
         res.status(200).json({ 
           success: false,
           msg: 'Cannot submit levels created before the contest began.'});
         return;
       }
 
-      let userReuslt = await rapi.getUser(levelResult.userId); //don't ask....
+      console.log(levelResult.tags)
+      if(contestInfo.requireLevelInTower && levelResult.tags.indexOf('tr') === -1) {
+        res.status(200).json({ 
+          success: false,
+          msg: 'This contest requires levels that are in the tower'});
+        return;
+      }
+
+      if(contestInfo.requireDailyBuild && levelResult.tags.indexOf('db') === -1) {
+        res.status(200).json({ 
+          success: false,
+          msg: 'This contest requires levels that are daily builds'});
+        return;
+      }
+
+      let userReuslt = await RumpusAPI.getUser(levelResult.userId); //don't ask....
 
       newSubmission.rumpusUserName = userReuslt.alias;
       newSubmission.rumpusCreatorId = levelResult.userId;
@@ -177,7 +212,7 @@ router.post('/', async function(req, res){
         await newSubmission.save();
       }
       
-      await rapi.updateTopScores(req.body.contestId);
+      await RumpusAPI.updateTopScores(req.body.contestId);
 
       res.status(200).json({
         success: true,

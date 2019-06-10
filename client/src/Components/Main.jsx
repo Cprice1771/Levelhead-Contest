@@ -5,6 +5,11 @@ import SubmissionList from './SubmissionList';
 import DiscordLogin from './DiscordLogin';
 import LoginLanding from './LoginLanding';
 import {NotificationContainer} from 'react-notifications';
+import ContestCreator from './ContestCreator';
+import UserProfile from './UserProfile';
+import { NavLink } from 'react-router-dom';
+import ContestList from './ContestList';
+
 class Main extends Component {
 
     render() {
@@ -16,7 +21,7 @@ class Main extends Component {
                 
                 <div className="header">
                     <div className="header-text">
-                        <h1>LEVELCUP</h1>
+                    <NavLink exact to={`/`} ><h1>LEVELCUP</h1></NavLink>
                         <h3>Community Levelhead Contests</h3>
                     </div>
                     <div className="header-nav">
@@ -24,10 +29,13 @@ class Main extends Component {
                     </div>
                 </div>
                 <div className="content-body">
-                    <Route exact path="/" render={() => (<Redirect to="/contest/5cfa9739e7179a4e432167dc"/>)}/>
+                    <Route exact path="/" render={() => (<Redirect to="/contests"/>)}/>
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />
+                    <Route path='/create-contest/' component={ContestCreator} />
                     <Route path='/login' component={LoginLanding} />
+                    <Route path='/profile' component={UserProfile} />
+                    <Route path='/contests' component={ContestList} />
 
 
 

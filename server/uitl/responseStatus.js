@@ -1,6 +1,7 @@
 module.exports = class ResponseStatus {
-    constructor(status, message){
-        success = status;
-        msg = message;
+    constructor(status, message, data = null){
+        this.success = status;
+        this.msg = message;
+        this.data = data;
     }
 }

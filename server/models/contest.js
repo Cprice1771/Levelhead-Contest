@@ -34,12 +34,6 @@ let contestSchema = mongoose.Schema({
     type: Date,
     // required: true
   },
-  topScores: {
-    type: Array
-  },
-  lastUpdatedScores: {
-    type: Date,
-  },
   /*Contest Rules */
   //building or speedrun
   contestType: {
@@ -56,6 +50,9 @@ let contestSchema = mongoose.Schema({
   maxVotePerUser: {
     type: Number,
   },
+  canVoteForSelf: {
+    type: Boolean,
+  },
   displayTopScore: {
     type: Boolean,
   },
@@ -67,6 +64,13 @@ let contestSchema = mongoose.Schema({
   },
   requireLevelInTower: {
     type: Boolean,
+  },
+  /* metadata about contest */
+  topScores: {
+    type: Array
+  },
+  lastUpdatedScores: {
+    type: Date,
   },
 
 })

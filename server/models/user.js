@@ -20,6 +20,9 @@ let userSchema = mongoose.Schema({
     //Admin or User
     role: {
         type: String,
+    },
+    apiKey: {
+        type: String
     }
 })
 let User = module.exports = mongoose.model('User', userSchema);

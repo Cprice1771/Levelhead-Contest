@@ -8,6 +8,7 @@ const Axios = require('axios');
 const RumpusAPI = require('../uitl/rumpusAPI');
 const User = require('../models/user')
 const ResponseStatus = require('../uitl/responseStatus');
+const moment = require('moment');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,11 +28,20 @@ router.get('/', function(req, res){
   })
 });
 
+router.get('/active', async function(req, res) {
+  try {
+    const contests = await Contest.find({ votingEndDate: { $gt : new Date() }});
+    res.send(new ResponseStatus(true, '', contests));
+  }
+  catch (err) {
+    res.status(500).json({msg: `Error Retrieving Contest ${req.params.contestId}. ${err}`})
+  }
+})
+
 router.get('/update-results-cache/:contestId', async function(req, res){
 
   try {
-    const rapi = new RumpusAPI();
-    const contest = await rapi.updateTopScores(req.params.contestId);
+    const contest = await RumpusAPI.updateTopScores(req.params.contestId);
     res.send(contest);
   }
   catch (err) {
@@ -69,6 +79,7 @@ router.get('/top-scores/:contestId', async function(req, res){
     let submissions = await Submission.find({ contestId: req.params.contestId});
     if(submissions.length === 0) {
       res.send([]);
+      return;
     }
 
     let contest = await Contest.findById(req.params.contestId);
@@ -92,9 +103,19 @@ router.get('/:contestId', function(req, res){
   })
 })
 
+//@@ GET /api/contests/:contestId
+//@@ Display a specific contest
+router.post('/validate-levels', async function(req, res){
+  try {
+    const levels = await RumpusAPI.bulkGetLevels(req.body.levelIds);
+    res.send({ success: true, data: levels});
+  }
+  catch (err) {
+    res.status(500).json({msg: `Error Retrieving Contest ${req.params.contestId}. ${err}`})
+  }
+})
+
 function validateContest(contest) {
-
-
   if(!contest.name || !contest.theme || !contest.rules) {
     return 'Missing contest info';
   }
@@ -133,7 +154,7 @@ router.post('/', async function(req, res){
     prizes: req.body.prizes,
     rules: req.body.rules,
     createdBy: req.body.createdBy,
-    startDate: req.body.startDate,
+    startDate: req.body.startDate || new Date(),
     submissionEndDate: req.body.submissionEndDate,
     votingEndDate: req.body.votingEndDate,
     /*Contest Type */
@@ -149,34 +170,67 @@ router.post('/', async function(req, res){
     requireLevelInTower: req.body.requireLevelInTower,
     canVoteForSelf: req.body.canVoteForSelf,
   });
-
-  var user = await User.findById(req.body.createdBy);
-  if(user.role != 'Admin') {
-    var existingContests = await Contest.find({ votingEndDate: { $gt: new Date() }});
-    if(existingContests.length > 0) {
-      res.status(422).json({ success: false, msg: `You can only have 1 contest running at a time! please wait until after ${moment(existingContests[0].votingEndDate).format('MM/DD/YYYY')} to create a new contest.`});
+  try {
+    var user = await User.findById(req.body.createdBy);
+    if(user.role !== 'admin') {
+      var existingContests = await Contest.find({ votingEndDate: { $gt: new Date() }});
+      if(existingContests.length > 0) {
+        res.status(422).json({ success: false, msg: `You can only have 1 contest running at a time! please wait until after ${moment(existingContests[0].votingEndDate).format('MM/DD/YYYY')} to create a new contest.`});
+        return;
+      }
     }
-  }
 
-  //Validation
-  var error = validateContest(newContest);
-  if(error) {
-    res.status(422).json(new ResponseStatus(false, error));
-  }
+    //Validation
+    var error = validateContest(req.body);
+    if(error) {
+      res.status(422).json(new ResponseStatus(false, error));
+      return;
+    }
+    var levels = []
+    var levelUsers = []
+    if(newContest.contestType === 'speedrun') {
+
+
+
+      levels = await RumpusAPI.bulkGetLevels(_.clone(req.body.contestLevels));
+      levelUsers = await RumpusAPI.bulkGetUsers(levels.map(x => x.userId));
+      if(levels.length !== req.body.contestLevels.length) {
+        res.status(422).json(new ResponseStatus(false, 'Failed fetching level details, please ensure lookup codes are correct and try again.'));
+        return;
+      }
+      
+    }
 
   
+    let contest = await newContest.save();
 
-  if(['building', 'speedrun'].indexOf(newContest.contestType) === -1) {
-    res.status(422).json(new ResponseStatus(false, 'Invalid contest type'));
-  }
+    if(newContest.contestType === 'speedrun') {
+      for(var level of levels) {
+        const newSubmission = new Submission({
+          contestId: contest._id,
+          dateSubmitted: new Date(),
+          lookupCode: level.name,
+          submittedByUserId: req.body.createdBy,
+          rumpusCreatorId: level.userId,
+          rumpusUserName: _.find(levelUsers, x => x.userId === level.userId).alias,
+          submittedIp: req.connection.remoteAddress,
+          levelMetaData: level,
+          overwrite: false
+        });
 
-  newContest.save(function(err, contest){
-    if(err){
-      res.status(500).json({ success: false, msg: `${err}`})
-    } else {
-      res.send({ success: true, msg : 'Contest Created'});
+        await newSubmission.save();
+      }
+
+      await RumpusAPI.updateTopScores(contest._id);
     }
-  })
+
+
+    res.send({ success: true, msg : 'Contest Created', data: { _id: contest._id}});
+    return;
+  } catch(err) {
+    res.status(500).json({ success: false, msg: `${err}`});
+    return;
+  }
 })
 
 

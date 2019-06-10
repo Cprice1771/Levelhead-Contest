@@ -38,7 +38,6 @@ let submissionSchema = mongoose.Schema({
   },
   overwrite: {
     type: Boolean,
-    required: true
   }
 })
 let Submission = module.exports = mongoose.model('Submission', submissionSchema);

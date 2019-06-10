@@ -75,7 +75,6 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(
 cron.schedule("0 * * * *", async function() {
 
   console.log('Running job');
-  const rapi = new RumpusAPI();
   let contests = await contest.find();
   const runDate = new Date();
   //Make sure we run at midnight when the contest closes 1 last time.
@@ -83,7 +82,7 @@ cron.schedule("0 * * * *", async function() {
   for(const contest of contests) {
     try {
       if(runDate < contest.votingEndDate) {
-        await rapi.updateTopScores(contest._id);
+        await RumpusAPI.updateTopScores(contest._id);
       }
     } catch(err) {
       console.log(`Error: ${err}`);

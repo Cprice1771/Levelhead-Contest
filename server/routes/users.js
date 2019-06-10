@@ -24,6 +24,32 @@ router.post('/discord-auth', async(req, res) => {
     });
 });
 
+router.post('/update-key/:id', async (req, res) => {
+
+    try {
+        let user = await User.findById(req.params.id);
+
+        if(!user) {
+            res.status(404).json({
+                success: false, msg: 'User not found'
+            });
+            return;
+        } 
+
+        user.apiKey = req.body.apiKey;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch(err) {
+        res.status(500).json({
+            success: false, msg: err
+        });
+    }
+})
+
 router.post('/login', async (req, res) => {
     try {
 
