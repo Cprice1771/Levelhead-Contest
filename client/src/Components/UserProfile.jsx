@@ -76,18 +76,25 @@ class UserProfile extends Component {
                     </Form.Group>
 
                     <Form.Group controlId="ApiKey">
-                        <Form.Label>User Api Key</Form.Label>
+                        
+                        <Form.Label>Delegation Key</Form.Label>
+                        
                         <Form.Control type="text"
                                         value={this.state.apiKey} 
                                         onChange={e => { 
-                                            this.setState({ apiKey: e.target.value })}} />
+                                            this.setState({ apiKey: e.target.value })}} /><span><a target="_blank" href="https://www.bscotch.net/account?delegationPermissions=rce-lh-read,rce-lh-manage-bookmarks&delegationKeyName=levelcup">Get key</a></span>
+                        <div className='pull-right'><a href="https://www.bscotch.net/rumpus-ce" target="_blank"><i>What is this?</i></a></div>
                     </Form.Group>
 
-                    <button 
-                            type='submit'
-                            className='b1 gbtn pull-right'>
-                        Save
-                    </button>
+                    <div className='row'>
+                        <div className='col-md-12'>
+                        <button 
+                                type='submit'
+                                className='b1 gbtn'>
+                            Save
+                        </button>
+                        </div>
+                    </div>
                 </Form>
             
             

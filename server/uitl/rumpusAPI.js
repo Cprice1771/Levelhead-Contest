@@ -15,6 +15,7 @@ class RumpusAPI {
         this.getTopScores = this.getTopScores.bind(this);
         this.getLevel = this.getLevel.bind(this);
         this.updateTopScores = this.updateTopScores.bind(this);
+        this.DelegationKeyPermissions = this.DelegationKeyPermissions.bind(this);
     }
 
     
@@ -36,6 +37,12 @@ class RumpusAPI {
       this.client.defaults.headers['Rumpus-Delegation-Key'] = this.levelcupKey;
       return this.client;
     }
+
+  async DelegationKeyPermissions(apiKey) {
+      const httpClient = await this.getClient();
+      httpClient.defaults.headers['Rumpus-Delegation-Key'] = apiKey;
+      return (await httpClient.get(`delegation/keys/@this`)).data.data;
+  }
 
     async bulkGetLevels(levelIds) {
        
