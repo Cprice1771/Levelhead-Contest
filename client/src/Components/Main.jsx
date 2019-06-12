@@ -29,7 +29,7 @@ class Main extends Component {
                     </div>
                 </div>
                 <div className="content-body">
-                    <Route exact path="/" render={() => (<Redirect to="/contests"/>)}/>
+                    <Route exact path="/" render={() => (<Redirect to="/contest/5cfa9739e7179a4e432167dc"/>)}/>
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />
                     <Route path='/create-contest/' component={ContestCreator} />
