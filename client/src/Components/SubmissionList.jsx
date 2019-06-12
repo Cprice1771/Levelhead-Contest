@@ -198,6 +198,7 @@ class SubmissionList extends Component {
         let inVotingPhase = !!contest && dateNow > new Date(contest.submissionEndDate) && dateNow < new Date(contest.votingEndDate);
         let loggedIn = !!UserStore.getLoggedInUser();
         let subs = this.state.submissions;
+        let canBookmark = !!UserStore.getLoggedInUser() && UserStore.getLoggedInUser().apiKey;
         if(this.state.hidePlayed) {
             subs = subs.filter(x => !x.played);
         }
@@ -205,7 +206,7 @@ class SubmissionList extends Component {
 
         let submissions = _.map(subs, s => {
             return <Submission 
-            canBookmark={!!UserStore.getLoggedInUser() && UserStore.getLoggedInUser().apiKey}
+            canBookmark={canBookmark}
             bookmark={this.bookmark}
             vote={this.vote} 
             unvote={this.unvote} 
@@ -223,7 +224,7 @@ class SubmissionList extends Component {
             <div className="col-md-12">
                 <div className="pull-right">
 
-                <button 
+                {canBookmark && <button 
                 onClick={this.bookmarkAll}
                  style={{
                     marginRight: '10px',
@@ -232,7 +233,7 @@ class SubmissionList extends Component {
                     padding: '5px',
                     textDecoration: 'underline',
                     backgroundColor: 'transparent'
-                }}>Bookmark All</button>
+                }}>Bookmark All</button>}
 
                 <span className="switch-label">Hide Played</span>
                 <label className="switch ">
