@@ -17,7 +17,7 @@ function Submission (props) {
             </td>
             <td><a href={`https://lvlhd.co/+${submision.lookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{submision.lookupCode}</a></td>
             <td>{submision.rumpusUserName}</td>
-            <td>{submision.levelMetaData.map.Title}</td>
+            <td>{submision.levelMetaData.title}</td>
             <td>{submision.levelMetaData.stats.Attempts}</td>
             <td>{submision.levelMetaData.stats.Attempts === 0 ? 0 : _.round(((submision.levelMetaData.stats.Successes / submision.levelMetaData.stats.Attempts) * 100), 2)}%</td>
             

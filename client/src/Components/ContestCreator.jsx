@@ -199,7 +199,7 @@ class ContestCreator extends Component {
                 let levelsValid = true;
 
                 for(var lookupCode of contestLevels) {
-                    if(_.findIndex(res.data.data, x => x.name === lookupCode) < 0) {
+                    if(_.findIndex(res.data.data, x => x.levelId === lookupCode) < 0) {
                         levelsValid = false;
                         break;
                     }
@@ -240,9 +240,9 @@ class ContestCreator extends Component {
 
     getLevelNameFromId(lookupCode) {
 
-        let level = _.find(this.state.levelDetails, x => x.name === lookupCode)
-        if(level && level.map) {
-            return level.map.Title
+        let level = _.find(this.state.levelDetails, x => x.levelId === lookupCode)
+        if(level) {
+            return level.title
         }
         return '';
     }
@@ -254,7 +254,7 @@ class ContestCreator extends Component {
         }
 
         return lookupCode.length < 7 || _.filter(this.state.contestLevels, x => x === lookupCode).length !== 1 ||
-                (!!this.state.levelDetails && _.findIndex(this.state.levelDetails, x => x.name === lookupCode) < 0);
+                (!!this.state.levelDetails && _.findIndex(this.state.levelDetails, x => x.levelId === lookupCode) < 0);
     }
    
     render() {

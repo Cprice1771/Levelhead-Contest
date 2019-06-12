@@ -9,6 +9,7 @@ const RumpusAPI = require('../uitl/rumpusAPI');
 const User = require('../models/user')
 const ResponseStatus = require('../uitl/responseStatus');
 const moment = require('moment');
+const PublicRumpusAPI = require('../uitl/rumpusPublicApi');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -39,7 +40,6 @@ router.get('/active', async function(req, res) {
 })
 
 router.get('/update-results-cache/:contestId', async function(req, res){
-
   try {
     const contest = await RumpusAPI.updateTopScores(req.params.contestId);
     res.send(contest);
@@ -189,9 +189,6 @@ router.post('/', async function(req, res){
     var levels = []
     var levelUsers = []
     if(newContest.contestType === 'speedrun') {
-
-
-
       levels = await RumpusAPI.bulkGetLevels(_.clone(req.body.contestLevels));
       levelUsers = await RumpusAPI.bulkGetUsers(levels.map(x => x.userId));
       if(levels.length !== req.body.contestLevels.length) {
@@ -209,7 +206,7 @@ router.post('/', async function(req, res){
         const newSubmission = new Submission({
           contestId: contest._id,
           dateSubmitted: new Date(),
-          lookupCode: level.name,
+          lookupCode: level.levelId,
           submittedByUserId: req.body.createdBy,
           rumpusCreatorId: level.userId,
           rumpusUserName: _.find(levelUsers, x => x.userId === level.userId).alias,

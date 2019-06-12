@@ -27,13 +27,13 @@ class RumpusAPI {
         baseURL: 'https://www.bscotch.net/api/',  
         timeout: 5000,
         headers: {
-            'rumpus-credentials' : cfg.key
+            'Rumpus-Delegation-Key' : cfg.key
         }
         }), {  maxRequests: 500, perMilliseconds: 300000});
         this.levelcupKey = cfg.key;
       }
 
-      this.client.defaults.headers['rumpus-credentials'] = this.levelcupKey;
+      this.client.defaults.headers['Rumpus-Delegation-Key'] = this.levelcupKey;
       return this.client;
     }
 
@@ -42,8 +42,8 @@ class RumpusAPI {
         const httpClient = await this.getClient();
         let newLevelData = [];
         while(levelIds.length > 0) {
-          let toGet = levelIds.splice(0, Math.min(64, levelIds.length));
-          let levelResults = (await httpClient.get(`storage/crates/lh-published-levels/items?names=${toGet.join(',')}&limit=64`)).data.data;
+          let toGet = levelIds.splice(0, Math.min(16, levelIds.length));
+          let levelResults = (await httpClient.get(`levelhead/levels?levelIds=${toGet.join(',')}&limit=64&includeStats=true&includeRecords=true`)).data.data;
           newLevelData = newLevelData.concat(levelResults);
         }
     
@@ -56,7 +56,7 @@ class RumpusAPI {
       let mappedUsers = [];
       while(users.length > 0) {
         let toGet = users.splice(0, Math.min(64, users.length));
-        let userReuslt = (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${toGet.join(',')}`)).data.data;
+        let userReuslt = (await httpClient.get(`levelhead/aliases?userIds=${toGet.join(',')}`)).data.data;
         mappedUsers = mappedUsers.concat(userReuslt);
       }
     
@@ -65,12 +65,12 @@ class RumpusAPI {
 
     async getLevel(levelId) {
       const httpClient = await this.getClient();
-      return (await httpClient.get(`storage/crates/lh-published-levels/items?names=${levelId}&limit=1`)).data.data[0]; //don't ask....
+      return (await httpClient.get(`levelhead/levels?levelIds=${levelId}&limit=1&includeStats=true&includeRecords=true`)).data.data[0]; //don't ask....
     }
 
     async getUser(userId) {
       const httpClient = await this.getClient();
-      return (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${userId}`)).data.data[0]; //don't ask....
+      return (await httpClient.get(`levelhead/aliases?userIds=${userId}`)).data.data[0]; //don't ask....
     }
     
     async getTopScores(submissions, contest) {
@@ -150,7 +150,7 @@ class RumpusAPI {
 
       let usersToGet = [];
       for(var i = 0; i < submissions.length; i++) {
-        let foundLevel = _.find(levels, x => x.name === submissions[i].lookupCode);
+        let foundLevel = _.find(levels, x => x.levelId === submissions[i].lookupCode);
         if(!!foundLevel) {
           submissions[i].levelMetaData = foundLevel;
 
@@ -164,15 +164,14 @@ class RumpusAPI {
         }
       }
 
-      let users = await this.bulkGetUsers(usersToGet);
-
+      let foundUsers = await this.bulkGetUsers(usersToGet);
       for(var submission of submissions){
-        let foundHighscoreUser = _.find(users, x => x.userId === submission.levelMetaData.records.HighScore[0].userId);
+        let foundHighscoreUser = _.find(foundUsers, x => x.userId === submission.levelMetaData.records.HighScore[0].userId);
         if(!!foundHighscoreUser) {
           submission.levelMetaData.records.HighScore[0].rumpusName = foundHighscoreUser.alias;
         }
 
-        let foundFastestUser = _.find(users, x => x.userId === submission.levelMetaData.records.FastestTime[0].userId);
+        let foundFastestUser = _.find(foundUsers, x => x.userId === submission.levelMetaData.records.FastestTime[0].userId);
         if(!!foundFastestUser) {
           submission.levelMetaData.records.FastestTime[0].rumpusName = foundFastestUser.alias;
         }
@@ -191,9 +190,9 @@ class RumpusAPI {
     async bookmarkLevel(lookupCode, apiKey) {
 
       const httpClient = await this.getClient();
-      httpClient.defaults.headers['rumpus-credentials'] = apiKey;
+      httpClient.defaults.headers['Rumpus-Delegation-Key'] = apiKey;
       
-      return (await httpClient.put(`storage/sets/lh-lvl-sc/users/@me/strings/${lookupCode}?rumpus-version=8.23.16`));
+      return (await httpClient.put(`levelhead/bookmarks/${lookupCode}`));
     }
 }
 

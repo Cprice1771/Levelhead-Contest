@@ -71,7 +71,7 @@ class Results extends Component {
             return <ResultRow 
                 key={idx}
                 votes={res.votes}
-                title={res.levelMetaData.map.Title}
+                title={res.levelMetaData.title}
                 position={res.position}
                 rumpusUserName={res.rumpusUserName}
             />

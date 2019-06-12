@@ -136,20 +136,20 @@ router.post('/', async function(req, res){
         return;
       }
 
-      console.log(levelResult.tags)
-      if(contestInfo.requireLevelInTower && levelResult.tags.indexOf('tr') === -1) {
+      if(contestInfo.requireLevelInTower && !levelResult.tower) {
         res.status(200).json({ 
           success: false,
           msg: 'This contest requires levels that are in the tower'});
         return;
       }
 
-      if(contestInfo.requireDailyBuild && levelResult.tags.indexOf('db') === -1) {
-        res.status(200).json({ 
-          success: false,
-          msg: 'This contest requires levels that are daily builds'});
-        return;
-      }
+      //TODO: wait for this to be implemented again
+      // if(contestInfo.requireDailyBuild && levelResult.tags.indexOf('db') === -1) {
+      //   res.status(200).json({ 
+      //     success: false,
+      //     msg: 'This contest requires levels that are daily builds'});
+      //   return;
+      // }
 
       let userReuslt = await RumpusAPI.getUser(levelResult.userId); //don't ask....
 
