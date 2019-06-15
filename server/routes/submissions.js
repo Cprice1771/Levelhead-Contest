@@ -5,7 +5,7 @@ const Submission = require("../models/submission")
 const Contest = require('../models/contest');
 const Axios = require('axios');
 const User = require('../models/user');
-const RumpusAPI = require('../uitl/rumpusAPI');
+const RumpusAPI = require('../util/rumpusAPI');
 
 
 
@@ -136,7 +136,6 @@ router.post('/', async function(req, res){
         return;
       }
 
-      console.log(levelResult.tags)
       if(contestInfo.requireLevelInTower && levelResult.tags.indexOf('tr') === -1) {
         res.status(200).json({ 
           success: false,

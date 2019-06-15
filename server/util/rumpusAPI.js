@@ -65,12 +65,22 @@ class RumpusAPI {
 
     async getLevel(levelId) {
       const httpClient = await this.getClient();
-      return (await httpClient.get(`storage/crates/lh-published-levels/items?names=${levelId}&limit=1`)).data.data[0]; //don't ask....
+      let levels = (await httpClient.get(`storage/crates/lh-published-levels/items?names=${levelId}&limit=1`)).data.data; //don't ask....
+      if(levels.length < 1) {
+        return null;
+      }
+
+      return levels[0];
     }
 
     async getUser(userId) {
       const httpClient = await this.getClient();
-      return (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${userId}`)).data.data[0]; //don't ask....
+      let users= (await httpClient.get(`aliases/contexts/levelhead/users?userIds=${userId}`)).data.data; //don't ask....
+      if(users.length < 1) {
+        return null;
+      } 
+
+      return users[0]
     }
     
     async getTopScores(submissions, contest) {

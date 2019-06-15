@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const path = require('path');
 const cron = require("node-cron");
-const RumpusAPI = require('./uitl/rumpusAPI');
+const RumpusAPI = require('./util/rumpusAPI');
 const contest = require('./models/contest');
+
 
 require('dotenv').config()
 
@@ -45,6 +46,10 @@ app.use('/api/submissions', submissions)
 
 let votes = require('./routes/votes')
 app.use('/api/votes', votes)
+
+const seasons = require('./routes/seasons')
+app.use('/api/seasons', seasons)
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

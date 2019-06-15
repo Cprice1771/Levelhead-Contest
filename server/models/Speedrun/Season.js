@@ -22,20 +22,65 @@ let seasonSchema = mongoose.Schema({
                 type: String
             },
             lookupCode: {
-                type: String
+                type: String,
+                required: true
             },
             diamondTime: {
-                type: Number
+                type: Number,
+                required: true
             },
             goldTime: {
-                type: Number
+                type: Number,
+                required: true
             },
             silverTime: {
-                type: Number
+                type: Number,
+                required: true
             },
             bronzeTime: {
-                type: Number
+                type: Number,
+                required: true
             },
+            startDate: {
+                type: Date,
+                required: true
+            }
+        }
+    ],
+    entries: [
+        {
+            usedId: {
+                type: String,
+                required: true
+            },
+            Diamonds: {
+                type: Number,
+                required: true,
+            },
+            Golds: {
+                type: Number,
+                required: true,
+            },
+            Silvers: {
+                type: Number,
+                required: true,
+            },
+            Bronzes: {
+                type: Number,
+                required: true,
+            },
+            TotalPoints: {
+                type: Number,
+                required: true,
+            },
+            TimesSubmitted: {
+                type: Number,
+                required: true,
+            },
+            league: {
+                type: String,
+                requried: false
+            }
         }
     ],
     lastUpdatedScores: {
