@@ -4,6 +4,7 @@ const User = require("../models/user");
 const fetch = require('node-fetch');
 const btoa = require('btoa');
 const Axios = require('axios');
+const RumpusAPI = require('../uitl/rumpusAPI');
 
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -37,6 +38,9 @@ router.post('/update-key/:id', async (req, res) => {
         } 
 
         user.apiKey = req.body.apiKey;
+
+        //user.rumpusId = RumpusAPI.DelegationKeyPermissions(req.body.apiKey).userId
+
         await user.save();
 
         res.status(200).json({

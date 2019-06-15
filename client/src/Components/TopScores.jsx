@@ -59,7 +59,6 @@ class TopScores extends Component {
             this.setState({ scores: resp.data });
         } catch (ex) {
             NotificationManager.error('Failed to load contest results');
-            console.log(ex);
         }
     }
 

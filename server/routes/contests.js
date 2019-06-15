@@ -160,9 +160,6 @@ router.post('/', catchErrors(async function(req, res){
   var levels = []
   var levelUsers = []
   if(newContest.contestType === 'speedrun') {
-
-
-
     levels = await RumpusAPI.bulkGetLevels(_.clone(req.body.contestLevels));
     levelUsers = await RumpusAPI.bulkGetUsers(levels.map(x => x.userId));
     if(levels.length !== req.body.contestLevels.length) {
@@ -180,7 +177,7 @@ router.post('/', catchErrors(async function(req, res){
       const newSubmission = new Submission({
         contestId: contest._id,
         dateSubmitted: new Date(),
-        lookupCode: level.name,
+          lookupCode: level.levelId,
         submittedByUserId: req.body.createdBy,
         rumpusCreatorId: level.userId,
         rumpusUserName: _.find(levelUsers, x => x.userId === level.userId).alias,
