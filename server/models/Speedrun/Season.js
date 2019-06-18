@@ -13,6 +13,10 @@ let seasonSchema = mongoose.Schema({
         type: Date,
         required: true
     },
+    seasonType: {
+        type: String,
+        required: true,
+    },
     levelsInSeason: [
         {
             levelName: {
@@ -25,55 +29,70 @@ let seasonSchema = mongoose.Schema({
                 type: String,
                 required: true
             },
-            diamondTime: {
+            diamondValue: {
                 type: Number,
                 required: true
             },
-            goldTime: {
+            goldValue: {
                 type: Number,
                 required: true
             },
-            silverTime: {
+            silverValue: {
                 type: Number,
                 required: true
             },
-            bronzeTime: {
+            bronzeValue: {
                 type: Number,
                 required: true
             },
             startDate: {
                 type: Date,
                 required: true
+            },
+            addedBy: {
+                type: String,
+                required: true,
+            },
+            lastUpdatedScores: {
+                type: Date,
             }
         }
     ],
     entries: [
         {
-            usedId: {
+            userId: {
                 type: String,
                 required: true
             },
-            Diamonds: {
+            rumpusId: {
+                type: String,
+                required: true
+            },
+            rumpusAlias: {
+                type: String,
+                required: true,
+            },
+            diamonds: {
                 type: Number,
                 required: true,
             },
-            Golds: {
+            golds: {
                 type: Number,
                 required: true,
             },
-            Silvers: {
+            silvers: {
                 type: Number,
                 required: true,
             },
-            Bronzes: {
+            bronzes: {
                 type: Number,
                 required: true,
             },
-            TotalPoints: {
+            totalPoints: {
                 type: Number,
                 required: true,
             },
-            TimesSubmitted: {
+            timesSubmitted: {
                 type: Number,
                 required: true,
             },
@@ -83,9 +102,5 @@ let seasonSchema = mongoose.Schema({
             }
         }
     ],
-    lastUpdatedScores: {
-        type: Date,
-    },
-
 })
-let Season = module.exports = mongoose.model('Season', seasonSchema);
+const  Season = module.exports = mongoose.model('Season', seasonSchema);

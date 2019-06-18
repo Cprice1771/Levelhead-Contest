@@ -29,4 +29,12 @@ export const endPoints = {
     CREATE_UPDATE_USER: '/api/users',
     SAVE_PROFILE: (id) => `/api/users/update-key/${id}`,
     LOGIN: '/api/users/login',
+
+    //Seasons
+    CREATE_SEASON: '/api/seasons/create',
+    GET_SEASON: (seasonId) =>  `/api/seasons/${seasonId}`,
+    SET_LEAGUE: '/api/seasons/set-league',
+    ADD_LEVEL: '/api/seasons/add-level',
+    UPDATE_LEADERBOARD: (seasonId) => `/api/seasons/update-leaderboard/${seasonId}`,
+    ENROLL: '/api/seasons/enroll',
 }

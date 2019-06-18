@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const path = require('path');
 const cron = require("node-cron");
-const RumpusAPI = require('./util/rumpusAPI');
+const ContestHelpers = require('./util/contestHelpers');
+const SeasonHelpers = require('./util/SeasonHelpers');
 const contest = require('./models/contest');
 
 
@@ -87,7 +88,7 @@ cron.schedule("0 * * * *", async function() {
   for(const contest of contests) {
     try {
       if(runDate < contest.votingEndDate) {
-        await RumpusAPI.updateTopScores(contest._id);
+        await SeasonHelpers.updateTopScores(contest._id);
       }
     } catch(err) {
       console.log(`Error: ${err}`);

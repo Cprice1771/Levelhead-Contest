@@ -5,11 +5,14 @@ const Submission = require('../models/submission');
 const _ = require('lodash');
 const Config = require('../models/config');
 const Axios = require('axios');
+
 const RumpusAPI = require('../util/rumpusAPI');
 const User = require('../models/user')
 const ResponseStatus = require('../util/responseStatus');
 const moment = require('moment');
 const catchErrors = require('../util/catchErrors');
+
+const ContestHelpers = require('../util/ContestHelpers');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -34,13 +37,13 @@ router.get('/active', catchErrors(async function(req, res) {
 //@@ GET /update-results-cache/:contestId
 //@@ updates the results cache for a given contest
 router.get('/update-results-cache/:contestId', catchErrors(async function(req, res){
-  const contest = await RumpusAPI.updateTopScores(req.params.contestId);
+  const contest = await ContestHelpers.updateTopScores(req.params.contestId);
   res.send(contest);
 }));
 
 
-//@@ GET /api/contests/results
-//@@ Display all submissions
+//@@ GET /api/results/results
+//@@ get the results for a contest
 router.get('/results/:contestId', catchErrors(async function(req, res){
   let submissions = await Submission.find({ contestId: req.params.contestId});
   let contest = await Contest.findById(req.params.contestId);
@@ -54,8 +57,8 @@ router.get('/results/:contestId', catchErrors(async function(req, res){
   res.send({ submissions, scores });
 }));
 
-//@@ GET /api/contests/results
-//@@ Display all submissions
+//@@ GET /api/top-scores/:contestId
+//@@ Get the top shoe and crown hunters for a contest
 router.get('/top-scores/:contestId', catchErrors(async function(req, res){
   let submissions = await Submission.find({ contestId: req.params.contestId});
   if(submissions.length === 0) {
@@ -158,10 +161,8 @@ router.post('/', catchErrors(async function(req, res){
     return;
   }
   var levels = []
-  var levelUsers = []
   if(newContest.contestType === 'speedrun') {
     levels = await RumpusAPI.bulkGetLevels(_.clone(req.body.contestLevels));
-    levelUsers = await RumpusAPI.bulkGetUsers(levels.map(x => x.userId));
     if(levels.length !== req.body.contestLevels.length) {
       res.status(422).json(new ResponseStatus(false, 'Failed fetching level details, please ensure lookup codes are correct and try again.'));
       return;
@@ -180,7 +181,7 @@ router.post('/', catchErrors(async function(req, res){
           lookupCode: level.levelId,
         submittedByUserId: req.body.createdBy,
         rumpusCreatorId: level.userId,
-        rumpusUserName: _.find(levelUsers, x => x.userId === level.userId).alias,
+        rumpusUserName: level.alias.alias,
         submittedIp: req.connection.remoteAddress,
         levelMetaData: level,
         overwrite: false
@@ -189,7 +190,7 @@ router.post('/', catchErrors(async function(req, res){
       await newSubmission.save();
     }
 
-    await RumpusAPI.updateTopScores(contest._id);
+    await ContestHelpers.updateTopScores(contest._id);
   }
 
 

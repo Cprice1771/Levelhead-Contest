@@ -10,6 +10,10 @@ import UserProfile from './UserProfile';
 import { NavLink } from 'react-router-dom';
 import ContestList from './ContestList';
 
+import CreateSeason from './Season/CreateSeason';
+import SeasonLeaderboard from './Season/SeasonLeaderboard';
+
+
 class Main extends Component {
 
     render() {
@@ -36,6 +40,9 @@ class Main extends Component {
                     <Route path='/login' component={LoginLanding} />
                     <Route path='/profile' component={UserProfile} />
                     <Route path='/contests' component={ContestList} />
+
+                    <Route path='/create-season' component={CreateSeason} />
+                    <Route path='/season/:seasonId' component={SeasonLeaderboard} />
 
 
 

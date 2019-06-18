@@ -8,6 +8,9 @@ let userSchema = mongoose.Schema({
     rumpusId: {
         type: String,
     },
+    rumpusAlias: {
+        type: String
+    },
     discordDisplayName: {
         type: String,
     },
@@ -22,7 +25,10 @@ let userSchema = mongoose.Schema({
         type: String,
     },
     apiKey: {
-        type: String
-    }
+        type: String,
+    },
+    keyPermissions: {
+        type: Array,
+    },
 })
 let User = module.exports = mongoose.model('User', userSchema);
