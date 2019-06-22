@@ -8,6 +8,7 @@ const cron = require("node-cron");
 const ContestHelpers = require('./util/contestHelpers');
 const SeasonHelpers = require('./util/SeasonHelpers');
 const contest = require('./models/contest');
+const Season = require('./models/speedrun/season');
 
 
 require('dotenv').config()
@@ -48,8 +49,11 @@ app.use('/api/submissions', submissions)
 let votes = require('./routes/votes')
 app.use('/api/votes', votes)
 
-const seasons = require('./routes/seasons')
+let seasons = require('./routes/seasons')
 app.use('/api/seasons', seasons)
+
+let events = require('./routes/events');
+app.use('/api/events', events);
 
 
 app.use(function(req, res, next) {
@@ -77,7 +81,7 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(
   }
 );
 
-//Update level metadata every minute
+//Update level metadata every Hour
 cron.schedule("0 * * * *", async function() {
 
   console.log('Running job');
@@ -88,7 +92,22 @@ cron.schedule("0 * * * *", async function() {
   for(const contest of contests) {
     try {
       if(runDate < contest.votingEndDate) {
-        await SeasonHelpers.updateTopScores(contest._id);
+        await ContestHelpers.updateTopScores(contest._id);
+      }
+    } catch(err) {
+      console.log(`Error: ${err}`);
+    }
+  }
+
+  console.log('Updating Seasons');
+  let seasons = await Season.find();
+  const seasonRunDate = new Date();
+  //Make sure we run at midnight when the contest closes 1 last time.
+  seasonRunDate.setMinutes(seasonRunDate.getMinutes() - 15);
+  for(const sns of seasons) {
+    try {
+      if(seasonRunDate < sns.endDate) {
+        await SeasonHelpers.updateSeasonLeaderboard(sns._id);
       }
     } catch(err) {
       console.log(`Error: ${err}`);

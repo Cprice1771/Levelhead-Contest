@@ -1,5 +1,6 @@
 import React from 'react';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 function Leaderboard (props) {
     let getPosition = (position) => {
@@ -15,68 +16,49 @@ function Leaderboard (props) {
         }
     }
 
+    let userId = props.userId;
     let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc'])
 
-    let megaJem = orderedPlayers.filter(x => x.league === '0').map((player, index) => {
-        return ( <tr className="submission-row">
+    let getRow = (player, index) => {
+        return ( <tr className={"submission-row " + ((player.userId === userId)  ? "player-row" : "")}>
                     <td>{getPosition(index + 1)}</td>
                     <td>{player.rumpusAlias}</td>
-                    <td>{player.diamonds}</td>
-                    <td>{player.golds}</td>
-                    <td>{player.silvers}</td>
-                    <td>{player.bronzes}</td>
-                    <td>{player.totalPoints}</td>
+                    <td align='center'>{player.diamonds}</td>
+                    <td align='center'>{player.golds}</td>
+                    <td align='center'>{player.silvers}</td>
+                    <td align='center'>{player.bronzes}</td>
+                    <td align='center'>{player.totalPoints}</td>
                 </tr>)
-                });
-    
-    let turboJem = orderedPlayers.filter(x => x.league === '1').map((player, index) => {
-        return ( <tr className="submission-row">
-                    <td>{getPosition(index + 1)}</td>
-                    <td>{player.rumpusAlias}</td>
-                    <td>{player.diamonds}</td>
-                    <td>{player.golds}</td>
-                    <td>{player.silvers}</td>
-                    <td>{player.bronzes}</td>
-                    <td>{player.totalPoints}</td>
-                </tr>)
-                });
-    let jem = orderedPlayers.filter(x => x.league === '2').map((player, index) => {
-        return ( <tr className="submission-row">
-                    <td>{getPosition(index + 1)}</td>
-                    <td>{player.rumpusAlias}</td>
-                    <td>{player.diamonds}</td>
-                    <td>{player.golds}</td>
-                    <td>{player.silvers}</td>
-                    <td>{player.bronzes}</td>
-                    <td>{player.totalPoints}</td>
-                </tr>)
-                });
+                };
 
-    let apprentice = orderedPlayers.filter(x => x.league === '3').map((player, index) => {
-        return ( <tr className="submission-row">
-                    <td>{getPosition(index + 1)}</td>
-                    <td>{player.rumpusAlias}</td>
-                    <td>{player.diamonds}</td>
-                    <td>{player.golds}</td>
-                    <td>{player.silvers}</td>
-                    <td>{player.bronzes}</td>
-                    <td>{player.totalPoints}</td>
-                </tr>)
-                });
+    let megaJem = orderedPlayers.filter(x => x.league === '0').map(getRow);
+    let turboJem = orderedPlayers.filter(x => x.league === '1').map(getRow);
+    let jem = orderedPlayers.filter(x => x.league === '2').map(getRow);
+    let apprentice = orderedPlayers.filter(x => x.league === '3').map(getRow);
 
     return (
         <>
-        <h1>Leaderboard</h1>
+        
+        <div className='row'>
+            <div className='col-8'>
+            <h1>Leaderboard</h1>
+            </div>
+            <div className='col-4'>
+                <div style={{  position: 'absolute',
+                                bottom: 0,
+                                left: 0, }}>Last updated ({moment(props.lastUpdate).format('MM/DD/YYYY hh:mm A')})</div>
+            </div>
+        </div>
         <div className="submission-container" >
             <table className="table submission-header table-striped">
                 <thead>
                     <tr>
                         <th>Position</th>
                         <th>Player</th>
-                        <th>Diamond Medals</th>
-                        <th>Gold Medals</th>
-                        <th>Silver Medals</th>
-                        <th>Bronze Medals</th>
+                        <th align='center'>Diamonds</th>
+                        <th align='center'>Golds</th>
+                        <th align='center'>Silvers</th>
+                        <th align='center'>Bronzes</th>
                         <th>Total Points</th>
                     </tr>
                 </thead>

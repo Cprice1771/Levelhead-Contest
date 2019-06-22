@@ -11,6 +11,8 @@ export const endPoints = {
     GET_CONTEST_TOP_SCORES: (contestId) => `/api/contests/top-scores/${contestId}`,
     VALIDATE_LEVELS: `/api/contests/validate-levels`,
     
+    //General
+    GET_ACTIVE_EVENTS: '/api/events/active',
 
     //Submissions
     GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,

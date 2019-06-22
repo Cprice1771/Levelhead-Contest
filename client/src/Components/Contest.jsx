@@ -125,7 +125,7 @@ class Contest extends Component {
         let contestOver = new Date(this.state.contest.votingEndDate) < new Date();
 
         return <div className="card"> 
-            <div className={"card-header-" + this.state.contest.contestType}>
+            <div className={"card-header-contest"}>
                 <div className="card-text">
                     <h2>{this.state.contest.name}</h2>
                     <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>

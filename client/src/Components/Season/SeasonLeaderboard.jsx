@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import LoginActions from '../../actions/LoginActions';
 import LevelBoard from './LevelBoard';
 import EnrollModal from './EnrollModal';
+import * as _ from 'lodash';
 
 
 class SeasonLeaderboard extends Component {
@@ -22,6 +23,9 @@ class SeasonLeaderboard extends Component {
         }
 
         this.loadSeason = this.loadSeason.bind(this);
+        this.userChange = this.userChange.bind(this);
+        this.enroll = this.enroll.bind(this);
+        this.addLevel = this.addLevel.bind(this);
     }
 
     componentDidMount() {
@@ -36,13 +40,12 @@ class SeasonLeaderboard extends Component {
     loadSeason(id) {
         axios.get(endPoints.GET_SEASON(id))
         .then( response => {
-            console.log(response.data);
             this.setState({ season: response.data.data });
         });
     }
 
     userChange() {
-        this.setState({loggedIn: !!UserStore.getLoggedInUser()});
+        this.setState({loggedIn: UserStore.getLoggedInUser()});
     }
 
     async addLevel(level) {
@@ -58,14 +61,15 @@ class SeasonLeaderboard extends Component {
                 startDate: level.startDate
             });
 
-            NotificationManager.success('You have been enrolled in this season');
+            NotificationManager.success('Level Added');
+            this.loadSeason(this.props.match.params.seasonId);
         } catch(err) {
-            NotificationManager.console.error('Something went wrong');
+            NotificationManager.error(`Error addning level: ${err}`);
         }
+        this.setState({ showAddLevelModal : false});
     }
 
     async enroll(rumpusId) {
-
         if(!rumpusId && !this.state.loggedIn.rumpusId) {
             this.setState({ showEnrollModal: true });
             return;
@@ -77,10 +81,10 @@ class SeasonLeaderboard extends Component {
                 seasonId : this.state.season._id,
                 rumpusId: rumpusId
             });
-
+            this.loadSeason(this.props.match.params.seasonId);
             NotificationManager.success('You have been enrolled in this season');
         } catch(err) {
-            NotificationManager.console.error('Something went wrong');
+            NotificationManager.error(`Error enrolling ${err.response.data.msg}`);
         }
     }
 
@@ -88,9 +92,12 @@ class SeasonLeaderboard extends Component {
         if(!this.state.season) {
             return <div>Loading...</div>
         }
+        
+        let userId = !!this.state.loggedIn ? this.state.loggedIn._id : null;
+        let inSeason = !!this.state.season.entries.find(x => x.userId === userId);
 
         return <div className="card">
-            <div className="card-header-speedrun">
+            <div className="card-header-season">
                 <div className="card-text">
                     <h2>{this.state.season.name}</h2>
                     <h3> {moment(this.state.season.startDate).format('MMM Do')} - {moment(this.state.season.endDate).format('MMM Do')}</h3>
@@ -98,7 +105,7 @@ class SeasonLeaderboard extends Component {
             </div>
             <div className="card-body">
             
-            { this.state.loggedIn && <button className='b1' onClick={this.enroll}>Enroll</button> }
+            { this.state.loggedIn && !inSeason && <button className='b1' onClick={this.enroll}>Enroll</button> }
             { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enroll</button> }
             
             </div>
@@ -109,7 +116,8 @@ class SeasonLeaderboard extends Component {
                 />
                 <Leaderboard
                     entries={this.state.season.entries}
-                    
+                    lastUpdate={_.max(this.state.season.levelsInSeason.map(x => x.lastUpdatedScores))}
+                    userId={userId}
                 />
                 
             </div>

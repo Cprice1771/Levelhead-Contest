@@ -8,7 +8,7 @@ import {NotificationContainer} from 'react-notifications';
 import ContestCreator from './ContestCreator';
 import UserProfile from './UserProfile';
 import { NavLink } from 'react-router-dom';
-import ContestList from './ContestList';
+import EventList from './EventList';
 
 import CreateSeason from './Season/CreateSeason';
 import SeasonLeaderboard from './Season/SeasonLeaderboard';
@@ -33,13 +33,13 @@ class Main extends Component {
                     </div>
                 </div>
                 <div className="content-body">
-                    <Route exact path="/" render={() => (<Redirect to="/contest/5cfa9739e7179a4e432167dc"/>)}/>
+                    <Route exact path="/" component={EventList}/>
                     <Route path='/contest/:contestId' component={Contest} />
                     <Route path='/submissions/:contestId' component={SubmissionList} />
                     <Route path='/create-contest/' component={ContestCreator} />
                     <Route path='/login' component={LoginLanding} />
                     <Route path='/profile' component={UserProfile} />
-                    <Route path='/contests' component={ContestList} />
+                    <Route path='/contests' component={EventList} />
 
                     <Route path='/create-season' component={CreateSeason} />
                     <Route path='/season/:seasonId' component={SeasonLeaderboard} />

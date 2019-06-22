@@ -9,7 +9,7 @@ function Leaderboard (props) {
         let s = seconds % 60;
 
         if(minutes > 0){
-            return `${minutes}:${s.toFixed(2)}`
+            return `${minutes}:${s.toFixed(2).padStart(5, '0')}`
         } else {
             return s.toFixed(2);
         }
@@ -50,11 +50,11 @@ function Leaderboard (props) {
                         
                         <th>Title</th>
                         <th>Creator</th>
-                        <th>Lookup Code</th>
-                        <th>Diamond Time</th>
-                        <th>Gold Time</th>
-                        <th>Silver Time</th>
-                        <th>Bronze Time</th>
+                        <th>Lookup</th>
+                        <th>Diamond</th>
+                        <th>Gold</th>
+                        <th>Silver</th>
+                        <th>Bronze</th>
                     </tr>
                 </thead>
                 <tbody>

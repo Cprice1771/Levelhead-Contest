@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-  width: 1000px;
+  width: 1300px;
   background-color: #D4D3E1;
   background: linear-gradient( #D4D3E1, rgb(180, 178, 196) );
   margin: 0px auto 0px auto;
@@ -99,14 +99,14 @@ body {
 .card {
   margin: 40px auto 100px auto;
   background-color: white;
-  width: 750px;
+  width: 1000px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
   border-radius: 5px;
   /* margin: 0px 0px 10px 0px; */
 }
 
 
-.card-header-building {
+.card-header-contest {
   background: linear-gradient( rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40) ), url('./assets/treeCropped.png');
   background-size: cover;
 
@@ -118,7 +118,7 @@ body {
   flex-wrap: wrap;
 }
 
-.card-header-speedrun {
+.card-header-season {
   background: linear-gradient( rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40) ), url('./assets/snowCropped.png');
   background-size: cover;
 

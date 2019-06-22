@@ -23,7 +23,7 @@ router.post('/create', catchErrors(async (req, res) => {
 
 
     var user = await User.findById(req.body.createdBy);
-    if(user.role !== 'admin') {
+    if(['admin', 'season-moderator'].indexOf(user.role) < 0) {
         res.status(422).json({ success: false, msg: `You do not have permission to create a new season`});
         return;
     }
