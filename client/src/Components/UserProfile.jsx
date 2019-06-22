@@ -84,6 +84,45 @@ class UserProfile extends Component {
                                             this.setState({ apiKey: e.target.value })}} /><span><a target="_blank" rel="noopener noreferrer" href="https://www.bscotch.net/account?delegationPermissions=rce-lh-read,rce-lh-manage-bookmarks&delegationKeyName=levelcup">Get key</a></span>
                         <div className='pull-right'><a href="https://www.bscotch.net/rumpus-ce" target="_blank" rel="noopener noreferrer"><i>What is this?</i></a></div>
                     </Form.Group>
+                    { this.state.keyPermissions &&
+                    <>
+                    <h3>Key Permissions</h3>
+                    <Form.Row>
+                        
+                    <Form.Group controlId="1" as={Col} >
+                        <Form.Check 
+                            custom
+                            type={'checkbox'}
+                            id={`keyCanReadData`}
+                            label={`Read Levelhead Data`}
+                            checked={this.state.keyPermissions && this.state.keyPermissions.includes('rce-lh-read')}
+                            disabled
+                        />
+                        </Form.Group>
+                        <Form.Group controlId="2" as={Col}>
+                        <Form.Check 
+                            custom
+                            type={'checkbox'}
+                            id={`keyCanReportUsers`}
+                            label={`Report Other Users`}
+                            checked={this.state.keyPermissions && this.state.keyPermissions.includes('rce-lh-report')}
+                            disabled
+                        />
+                        </Form.Group>
+                        <Form.Group controlId="3" as={Col}>
+                        <Form.Check 
+                            
+                            custom
+                            type={'checkbox'}
+                            id={`keyCanBookmark`}
+                            label={`Can Make Bookmarks`}
+                            checked={this.state.keyPermissions && this.state.keyPermissions.includes('rce-lh-manage-bookmarks')}
+                            disabled
+                        />
+                        </Form.Group>
+                    </Form.Row>
+                    </>
+                    }
 
                     <div className='row'>
                         <div className='col-md-12'>

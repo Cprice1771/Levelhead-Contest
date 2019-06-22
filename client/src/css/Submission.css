@@ -1,8 +1,18 @@
 .submission-row {
-  background-color: white; }
+  background-color: white; 
+}
+
+.submission-row td {
+  height: 70px !important;
+}
+
+.submission-row td:nth-child(n+2) {
+  padding-top: 1.5em !important;
+}
 
 .submission-header {
-  background-color: white; }
+  background-color: white; 
+}
 
 .submission-container {
   width: 100%; }
@@ -10,7 +20,8 @@
 .table tr:nth-child(n+1):hover {
   transition: .15s ease-in;
   color: white;
-  background-color: #5d61d1; }
+  background-color: #5d61d1; 
+}
 
 .table tr {
   align-content: center; }

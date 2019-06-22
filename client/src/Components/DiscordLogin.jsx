@@ -47,7 +47,14 @@ class DiscordLogin extends Component {
         let content = null;
         if(loggedIn) {
             content = <div>
-                            { this.state.loggedInUser.role === 'admin' &&
+                            { ['admin', 'season-moderator'].indexOf(this.state.loggedInUser.role) > -1  &&
+                                <NavLink exact to={`/create-season/`} 
+                                    className="NavButton"
+                                    activeClassName="activeRoute">
+                                    <button>Create Season</button>
+                                </NavLink>
+                            }
+                            { ['admin', 'contest-moderator'].indexOf(this.state.loggedInUser.role) > -1  &&
                             <NavLink exact to={`/create-contest/`} 
                                 className="NavButton"
                                 activeClassName="activeRoute">

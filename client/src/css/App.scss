@@ -13,8 +13,44 @@ $secondaryBlue: #45A29E;
   background-color: rgba(0,0,0,.05);
 }
 
+.add-level {
+  color: #3b40bd;
+  cursor: pointer;
+}
+
+.leaderboard-header {
+  text-align: center;
+  width:100%;
+  font-size: 25px;
+}
+
+.megajem {
+  background-color: #C928CC;
+  color: white;
+}
+
+.turbojem {
+  background-color: #11C9DE;
+  color: black;
+}
+
+.jem {
+  background-color: #FFCC00;
+  color: black;
+}
+
+.apprentice {
+  background-color: #D9D9D9;
+  color: black;
+}
+
 .submission-nav-row {
   height: 50px;
+}
+
+.player-row {
+  font-weight: 600;
+  font-size: 1.2em;
 }
 
 .contest-list {
@@ -212,6 +248,11 @@ $secondaryBlue: #45A29E;
   margin-right: -50%;
   transform: translate(-50%, -50%);
   border-radius: 5px;
+}
+
+.big-modal {
+  height: 425px;
+  padding: 10px;
 }
 
 .modalClose {

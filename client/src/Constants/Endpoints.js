@@ -11,6 +11,8 @@ export const endPoints = {
     GET_CONTEST_TOP_SCORES: (contestId) => `/api/contests/top-scores/${contestId}`,
     VALIDATE_LEVELS: `/api/contests/validate-levels`,
     
+    //General
+    GET_ACTIVE_EVENTS: '/api/events/active',
 
     //Submissions
     GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,
@@ -29,4 +31,12 @@ export const endPoints = {
     CREATE_UPDATE_USER: '/api/users',
     SAVE_PROFILE: (id) => `/api/users/update-key/${id}`,
     LOGIN: '/api/users/login',
+
+    //Seasons
+    CREATE_SEASON: '/api/seasons/create',
+    GET_SEASON: (seasonId) =>  `/api/seasons/${seasonId}`,
+    SET_LEAGUE: '/api/seasons/set-league',
+    ADD_LEVEL: '/api/seasons/add-level',
+    UPDATE_LEADERBOARD: (seasonId) => `/api/seasons/update-leaderboard/${seasonId}`,
+    ENROLL: '/api/seasons/enroll',
 }

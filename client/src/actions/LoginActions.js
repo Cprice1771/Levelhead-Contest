@@ -11,7 +11,6 @@ export default {
             if(!localStorage.getItem('discord-token')) {
                 throw 'No token found'
             }
-
             var x = await axios.post(endPoints.LOGIN, JSON.parse(localStorage.getItem('discord-token')));
             UserStore.setLoggedInUser(x.data.user);
             

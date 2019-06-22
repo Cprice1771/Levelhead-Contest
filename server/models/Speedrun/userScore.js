@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 
-let speedrunTimeSchema = mongoose.Schema({
+let userScoreSchema = mongoose.Schema({
     seasonId: {
         type: String,
         required: true
@@ -9,7 +9,7 @@ let speedrunTimeSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    time: {
+    value: {
         type: Number,
         required: true
     },
@@ -23,8 +23,8 @@ let speedrunTimeSchema = mongoose.Schema({
     },
     rumpusAlias: {
         type: String,
-        required: true
+        required: false
     },
 
 })
-let SpeedrunTime = module.exports = mongoose.model('SpeedrunTime', speedrunTimeSchema);
+let UserScore = module.exports = mongoose.model('UserScore', userScoreSchema);
