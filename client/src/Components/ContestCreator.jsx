@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ContestStore from '../Stores/ContestStore';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'flatpickr/dist/themes/material_blue.css'
@@ -7,7 +6,7 @@ import 'flatpickr/dist/themes/material_blue.css'
 import Flatpickr from 'react-flatpickr'
 import Axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
+import { Form, Col, Alert } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
 import UserStore from '../Stores/UserStore';
 
@@ -503,7 +502,7 @@ class ContestCreator extends Component {
 
                     {
                         this.state.contestLevels.map( (lookupCode, index)  => {
-                                        return (<div className={"row levelRow " + (index % 2 == 0 ? '' : 'light-grey')} key={index}>
+                                        return (<div className={"row levelRow " + (index % 2 === 0 ? '' : 'light-grey')} key={index}>
                                                     <div className='col-md-4'>
                                                         <Form.Group controlId={`level_${index}`}>
                                                             <Form.Control type="text" placeholder="Enter lookup code" 

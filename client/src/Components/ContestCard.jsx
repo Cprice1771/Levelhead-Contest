@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import { NavLink } from 'react-router-dom';

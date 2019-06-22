@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import SubmissionStore from '../Stores/SubmissionStore';
-import ContestStore from '../Stores/ContestStore';
 
-import Submission from './Submission';
 import * as _ from 'lodash';
-import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { endPoints } from '../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
-import UserStore from '../Stores/UserStore';
-import LoginActions from '../actions/LoginActions';
-import TopScores from './TopScores';
 import ContestCard from './ContestCard';
 
 class ContestList extends Component {

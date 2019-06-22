@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserStore from '../Stores/UserStore';
 import { endPoints } from '../Constants/Endpoints';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
 import Axios from 'axios';
 
@@ -28,7 +28,6 @@ class UserProfile extends Component {
     }
 
     handleSubmit(event) {
-        const form = event.currentTarget;
         this.setState({ validated: true });
         event.preventDefault();
         event.stopPropagation();
@@ -82,8 +81,8 @@ class UserProfile extends Component {
                         <Form.Control type="text"
                                         value={this.state.apiKey} 
                                         onChange={e => { 
-                                            this.setState({ apiKey: e.target.value })}} /><span><a target="_blank" href="https://www.bscotch.net/account?delegationPermissions=rce-lh-read,rce-lh-manage-bookmarks&delegationKeyName=levelcup">Get key</a></span>
-                        <div className='pull-right'><a href="https://www.bscotch.net/rumpus-ce" target="_blank"><i>What is this?</i></a></div>
+                                            this.setState({ apiKey: e.target.value })}} /><span><a target="_blank" rel="noopener noreferrer" href="https://www.bscotch.net/account?delegationPermissions=rce-lh-read,rce-lh-manage-bookmarks&delegationKeyName=levelcup">Get key</a></span>
+                        <div className='pull-right'><a href="https://www.bscotch.net/rumpus-ce" target="_blank" rel="noopener noreferrer"><i>What is this?</i></a></div>
                     </Form.Group>
 
                     <div className='row'>
