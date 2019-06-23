@@ -169,7 +169,7 @@ if(existingSubmissions.length > 0) {
       submittedByUserId: req.body.submittedByUserId,
       overwrite: req.body.overwrite,
       rumpusCreatorId: levelResult.userId,
-      rumpusUserName: userReuslt.alias,
+      rumpusUserName: levelResult.alias.alias,
       levelMetaData: levelResult,
       submittedIp: req.connection.remoteAddress,
       votes: 0
