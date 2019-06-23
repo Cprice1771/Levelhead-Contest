@@ -8,7 +8,7 @@ const cron = require("node-cron");
 const ContestHelpers = require('./util/ContestHelpers');
 const SeasonHelpers = require('./util/SeasonHelpers');
 const contest = require('./models/contest');
-const Season = require('./models/speedrun/season');
+const Season = require('./models/Speedrun/Season');
 
 
 require('dotenv').config()

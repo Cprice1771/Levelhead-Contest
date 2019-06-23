@@ -4,8 +4,8 @@ const Axios = require('axios');
 const Contest  = require('../models/contest');
 const Submission = require('../models/submission');
 const rateLimit = require('./AxiosRateLimit')
-const Season = require('../models/speedrun/season');
-const UserScore = require('../models/speedrun/UserScore');
+const Season = require('../models/Speedrun/Season');
+const UserScore = require('../models/Speedrun/UserScore');
 
 class RumpusAPI {
 

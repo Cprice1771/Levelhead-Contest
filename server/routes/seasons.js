@@ -7,10 +7,10 @@ const Axios = require('axios');
 const _ = require('lodash');
 
 const RumpusAPI = require('../util/rumpusAPI');
-const Season = require('../models/speedrun/season');
+const Season = require('../models/Speedrun/Season');
 const catchErrors = require('../util/catchErrors');
 const SeasonHelpers = require('../util/SeasonHelpers');
-const UserScores = require('../models/speedrun/UserScore')
+const UserScores = require('../models/Speedrun/UserScore')
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

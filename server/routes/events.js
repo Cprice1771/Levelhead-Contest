@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Contest = require("../models/contest");
-const Season = require('../models/speedrun/season');
+const Season = require('../models/Speedrun/Season');
 const ResponseStatus = require('../util/responseStatus');
 const catchErrors = require('../util/catchErrors');
 
