@@ -26,9 +26,13 @@ class SeasonLeaderboard extends Component {
         this.userChange = this.userChange.bind(this);
         this.enroll = this.enroll.bind(this);
         this.addLevel = this.addLevel.bind(this);
+        this.setLeague = this.setLeague.bind(this);
+        this.bookmark = this.bookmark.bind(this);
+        this.bookmarkAll = this.bookmarkAll.bind(this);
     }
 
     componentDidMount() {
+        this.setState({loggedIn: UserStore.getLoggedInUser()});
         UserStore.addChangeListener(this.userChange);
         this.loadSeason(this.props.match.params.seasonId);
     }
@@ -46,6 +50,55 @@ class SeasonLeaderboard extends Component {
 
     userChange() {
         this.setState({loggedIn: UserStore.getLoggedInUser()});
+    }
+
+    async setLeague(player, newLeague) {
+        try {
+            let res = await axios.post(endPoints.SET_LEAGUE, {
+                seasonId: this.props.match.params.seasonId,
+                userId: player.userId,
+                newLeague: newLeague
+            });
+            if(res.data.success) {
+                NotificationManager.success(`${player.rumpusAlias} League Updated`);
+            } else {
+                NotificationManager.error('Something went wrong');
+            }
+
+            this.loadSeason(this.props.match.params.seasonId);
+            
+
+        } catch(err) {
+            console.log(err);
+            NotificationManager.error('Something went wrong');
+        }
+        
+
+
+    }
+
+    bookmarkAll() {
+        this.bookmark(this.state.season.levelsInSeason.map(x => x.lookupCode));
+    }
+
+    bookmark(lookupCodes) {
+        axios.post(endPoints.BOOKMARK_SUBMISSION, {
+            lookupCodes: lookupCodes,
+            apiKey: UserStore.getLoggedInUser().apiKey,
+        }).then(res => {
+            if(res.data.success) {
+                NotificationManager.success('Bookmarked');
+            } else {
+                NotificationManager.error(res.data.msg);
+            }
+        }).catch(res => {
+            if(res && res.response && res.response.data) {
+                NotificationManager.error(res.response.data.msg);
+            } else {
+                NotificationManager.error('Something went wrong');
+            }
+            
+        });
     }
 
     async addLevel(level) {
@@ -92,10 +145,12 @@ class SeasonLeaderboard extends Component {
         if(!this.state.season) {
             return <div>Loading...</div>
         }
-        
+
+        let canBookmark = !!UserStore.getLoggedInUser() && UserStore.getLoggedInUser().apiKey;
+        let seasonOver = new Date(this.state.season.endDate) < new Date();
         let userId = !!this.state.loggedIn ? this.state.loggedIn._id : null;
         let inSeason = !!this.state.season.entries.find(x => x.userId === userId);
-
+        let admin = this.state.loggedIn && ['admin', 'season-moderator'].indexOf(this.state.loggedIn.role) >= 0;
         return <div className="card">
             <div className="card-header-season">
                 <div className="card-text">
@@ -111,13 +166,23 @@ class SeasonLeaderboard extends Component {
             </div>
             <div className="card-rules pad-bottom">
                 <LevelBoard
+                    seasonOver={seasonOver}
                     levels={this.state.season.levelsInSeason}
                     addLevel={()=> { this.setState({ showAddLevelModal : true })}}
+                    admin={admin}
+                    canBookmark={canBookmark}
+                    bookmark={this.bookmark}
+                    bookmarkAll={this.bookmarkAll}
                 />
                 <Leaderboard
+                    seasonOver={seasonOver}
+                    levelInfo={this.state.season.levelsInSeason}
+                    seasonId={this.state.season._id}
                     entries={this.state.season.entries}
-                    lastUpdate={_.max(this.state.season.levelsInSeason.map(x => x.lastUpdatedScores))}
+                    lastUpdate={_.max(this.state.season.entries.map(x => x.lastUpdatedScores))}
                     userId={userId}
+                    admin={admin}
+                    setLeague={this.setLeague}
                 />
                 
             </div>

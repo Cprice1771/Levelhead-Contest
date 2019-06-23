@@ -29,6 +29,9 @@ let seasonSchema = mongoose.Schema({
                 type: String,
                 required: true
             },
+            legendValue: {
+                type: Number
+            },
             diamondValue: {
                 type: Number,
                 required: true
@@ -53,8 +56,8 @@ let seasonSchema = mongoose.Schema({
                 type: String,
                 required: true,
             },
-            lastUpdatedScores: {
-                type: Date,
+            record: {
+                type: Object
             }
         }
     ],
@@ -88,6 +91,9 @@ let seasonSchema = mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            hasLegend: {
+                type: Boolean,
+            },
             totalPoints: {
                 type: Number,
                 required: true,
@@ -99,6 +105,9 @@ let seasonSchema = mongoose.Schema({
             league: {
                 type: String,
                 requried: false
+            },
+            lastUpdatedScores: {
+                type: Date,
             }
         }
     ],

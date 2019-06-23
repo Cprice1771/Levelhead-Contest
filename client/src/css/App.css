@@ -164,6 +164,45 @@ input:checked + .slider:before {
   color: #3b40bd;
   cursor: pointer; }
 
+.score-row {
+  -webkit-transition: opacity 1.0s ease-in;
+  -moz-transition: opacity 1.0s ease-in;
+  -o-transition: opacity 1.0s ease-in;
+  opacity: 1;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  max-height: 1000px;
+  overflow-y: hidden; }
+
+.score-row.hidden {
+  opacity: 0;
+  max-height: 0;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1); }
+
+.fade-enter {
+  opacity: 0.01; }
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.fade-leave {
+  opacity: 1; }
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+.fade-appear {
+  opacity: 0.01; }
+
+.fade-appear.fade-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in; }
+
 .leaderboard-header {
   text-align: center;
   width: 100%;
@@ -357,7 +396,7 @@ input:checked + .slider:before {
   border-radius: 5px; }
 
 .big-modal {
-  height: 425px;
+  height: 470px;
   padding: 10px; }
 
 .modalClose {

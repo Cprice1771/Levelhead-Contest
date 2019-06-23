@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import { NavLink } from 'react-router-dom';
@@ -15,7 +15,7 @@ function EventCard(props) {
                 
                 </div>
             </div>      
-            { props.eventType == 'contest' &&
+            { props.eventType === 'contest' &&
                 <div className="card-body">
                     <NavLink exact to={`/contest/${props._id}`} 
                                 className="NavButton"
@@ -29,7 +29,7 @@ function EventCard(props) {
                     </NavLink> 
                 </div>      
             }
-            { props.eventType == 'season' &&
+            { props.eventType === 'season' &&
                 <div className="card-body">
                     <NavLink exact to={`/season/${props._id}`} 
                                 className="NavButton"

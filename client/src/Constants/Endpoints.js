@@ -39,4 +39,5 @@ export const endPoints = {
     ADD_LEVEL: '/api/seasons/add-level',
     UPDATE_LEADERBOARD: (seasonId) => `/api/seasons/update-leaderboard/${seasonId}`,
     ENROLL: '/api/seasons/enroll',
+    GET_USER_SCORES: '/api/seasons/get-user-scores'
 }

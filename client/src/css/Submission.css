@@ -2,6 +2,11 @@
   background-color: white; 
 }
 
+.scheduled-row {
+  background-color: darkgray !important;
+  color: white;
+}
+
 .submission-row td {
   height: 70px !important;
 }

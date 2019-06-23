@@ -51,10 +51,24 @@ class ContestList extends Component {
                 {...x}
             />
         })
+        
+        
 
         return <>
         
-        <div>{events}</div></>
+        <div>
+        {events.length > 0 ? 
+                            events : 
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                textAlign: 'center',
+                                paddingTop: '100px'
+                            }}> 
+                                <h2>No events are currently ongoing</h2>
+                            </div> 
+        }
+        </div></>
     }
 }
 

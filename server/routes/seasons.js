@@ -10,20 +10,32 @@ const RumpusAPI = require('../util/rumpusAPI');
 const Season = require('../models/speedrun/season');
 const catchErrors = require('../util/catchErrors');
 const SeasonHelpers = require('../util/SeasonHelpers');
-
+const UserScores = require('../models/speedrun/UserScore')
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
   
+
+
+//@@ POST api/seasons/get-user-scores
+//@@ gets user scores
+router.post('/get-user-scores', catchErrors(async (req, res) => {
+    // console.log(req.body)
+    let scores = await UserScores.find({ $and : [{ "seasonId": req.body.seasonId  }, { "userId": req.body.userId }]});
+   
+    res.status(200).json({
+        success: true,
+        data: scores
+    });
+}));
+
 //@@ POST api/seasons/create
 //@@ Create a new season
 router.post('/create', catchErrors(async (req, res) => {
-
-
     var user = await User.findById(req.body.createdBy);
-    if(['admin', 'season-moderator'].indexOf(user.role) < 0) {
+    if(['admin', 'season-moderator'].indexOf(user.role) === -1) {
         res.status(422).json({ success: false, msg: `You do not have permission to create a new season`});
         return;
     }
@@ -47,6 +59,10 @@ router.post('/create', catchErrors(async (req, res) => {
         levelsInSeason: [],
         entries: [],
         });
+
+
+    let users = await SeasonHelpers.getPlayersForNextSeason(req.body.seasonType);
+    newSeason.entries = users;
 
     let saved = await newSeason.save();
 
@@ -162,10 +178,9 @@ router.post('/enroll', catchErrors(async (req, res) => {
 //@@ POST api/seasons/set-league
 //@@ sets a users league
 router.post('/set-league', catchErrors(async (req, res) => {
-    console.log(req.body.seasonId)
     let foundSeason = await Season.findById(req.body.seasonId);
     if(!foundSeason) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
             msg: 'Season not found'
         });
@@ -175,7 +190,7 @@ router.post('/set-league', catchErrors(async (req, res) => {
 
     var userIndex = foundSeason.entries.findIndex(x => x.userId === req.body.userId);
     if(userIndex < 0) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
             msg: 'Could not find user in season'
         });
@@ -189,12 +204,14 @@ router.post('/set-league', catchErrors(async (req, res) => {
     });
 }));
 
+
+
 //@@ POST api/seasons/add-level
 //@@ add a level to a season
 router.post('/add-level', catchErrors(async (req, res) => {
     let foundSeason = await Season.findById(req.body.seasonId);
     if(!foundSeason) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
             msg: `Could not find season ${req.body.seasonId}`
         });
@@ -216,6 +233,7 @@ router.post('/add-level', catchErrors(async (req, res) => {
         levelName: level.title,
         creatorAlias: level.alias.alias,
         lookupCode: req.body.lookupCode,
+        legendValue: req.body.legendValue,
         diamondValue: req.body.diamondValue,
         goldValue: req.body.goldValue,
         silverValue: req.body.silverValue,

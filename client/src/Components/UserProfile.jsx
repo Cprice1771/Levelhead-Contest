@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserStore from '../Stores/UserStore';
 import { endPoints } from '../Constants/Endpoints';
-import { Form } from 'react-bootstrap'
+import { Form, Col } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
 import Axios from 'axios';
 

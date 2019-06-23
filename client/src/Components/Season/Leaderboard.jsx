@@ -2,34 +2,25 @@ import React from 'react';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-function Leaderboard (props) {
-    let getPosition = (position) => {
-        switch(position) {
-            case 1:
-                return <h1 className='first'>1st</h1>;
-            case 2:
-                return <h2 className='second'>2nd</h2>;
-            case 3:
-                return <h4 className='third'>3rd</h4>;
-            default:
-                return <h5 className='other'>{position}th</h5>;
-        }
-    }
+import LeaderboardRow from './LeaderboardRow';
 
-    let userId = props.userId;
-    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc'])
+function Leaderboard (props) {
+    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']);
+
 
     let getRow = (player, index) => {
-        return ( <tr className={"submission-row " + ((player.userId === userId)  ? "player-row" : "")}>
-                    <td>{getPosition(index + 1)}</td>
-                    <td>{player.rumpusAlias}</td>
-                    <td align='center'>{player.diamonds}</td>
-                    <td align='center'>{player.golds}</td>
-                    <td align='center'>{player.silvers}</td>
-                    <td align='center'>{player.bronzes}</td>
-                    <td align='center'>{player.totalPoints}</td>
-                </tr>)
-                };
+        return ( 
+                <LeaderboardRow 
+                    levelInfo={props.levelInfo}
+                    key={index}
+                    index={index}
+                    player={player}
+                    setLeague={props.setLeague}
+                    admin={props.admin}
+                    userId={props.loggedInUserId}
+                    seasonId={props.seasonId}
+                    seasonOver={props.seasonOver}
+                />)};
 
     let megaJem = orderedPlayers.filter(x => x.league === '0').map(getRow);
     let turboJem = orderedPlayers.filter(x => x.league === '1').map(getRow);
@@ -60,11 +51,12 @@ function Leaderboard (props) {
                         <th align='center'>Silvers</th>
                         <th align='center'>Bronzes</th>
                         <th>Total Points</th>
+                        { props.admin && !props.seasonOver && <th></th> }
                     </tr>
                 </thead>
                 <thead>
                     <tr>
-                        <th className='leaderboard-header megajem' colSpan='7' >Mega Jem League</th>
+                        <th className='leaderboard-header megajem' colSpan={props.admin ? '8' : '7'} >Mega Jem League</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,7 +64,7 @@ function Leaderboard (props) {
                 </tbody>
                 <thead>
                     <tr>
-                    <th className='leaderboard-header turbojem' colSpan='7'>Turbo Jem League</th>
+                    <th className='leaderboard-header turbojem' colSpan={props.admin ? '8' : '7'}>Turbo Jem League</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,7 +72,7 @@ function Leaderboard (props) {
                 </tbody>
                 <thead>
                     <tr>
-                        <th className='leaderboard-header jem' colSpan='7'>Jem League</th>
+                        <th className='leaderboard-header jem' colSpan={props.admin ? '8' : '7'}>Jem League</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,7 +80,7 @@ function Leaderboard (props) {
                 </tbody>
                 <thead>
                     <tr>
-                        <th className='leaderboard-header apprentice' colSpan='7'>Apprentice League</th>
+                        <th className='leaderboard-header apprentice' colSpan={props.admin ? '8' : '7'}>Apprentice League</th>
                     </tr>
                 </thead>
                 <tbody>

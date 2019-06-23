@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import * as _ from 'lodash';
 import 'flatpickr/dist/themes/material_blue.css'
 import Flatpickr from 'react-flatpickr'
 import Axios from 'axios';
 import { endPoints } from '../../Constants/Endpoints';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
+import { Form, Col, Alert } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
 import UserStore from '../../Stores/UserStore';
 
@@ -73,7 +72,7 @@ class CreateSeason extends Component {
                 if(res.data.success) {
                     NotificationManager.success('Season Created!');
                     let currentUrl = window.location.href.split('create-season')[0];
-                    window.location.href = `${currentUrl}seasons/${res.data.data._id}`;
+                    window.location.href = `${currentUrl}season/${res.data.data._id}`;
                 } else {
                     NotificationManager.error(res.data.msg);
                 }

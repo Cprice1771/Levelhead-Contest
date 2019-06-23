@@ -11,10 +11,14 @@ const RumpusAPI = require('./rumpusAPI');
 class SeasonHelpers {
     constructor() {
         this.updateSeasonLeaderboard = this.updateSeasonLeaderboard.bind(this);
+        this.UpdateLevelInfo = this.UpdateLevelInfo.bind(this);
+        this.getPlayersForNextSeason = this.getPlayersForNextSeason.bind(this);
     }
 
-    async getPlayersForNextSeason() {
-      let lastSeason = Season.findOne().sort({ endDate: -1 });
+    async getPlayersForNextSeason(seasonType) {
+      
+      let lastSeason = await Season.findOne({ seasonType: seasonType }).sort({ endDate: -1 });
+
       let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']); 
       let numPlayers = playersToEnroll.length;
       let MegaJemCutoff = playersToEnroll[Math.ceil(numPlayers * .1)].totalPoints;
@@ -48,31 +52,42 @@ class SeasonHelpers {
       return newPlayers;
     }
 
+    async UpdateLevelInfo(season) {
+      let levelLookupCodes = season.levelsInSeason.map(x => x.lookupCode);
+      let levels = await RumpusAPI.bulkGetLevels(levelLookupCodes);
+      for(let level of levels) {
+        let lvlIndex = _.findIndex(season.levelsInSeason, x => x.lookupCode === level.levelId);
+        season.levelsInSeason[lvlIndex].record = { alias: level.records.FastestTime[0].alias.alias, value: level.records.FastestTime[0].value }
+      }
+    }
+
     async updateSeasonLeaderboard(seasonId) {
         let foundSeason = await Season.findById(seasonId);
-        let entrees = foundSeason.entries.map(x => {  return { userId: x.userId, rumpusId: x.rumpusId, rumpusAlias: x.rumpusAlias } });
-        let levels = foundSeason.levelsInSeason.filter(x => x.startDate < new Date());
+        let levels = foundSeason.levelsInSeason.filter(x => x.startDate < new Date()).map(x => x.lookupCode);
         
-        for(var userInfo of entrees) {
+        for(let i = 0; i < foundSeason.entries.length; i++) {
           let scores = [];
           let before = new Date();
-          for(var level of levels) {
-            let afterDate = level.lastUpdatedScores || new Date(new Date() - (21 * 86400000)); 
-            do {
-              var scoreResults = await RumpusAPI.getRecentRecords(
-                foundSeason.seasonType === 'speedrun' ? 'FastestTime': 'HighScore', 
-                { levelIds: level.lookupCode,
-                  userIds: userInfo.rumpusId,
-                  before: before,
-                  limit: 128
-                });
-              scoreResults = _.filter(scoreResults, x => afterDate < new Date(x.updatedAt));
-              scores = scores.concat(scoreResults);
-            } while(scoreResults.length >= 128);
-          }
-         
+          let userInfo = foundSeason.entries[i];
+          let afterDate = userInfo.lastUpdatedScores || new Date(new Date() - (21 * 86400000));
+          foundSeason.entries[i].lastUpdatedScores = new Date();
+          do {
+            var scoreResults = await RumpusAPI.getRecentRecords(
+              foundSeason.seasonType === 'speedrun' ? 'FastestTime': 'HighScore', 
+              { levelIds: levels,
+                userIds: userInfo.rumpusId,
+                before: before,
+                limit: 128
+              });
+            scoreResults = _.filter(scoreResults, x => afterDate < new Date(x.updatedAt));
+            scores = scores.concat(scoreResults);
+            if(scoreResults.length > 0) {
+              before = scoreResults[scoreResults.length - 1].updatedAt;
+            }
+            
+          } while(scoreResults.length >= 128);
   
-          let existingScoresForUser = await UserScore.find({ seasonId: foundSeason.seasonId, userId: userInfo.userId });
+          let existingScoresForUser = await UserScore.find({ seasonId: foundSeason._id, userId: userInfo.userId });
           for(let score of scores) {
             let existingScore = existingScoresForUser.find(x => x.levelLookupCode === score.levelId);
             if(!existingScore) {
@@ -105,6 +120,10 @@ class SeasonHelpers {
           for(let score of existingScoresForUser) {
             let level = foundSeason.levelsInSeason.find(x => x.lookupCode === score.levelLookupCode);
 
+            if(level.legendValue && level.legendValue > score.value) {
+              foundSeason.entries[entryIndex].hasLegend = true;
+            }
+
             if(level.diamondValue > score.value) {
               foundSeason.entries[entryIndex].diamonds++;
             }
@@ -119,18 +138,19 @@ class SeasonHelpers {
             }
           }
 
+          foundSeason.entries[entryIndex].timesSubmitted = existingScoresForUser.length;
           foundSeason.entries[entryIndex].totalPoints = (foundSeason.entries[entryIndex].diamonds * 5) + 
                                                         (foundSeason.entries[entryIndex].golds * 3) +
                                                         (foundSeason.entries[entryIndex].silvers * 2) +
                                                         (foundSeason.entries[entryIndex].bronzes * 1);
 
         }
-
-        for(var i = 0; i < foundSeason.levelsInSeason.length; i++) {
-          foundSeason.levelsInSeason[i].lastUpdatedScores = new Date();
-        }
         
+
+        
+        await this.UpdateLevelInfo(foundSeason);
         await foundSeason.save();
+        
     }
 }
 

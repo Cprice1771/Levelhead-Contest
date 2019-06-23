@@ -36,6 +36,7 @@ class AddLevelModal extends Component {
             goldValue: 0,
             silverValue: 0,
             bronzeValue: 0,
+            legendValue: '',
             startDate: '',
             selectedLevelTitle: '',
         })
@@ -187,7 +188,20 @@ class AddLevelModal extends Component {
                     />
                 </div>
             </div>
-
+            <div className='row input-group'>
+                <div className='col-md-4'>
+                    Legend Time
+                </div>
+                <div className='col-md-8'>
+                    
+                    <input type='number' className="form-control"
+                        value={this.state.legendValue} 
+                        onChange={(e) => {
+                            this.setState({ legendValue: e.target.value });
+                        }}
+                    />
+                </div>
+            </div>
              
 
             <div className='error'>
