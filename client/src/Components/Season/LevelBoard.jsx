@@ -42,7 +42,7 @@ function Leaderboard (props) {
     return (
         <>
         <div className='row'>
-            <div className='col-md-10'><h1>Challenges</h1></div>
+            <div className='col-md-10'><h1 style={{ display: 'inline-block'}}>Challenges </h1> { props.admin && !props.seasonOver && <i className="fas fa-question-circle fa-1x pull-up"  onClick={props.showRecommend}></i> }</div>
             <div className='col-md-2'>
             { props.canBookmark && <button 
                 onClick={props.bookmarkAll}
@@ -56,12 +56,16 @@ function Leaderboard (props) {
                     position: 'absolute',
                     bottom: 0
                 }}>Bookmark All</button>}
+
+                
+
                 <div style={{
                     position: 'absolute',
                     bottom: '0px',
                     right: '10px',
                 }}>
-                    { props.admin && !props.seasonOver && <i className="fas fa-plus add-level"  onClick={props.addLevel}></i> }
+                     { props.admin && !props.seasonOver && <i className="fas fa-plus add-level"  onClick={props.addLevel}></i> }
+                    
                 </div>
             </div>
         </div>

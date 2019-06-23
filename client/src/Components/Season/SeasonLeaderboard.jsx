@@ -10,6 +10,7 @@ import LoginActions from '../../actions/LoginActions';
 import LevelBoard from './LevelBoard';
 import EnrollModal from './EnrollModal';
 import * as _ from 'lodash';
+import RecommendLevelModal from './RecommendLevelModal';
 
 
 class SeasonLeaderboard extends Component {
@@ -64,17 +65,11 @@ class SeasonLeaderboard extends Component {
             } else {
                 NotificationManager.error('Something went wrong');
             }
-
             this.loadSeason(this.props.match.params.seasonId);
-            
-
         } catch(err) {
             console.log(err);
             NotificationManager.error('Something went wrong');
         }
-        
-
-
     }
 
     bookmarkAll() {
@@ -173,6 +168,7 @@ class SeasonLeaderboard extends Component {
                     canBookmark={canBookmark}
                     bookmark={this.bookmark}
                     bookmarkAll={this.bookmarkAll}
+                    showRecommend={()=> { this.setState({ showRecommendLevelModal : true })}}
                 />
                 <Leaderboard
                     seasonOver={seasonOver}
@@ -198,6 +194,16 @@ class SeasonLeaderboard extends Component {
                 handleCloseModal={() => { this.setState({ showAddLevelModal: false }) }}
                 addLevel={this.addLevel}
             />
+
+            {this.state.showRecommendLevelModal && 
+                <RecommendLevelModal 
+                    showModal
+                    canBookmark={canBookmark}
+                    bookmark={this.bookmark}
+                    bookmarkAll={this.bookmarkAll}
+                    handleCloseModal={() => { this.setState({ showRecommendLevelModal: false }) }}
+                />
+            }
         </div>
     }
 }

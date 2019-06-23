@@ -13,6 +13,87 @@ class SeasonHelpers {
         this.updateSeasonLeaderboard = this.updateSeasonLeaderboard.bind(this);
         this.UpdateLevelInfo = this.UpdateLevelInfo.bind(this);
         this.getPlayersForNextSeason = this.getPlayersForNextSeason.bind(this);
+        this.getTimeScore = this.getTimeScore.bind(this);
+        this.scoreTags = this.scoreTags.bind(this);
+    }
+
+    async getRecommendations(){
+
+      let levels = await RumpusAPI.searchLevels({
+        sort: 'HiddenHem',
+        excludeTags: ['ltag_brawler','ltag_contraption', 'ltag_shop', 'ltag_long', 'ltag_dontmove', 'ltag_elite'],
+        minClearRate: 0.09,
+        minTimePerWin: 15,
+        maxTimePerWin: 300,
+        minSecondsAgo: 7200,
+        includeStats: true,
+      })
+
+      for(let lvl of levels) {
+        lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 120, 75, 4000);
+
+        lvl.speedrunScore = (lvl.stats.timeScore + lvl.stats.HiddenGem + this.scoreTags(lvl.tags));
+      }
+
+      levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
+
+      return levels;
+
+
+    }
+
+    getTimeScore(x, mean, std, multiply) {
+      return multiply * (1 / (std*Math.sqrt(2 * Math.PI))) * Math.exp(-((x-mean)^2)/(2*std*std))
+    }
+
+    scoreTags(tags) {
+      var score = 0;
+      let tagScoreSheet = {
+        ltag_elite: -15,
+        ltag_newbie: 5,
+        ltag_simple: 5,
+        ltag_casual: 10,
+        ltag_panic: 0,
+        ltag_pjp: -5,
+        ltag_precise: 10,
+        ltag_precarious: 10,
+        ltag_electrodongle: 5,
+        ltag_secret: 0,
+        ltag_intense: 5,
+        ltag_choice: 0,
+        ltag_raceway: 10,
+        ltag_traps: 0,
+        ltag_brawler: -100,
+        ltag_eye: 0,
+        ltag_paced: 10,
+        ltag_puzzle: -5,
+        ltag_bombs: 0,
+        ltag_blasters: 0,
+        ltag_paths: 0,
+        ltag_contraption: -10,
+        ltag_clever: 5,
+        ltag_elite: -20,
+        ltag_musicbox: 0,
+        ltag_chase: -10,
+        ltag_powerup: 0,
+        ltag_complex: -10,
+        ltag_throwing: -5,
+        ltag_explore: -10,
+        ltag_switch: 0,
+        ltag_igneum: 0,
+        ltag_kaizo: 0,
+        ltag_dontmove: -100,
+        ltag_juicefusion: 0,
+        ltag_quick: 10,
+        ltag_long: -10,
+        ltag_shop: -10,
+      }
+
+      for(var tag in tags) {
+        score += tagScoreSheet[tag];
+      }
+
+      return score;
     }
 
     async getPlayersForNextSeason(seasonType) {

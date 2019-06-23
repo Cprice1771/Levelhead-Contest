@@ -73,6 +73,17 @@ router.post('/create', catchErrors(async (req, res) => {
 
 }));
 
+//@@ POST api/seasons/suggest-levels
+//@@ suggests levels for speedrunner guild
+router.get('/suggest-levels', catchErrors(async (req, res) => {
+   let levels = await SeasonHelpers.getRecommendations();
+    res.status(200).json({
+        success: true,
+        levels: levels
+    });
+
+}));
+
 //@@ POST api/seasons/update-leaderboard/:seasonId
 //@@ Create a new season
 router.get('/update-leaderboard/:seasonId', catchErrors(async (req, res) => {

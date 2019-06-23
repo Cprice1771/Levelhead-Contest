@@ -26,7 +26,7 @@ class Main extends Component {
                 <div className="header">
                     <div className="header-text">
                     <NavLink exact to={`/`} ><h1>LEVELCUP</h1></NavLink>
-                        <h3>Community Levelhead Contests</h3>
+                        <h3>Levelhead Community Events</h3>
                     </div>
                     <div className="header-nav">
                         <DiscordLogin />

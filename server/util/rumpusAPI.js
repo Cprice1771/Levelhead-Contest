@@ -17,6 +17,7 @@ class RumpusAPI {
         this.getLevel = this.getLevel.bind(this);
         this.DelegationKeyPermissions = this.DelegationKeyPermissions.bind(this);
         this.getUrlParams = this.getUrlParams.bind(this);
+        this.searchLevels = this.searchLevels.bind(this);
     }
 
     getUrlParams(searchParams) {
@@ -35,6 +36,8 @@ class RumpusAPI {
 
       return params;
   }
+
+  
     
     async getClient() {
 
@@ -54,6 +57,12 @@ class RumpusAPI {
       this.client.defaults.headers['Rumpus-Delegation-Key'] = this.levelcupKey;
       return this.client;
     }
+
+    async searchLevels(searchParams) {
+      const httpClient = await this.getClient();
+      const params = this.getUrlParams(searchParams);
+      return (await httpClient.get(`levelhead/levels?${params}`)).data.data;
+  }
 
   async DelegationKeyPermissions(apiKey) {
       const httpClient = await this.getClient();

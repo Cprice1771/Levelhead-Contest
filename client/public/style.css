@@ -200,10 +200,14 @@ body {
 
 @media only screen and (max-width: 1300px) {
   .container {
-    width: 900px;
+    width: 100%;
   }
   .header {
     width: 100%;
+  }
+  .card{ 
+    width: 100%;
+    margin: 0px auto;
   }
 
 }
