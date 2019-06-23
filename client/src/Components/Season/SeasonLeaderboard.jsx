@@ -155,7 +155,7 @@ class SeasonLeaderboard extends Component {
             </div>
             <div className="card-body">
             
-            { this.state.loggedIn && !inSeason && <button className='b1' onClick={this.enroll}>Enroll</button> }
+            { this.state.loggedIn && !inSeason && <button className='b1' onClick={() => { this.enroll(null); }}>Enroll</button> }
             { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enroll</button> }
             
             </div>

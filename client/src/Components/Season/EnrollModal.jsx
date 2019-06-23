@@ -50,7 +50,9 @@ class EnrollModal extends Component {
                     <input type='text' className="form-control"
                         value={this.state.rumpusId} 
                         onChange={(e) => {
-                            this.setState({ rumpusId: e.target.value });
+                            let newVal = e.target.value;
+                            newVal = newVal.substring(0, Math.min(newVal.length, 6))
+                            this.setState({ rumpusId: newVal });
                         }}
                     />
                 </div>
@@ -63,7 +65,10 @@ class EnrollModal extends Component {
             <button 
                 className={'btn pull-right-down btn-primary'} 
                 disabled={!this.isValid()} 
-                onClick={() => { this.props.enroll(this.state.rumpusId); }}>
+                onClick={() => { 
+                    this.props.enroll(this.state.rumpusId);
+                    this.props.handleCloseModal();
+                }}>
                 Enroll
             </button>
            
