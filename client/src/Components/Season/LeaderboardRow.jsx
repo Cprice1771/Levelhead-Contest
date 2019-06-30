@@ -109,7 +109,7 @@ class LeaderboardRow extends Component {
                         }); 
                         
                     }}>
-                    <td>{this.getPosition(this.props.index + 1)}</td>
+                    <td style={{paddingTop: '0' }}>{this.getPosition(this.props.index + 1)}</td>
                     <td>{player.rumpusAlias} {player.hasLegend && <span style={{ cursor: 'default'}}>✳️</span>}</td>
                     <td align='center'>{player.diamonds}</td>
                     <td align='center'>{player.golds}</td>

@@ -100,6 +100,10 @@ class SeasonHelpers {
       
       let lastSeason = await Season.findOne({ seasonType: seasonType }).sort({ endDate: -1 });
 
+      if(!lastSeason) {
+        return [];
+      }
+
       let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']); 
       let numPlayers = playersToEnroll.length;
       let MegaJemCutoff = playersToEnroll[Math.ceil(numPlayers * .1)].totalPoints;
