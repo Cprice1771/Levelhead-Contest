@@ -218,6 +218,7 @@ class AddLevelModal extends Component {
                                     goldValue: 0,
                                     silverValue: 0,
                                     bronzeValue: 0,
+                                    legendValue: '',
                                     startDate: ''
                                 }); 
                                 }}>

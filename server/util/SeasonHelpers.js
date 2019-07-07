@@ -18,21 +18,25 @@ class SeasonHelpers {
     }
 
     async getRecommendations(){
-
+      //TODO: page once Adam adds it
       let levels = await RumpusAPI.searchLevels({
         sort: 'HiddenHem',
         excludeTags: ['ltag_brawler','ltag_contraption', 'ltag_shop', 'ltag_long', 'ltag_dontmove', 'ltag_elite'],
         minClearRate: 0.09,
         minTimePerWin: 15,
         maxTimePerWin: 300,
+        //only grab levels that have been published for longer than 2 hours, 
+        //so that when people start running it, 
+        //it (hopefully) graduates quickly from the tower and won't be taken down
         minSecondsAgo: 7200,
-        includeStats: true,
-      })
+        maxSecondsAgo: 604800, //only published this week
+        includeStats: true
+      });
 
       for(let lvl of levels) {
         lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 120, 75, 4000);
 
-        lvl.speedrunScore = (lvl.stats.timeScore + lvl.stats.HiddenGem + this.scoreTags(lvl.tags));
+        lvl.speedrunScore = (lvl.stats.HiddenGem + this.scoreTags(lvl.tags) + lvl.stats.timeScore);
       }
 
       levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
@@ -76,7 +80,7 @@ class SeasonHelpers {
         ltag_musicbox: 0,
         ltag_chase: -10,
         ltag_powerup: 0,
-        ltag_complex: -10,
+        ltag_complex: -5,
         ltag_throwing: -5,
         ltag_explore: -10,
         ltag_switch: 0,
@@ -147,9 +151,16 @@ class SeasonHelpers {
     }
 
     async updateSeasonLeaderboard(seasonId) {
+
+        const LIMIT = 128;
+
         let foundSeason = await Season.findById(seasonId);
         let levels = foundSeason.levelsInSeason.filter(x => x.startDate < new Date()).map(x => x.lookupCode);
         
+        if(levels.length === 0) {
+          return;
+        }
+
         for(let i = 0; i < foundSeason.entries.length; i++) {
           let scores = [];
           let before = new Date();
@@ -162,15 +173,15 @@ class SeasonHelpers {
               { levelIds: levels,
                 userIds: userInfo.rumpusId,
                 before: before,
-                limit: 128
+                limit: LIMIT
               });
-            scoreResults = _.filter(scoreResults, x => afterDate < new Date(x.updatedAt));
+            //scoreResults = _.filter(scoreResults, x => afterDate < new Date(x.updatedAt));
             scores = scores.concat(scoreResults);
             if(scoreResults.length > 0) {
               before = scoreResults[scoreResults.length - 1].updatedAt;
             }
             
-          } while(scoreResults.length >= 128);
+          } while(scoreResults.length >= LIMIT);
   
           let existingScoresForUser = await UserScore.find({ seasonId: foundSeason._id, userId: userInfo.userId });
           for(let score of scores) {
@@ -185,9 +196,9 @@ class SeasonHelpers {
                 rumpusAlias: userInfo.rumpusAlias
               }));
             } else if(foundSeason.seasonType === 'speedrun' && existingScore.value > score.value) {
-              existingScoresForUser.value = score.value;
+              existingScore.value = score.value;
             } else if(foundSeason.seasonType === 'crown' && existingScore.value < score.value) {
-              existingScoresForUser.value = score.value;
+              existingScore.value = score.value;
             }
   
           };
@@ -204,6 +215,8 @@ class SeasonHelpers {
 
           for(let score of existingScoresForUser) {
             let level = foundSeason.levelsInSeason.find(x => x.lookupCode === score.levelLookupCode);
+
+            
 
             if(level.legendValue && level.legendValue > score.value) {
               foundSeason.entries[entryIndex].hasLegend = true;
@@ -224,6 +237,10 @@ class SeasonHelpers {
           }
 
           foundSeason.entries[entryIndex].timesSubmitted = existingScoresForUser.length;
+          if(existingScoresForUser.length > 0) {
+            foundSeason.entries[entryIndex].totalTime = _.round(existingScoresForUser.reduce((acc, x) => { return acc + _.round(x.value, 2) }, 0), 2);
+          }
+          
           foundSeason.entries[entryIndex].totalPoints = (foundSeason.entries[entryIndex].diamonds * 5) + 
                                                         (foundSeason.entries[entryIndex].golds * 3) +
                                                         (foundSeason.entries[entryIndex].silvers * 2) +

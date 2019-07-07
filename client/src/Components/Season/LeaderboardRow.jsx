@@ -88,11 +88,11 @@ class LeaderboardRow extends Component {
                             <td colSpan='1'>{level && level.levelName}</td>
                             <td colSpan='1'><a href={`https://lvlhd.co/+${x.levelLookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{x.levelLookupCode}</a></td>
                             <td colSpan='1'>{this.formatSeconds(x.value)}</td>
-                            <td colSpan='3'>{level && this.getMedal(level, x.value)}</td>
+                            <td colSpan='4'>{level && this.getMedal(level, x.value)}</td>
                         </tr>});
             } else {
                 return <tr>
-                            <td colSpan='7' align="center">
+                            <td colSpan='8' align="center">
                                 No Scores
                             </td>
                         </tr>
@@ -116,6 +116,7 @@ class LeaderboardRow extends Component {
                     <td align='center'>{player.silvers}</td>
                     <td align='center'>{player.bronzes}</td>
                     <td align='center'>{player.totalPoints}</td>
+                    <td align='center'>{player.totalTime}</td>
                     { this.props.admin && !this.props.seasonOver && <td onClick={(e) => {
                                                 e.stopPropagation(); 
                                                 e.preventDefault();
@@ -127,7 +128,7 @@ class LeaderboardRow extends Component {
                                 <option value='0'>Mega</option>
                                 <option value='1'>Turbo</option>
                                 <option value='2'>Jem</option>
-                                <option value='3'>Apprentice</option>
+                                {/* <option value='3'>Apprentice</option> */}
                         </Form.Control>
                     </td> }
                 </tr>
@@ -138,13 +139,13 @@ class LeaderboardRow extends Component {
                         <th colSpan='1'>LevelName</th>
                         <th colSpan='1'>Lookup</th>
                         <th colSpan='1'>time</th>
-                        <th colSpan='3'>Award</th>
+                        <th colSpan='4'>Award</th>
                     </tr>
                     {
                         this.state.scores ? 
                             getScores(this.state.scores) : 
                             <tr>
-                                <td colSpan='7' align="center">
+                                <td colSpan='8' align="center">
                                     <i className='fas fa-spinner fa-spin fa-3x'></i>
                                 </td>
                             </tr>

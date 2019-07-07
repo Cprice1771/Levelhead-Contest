@@ -106,7 +106,8 @@ class SeasonLeaderboard extends Component {
                 goldValue: level.goldValue,
                 silverValue: level.silverValue,
                 bronzeValue: level.bronzeValue,
-                startDate: level.startDate
+                startDate: level.startDate,
+                legendValue: level.legendValue
             });
 
             NotificationManager.success('Level Added');

@@ -102,6 +102,10 @@ let seasonSchema = mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            totalTime: {
+                type: Number,
+                required: false,
+            },
             league: {
                 type: String,
                 requried: false

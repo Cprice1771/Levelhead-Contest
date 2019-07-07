@@ -173,7 +173,7 @@ router.post('/enroll', catchErrors(async (req, res) => {
         bronzes: 0,
         totalPoints: 0,
         timesSubmitted: 0,
-        league: 3,
+        league: 2, //Enroll into Jem for now
     });
     await curSeason.save();
 
@@ -254,7 +254,7 @@ router.post('/add-level', catchErrors(async (req, res) => {
     });
     await foundSeason.save();
 
-    SeasonHelpers.updateSeasonLeaderboard();
+    SeasonHelpers.updateSeasonLeaderboard(req.body.seasonId);
 
     res.status(200).json({
         success: true,
