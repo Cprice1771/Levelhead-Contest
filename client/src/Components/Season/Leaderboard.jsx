@@ -46,10 +46,10 @@ function Leaderboard (props) {
                     <tr>
                         <th>Position</th>
                         <th>Player</th>
-                        <th align='center'>Diamonds</th>
-                        <th align='center'>Golds</th>
-                        <th align='center'>Silvers</th>
-                        <th align='center'>Bronzes</th>
+                        <th align='center'>💎</th>
+                        <th align='center'>🥇</th>
+                        <th align='center'>🥈</th>
+                        <th align='center'>🥉</th>
                         <th>Total Points</th>
                         <th>Total Time</th>
                         { props.admin && !props.seasonOver && <th></th> }
