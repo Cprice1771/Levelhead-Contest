@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import LeaderboardRow from './LeaderboardRow';
 
 function Leaderboard (props) {
-    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], ['desc', 'desc', 'desc', 'desc', 'desc', 'desc']);
+    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], ['desc', 'desc', 'desc', 'desc', 'desc', 'asc']);
 
 
     let getRow = (player, index) => {
