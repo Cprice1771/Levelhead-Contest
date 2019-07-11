@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import { endPoints} from '../../Constants/Endpoints';
 import ReactModal from 'react-modal';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
-import Flatpickr from 'react-flatpickr'
 import { NotificationManager } from 'react-notifications';
 import * as _ from 'lodash';
 
@@ -43,6 +41,14 @@ class RecommendLevelModal extends Component {
         }
     }
 
+
+    async likeLevel() {
+
+    }
+
+    async booLevel() {
+
+    }
    
 
     render() {
@@ -83,6 +89,8 @@ class RecommendLevelModal extends Component {
                     <th>Level Name</th>
                     <th>Lookup Code</th>
                     <th>Clear Rate</th>
+                    {/* <th>Like</th>
+                    <th>Boo</th> */}
                     {this.props.canBookmark &&<th>Bookmark</th>}
                 </tr>
                 {
@@ -92,6 +100,8 @@ class RecommendLevelModal extends Component {
                                 <td>{x.title}</td>
                                 <td><a href={`https://lvlhd.co/+${x.levelId}`} target="_blank" rel="noopener noreferrer" className="levelLink">{x.levelId}</a></td>
                                 <td>{x.stats.Attempts === 0 ? 0 : _.round(((x.stats.Successes / x.stats.Attempts) * 100), 2)}%</td>
+                                {/* <td><i className="fas fa-thumbs-up"  onClick={this.likeLevel}></i></td>
+                                <td><i className="fas fa-thumbs-down"  onClick={this.booLevel}></i></td> */}
                                 {this.props.canBookmark && <td align="center"><i className='fas fa-bookmark fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { this.props.bookmark([x.levelId])}}> </i></td>}
                             </tr>
                         )

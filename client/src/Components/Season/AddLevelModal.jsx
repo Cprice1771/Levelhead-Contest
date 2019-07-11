@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import { endPoints} from '../../Constants/Endpoints';
 import ReactModal from 'react-modal';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
 import Flatpickr from 'react-flatpickr'
 import { NotificationManager } from 'react-notifications';
 
@@ -69,7 +68,7 @@ class AddLevelModal extends Component {
                 +this.state.diamondValue > 0 &&
                 +this.state.goldValue > +this.state.diamondValue &&
                 +this.state.silverValue > +this.state.goldValue &&
-                +this.state. bronzeValue > +this.state.silverValue;
+                +this.state.bronzeValue > +this.state.silverValue;
     }
 
     render() {

@@ -163,6 +163,7 @@ class SeasonLeaderboard extends Component {
             <div className="card-rules pad-bottom">
                 <LevelBoard
                     seasonOver={seasonOver}
+                    seasonId={this.state.season._id}
                     levels={this.state.season.levelsInSeason}
                     addLevel={()=> { this.setState({ showAddLevelModal : true })}}
                     admin={admin}

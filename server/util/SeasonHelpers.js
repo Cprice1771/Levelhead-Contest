@@ -18,20 +18,27 @@ class SeasonHelpers {
     }
 
     async getRecommendations(){
-      //TODO: page once Adam adds it
-      let levels = await RumpusAPI.searchLevels({
-        sort: 'HiddenHem',
-        excludeTags: ['ltag_brawler','ltag_contraption', 'ltag_shop', 'ltag_long', 'ltag_dontmove', 'ltag_elite'],
-        minClearRate: 0.09,
-        minTimePerWin: 15,
-        maxTimePerWin: 300,
-        //only grab levels that have been published for longer than 2 hours, 
-        //so that when people start running it, 
-        //it (hopefully) graduates quickly from the tower and won't be taken down
-        minSecondsAgo: 7200,
-        maxSecondsAgo: 604800, //only published this week
-        includeStats: true
-      });
+      let levels = [];
+      let maxHiddenGem = 1000000;
+      for(let i = 0; i < 3; i++) { // get 3 pages 
+        levels = levels.concat(await RumpusAPI.searchLevels({
+          sort: 'HiddenHem',
+          excludeTags: ['ltag_brawler','ltag_contraption', 'ltag_shop', 'ltag_long', 'ltag_dontmove', 'ltag_elite'],
+          minClearRate: 0.09,
+          minTimePerWin: 15,
+          maxTimePerWin: 300,
+          limit: 64,
+          //only grab levels that have been published for longer than 2 hours, 
+          //so that when people start running it, 
+          //it (hopefully) graduates quickly from the tower and won't be taken down
+          maxHiddenGem: maxHiddenGem,
+          minSecondsAgo: 7200,
+          maxSecondsAgo: 604800, //only published this week
+          includeStats: true
+        }));
+
+        maxHiddenGem = levels[levels.length - 1].stats.HiddenGem - 0.0001;
+      }
 
       for(let lvl of levels) {
         lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 120, 75, 4000);
@@ -41,7 +48,7 @@ class SeasonHelpers {
 
       levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
 
-      return levels;
+      return levels.slice(0, 10);
 
 
     }

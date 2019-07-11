@@ -1,21 +1,8 @@
 import React from 'react';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import LevelBoardRow from './levelBoardRow';
 
-function Leaderboard (props) {
-
-
-    let formatSeconds = (seconds) => {
-        let minutes = Math.floor(seconds / 60);
-        let s = seconds % 60;
-
-        if(minutes > 0){
-            return `${minutes}:${s.toFixed(2).padStart(5, '0')}`
-        } else {
-            return s.toFixed(2);
-        }
-    }
-
+function LevelBoard (props) {
     let orderedLevels = _.orderBy(props.levels, ['startDate'], ['asc']);
     if(!props.admin) {
         orderedLevels = orderedLevels.filter(x => new Date(x.startDate) < new Date());
@@ -24,19 +11,14 @@ function Leaderboard (props) {
     let levels = orderedLevels.map((lvl) => {
 
         let scheduled = new Date(lvl.startDate) > new Date();
-        return ( <tr className={(scheduled ? 'scheduled-row' : 'submission-row')} key={lvl.lookupCode}>
-                    <td>{lvl.levelName} {scheduled && <div> {`(Scheduled ${moment(lvl.startDate).format('MM/DD/YYYY hh:mm A')})`}</div>}
-                        {lvl.legendValue && <span style={{ cursor: 'default'}} title={`Time: ${lvl.legendValue}`}>✳️</span>}
-                    </td>
-                    <td>{lvl.creatorAlias}</td>
-                    <td><a href={`https://lvlhd.co/+${lvl.lookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{lvl.lookupCode}</a></td>
-                    <td>{formatSeconds(lvl.diamondValue)}</td>
-                    <td>{formatSeconds(lvl.goldValue)}</td>
-                    <td>{formatSeconds(lvl.silverValue)}</td>
-                    <td>{formatSeconds(lvl.bronzeValue)}</td>
-                    <td>{ lvl.record &&  <><div>{lvl.record.alias}</div> <div>{formatSeconds(lvl.record.value)}</div></>} </td>
-                    {props.canBookmark && <td><i className='fas fa-bookmark fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { props.bookmark([lvl.lookupCode])}}> </i></td>}
-                </tr>)
+        return ( 
+            <LevelBoardRow 
+            key={lvl.lookupCode}
+            lvl={lvl}
+            scheduled={scheduled}
+            {...props}
+            />
+        )
                 })
 
     return (
@@ -94,4 +76,4 @@ function Leaderboard (props) {
     )
 }
 
-export default Leaderboard;
+export default LevelBoard;

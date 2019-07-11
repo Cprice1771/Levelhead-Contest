@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect  } from 'react-router';
+import { Route  } from 'react-router';
 import Contest from './Contest';
 import SubmissionList from './SubmissionList';
 import DiscordLogin from './DiscordLogin';

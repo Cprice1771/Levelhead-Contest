@@ -180,7 +180,7 @@ input:checked + .slider:before {
 .level-suggest-container {
   padding: 10px;
   max-height: 700px;
-  overflow-y: scroll; }
+  overflow-y: hidden; }
 
 .level-suggest-table {
   padding: 10px;
@@ -468,3 +468,15 @@ input:checked + .slider:before {
   color: #212529 !important;
   font-weight: 350 !important;
   font-size: 18px; }
+
+.first-pad {
+  padding-top: 12px !important; }
+
+.second-pad {
+  padding-top: 15px !important; }
+
+.third-pad {
+  padding-top: 25px !important; }
+
+.other-pad {
+  padding-top: 30px !important; }

@@ -46,10 +46,10 @@ function Leaderboard (props) {
                     <tr>
                         <th>Position</th>
                         <th>Player</th>
-                        <th align='center'>💎</th>
-                        <th align='center'>🥇</th>
-                        <th align='center'>🥈</th>
-                        <th align='center'>🥉</th>
+                        <th align='center'><span role='img' aria-label='diamond'>💎</span></th>
+                        <th align='center'><span role='img' aria-label='gold'>🥇</span></th>
+                        <th align='center'><span role='img' aria-label='silver'>🥈</span></th>
+                        <th align='center'><span role='img' aria-label='bronze'>🥉</span></th>
                         <th>Total Points</th>
                         <th>Total Time</th>
                         { props.admin && !props.seasonOver && <th></th> }

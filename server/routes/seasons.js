@@ -31,6 +31,19 @@ router.post('/get-user-scores', catchErrors(async (req, res) => {
     });
 }));
 
+//@@ POST api/seasons/get-level-scores
+//@@ gets a levels scores
+router.post('/get-level-scores', catchErrors(async (req, res) => {
+    let scores = await UserScores.find({ $and : [{ "seasonId": req.body.seasonId  }, { "levelLookupCode": req.body.levelId }]});
+   
+    res.status(200).json({
+        success: true,
+        data: scores
+    });
+}));
+
+
+
 //@@ POST api/seasons/create
 //@@ Create a new season
 router.post('/create', catchErrors(async (req, res) => {

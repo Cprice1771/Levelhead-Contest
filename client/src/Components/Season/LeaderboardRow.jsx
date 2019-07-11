@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import { endPoints} from '../../Constants/Endpoints';
 import { NotificationManager } from 'react-notifications';
-import UserStore from '../../Stores/UserStore';
-import * as moment from 'moment';
-import { Form, FormControl, FormCheck, Col, Alert } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import * as _ from 'lodash';
 
 
@@ -40,13 +38,13 @@ class LeaderboardRow extends Component {
     getPosition = (position) => {
         switch(position) {
             case 1:
-                return <h1 className='first'>1st</h1>;
+                return <h1 className='first first-pad'>1st</h1>;
             case 2:
-                return <h2 className='second'>2nd</h2>;
+                return <h2 className='second second-pad'>2nd</h2>;
             case 3:
-                return <h4 className='third'>3rd</h4>;
+                return <h4 className='third third-pad'>3rd</h4>;
             default:
-                return <h5 className='other'>{position}th</h5>;
+                return <h5 className='other other-pad'>{position}th</h5>;
         }
     }
 
@@ -63,13 +61,13 @@ class LeaderboardRow extends Component {
 
     getMedal = (levelInfo, score) => {
         if(levelInfo.diamondValue > score) {
-            return <span style={{ paddingLeft: '12px'}}>💎</span>
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='diamond'>💎</span>
         } else if (levelInfo.goldValue > score) {
-            return <span style={{ paddingLeft: '12px'}}>🥇</span>
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='gold'>🥇</span>
         } else if (levelInfo.silverValue > score) {
-            return <span style={{ paddingLeft: '12px'}}>🥈</span>
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='silver'>🥈</span>
         } else if (levelInfo.bronzeValue > score) {
-            return <span style={{ paddingLeft: '12px'}}>🥉</span>
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='bronze'>🥉</span>
         } else {
             return <span></span>
         }
@@ -110,7 +108,7 @@ class LeaderboardRow extends Component {
                         
                     }}>
                     <td style={{paddingTop: '0' }}>{this.getPosition(this.props.index + 1)}</td>
-                    <td>{player.rumpusAlias} {player.hasLegend && <span style={{ cursor: 'default'}}>✳️</span>}</td>
+                    <td>{player.rumpusAlias} {player.hasLegend && <span style={{ cursor: 'default'}} role='img' aria-label='legend'>✳️</span>}</td>
                     <td align='center'>{player.diamonds}</td>
                     <td align='center'>{player.golds}</td>
                     <td align='center'>{player.silvers}</td>
@@ -136,9 +134,9 @@ class LeaderboardRow extends Component {
                     <>
                     <tr>
                         <th></th>
-                        <th colSpan='1'>LevelName</th>
+                        <th colSpan='1'>Level</th>
                         <th colSpan='1'>Lookup</th>
-                        <th colSpan='1'>time</th>
+                        <th colSpan='1'>Time</th>
                         <th colSpan='4'>Award</th>
                     </tr>
                     {
