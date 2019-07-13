@@ -109,10 +109,10 @@ class LeaderboardRow extends Component {
                     }}>
                     <td style={{paddingTop: '0' }}>{this.getPosition(this.props.index + 1)}</td>
                     <td>{player.rumpusAlias} {player.hasLegend && <span style={{ cursor: 'default'}} role='img' aria-label='legend'>✳️</span>}</td>
-                    <td align='center'>{player.diamonds}</td>
-                    <td align='center'>{player.golds}</td>
-                    <td align='center'>{player.silvers}</td>
-                    <td align='center'>{player.bronzes}</td>
+                    <td align='center' className='large'>{player.diamonds}</td>
+                    <td align='center' className='large'>{player.golds}</td>
+                    <td align='center' className='large'>{player.silvers}</td>
+                    <td align='center' className='large'>{player.bronzes}</td>
                     <td align='center'>{player.totalPoints}</td>
                     <td align='center'>{player.totalTime}</td>
                     { this.props.admin && !this.props.seasonOver && <td onClick={(e) => {

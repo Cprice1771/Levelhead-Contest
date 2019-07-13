@@ -6,6 +6,8 @@ import { NavLink } from 'react-router-dom';
 
 function EventCard(props) {
 
+    let eventOver = new Date(props.endDate) < new Date();
+
     return <div className="card"> 
             <div className={"card-header-" + props.eventType}>
                 <div className="card-text">
@@ -18,25 +20,28 @@ function EventCard(props) {
             </div>      
             { props.eventType === 'contest' &&
                 <div className="card-body">
-                    <NavLink exact to={`/${props.eventType}/${props._id}`} 
+                    <><NavLink exact to={`/${props.eventType}/${props._id}`} 
                                 className="NavButton"
                                 activeClassName="activeRoute">
-                                <button className='b1' >Contest Info</button>
+                                <button className='b1' >{ eventOver ? 'View Results' : 'Contest Info'}</button>
                     </NavLink> 
                     <NavLink exact to={`/submissions/${props._id}`} 
                                 className="NavButton"
                                 activeClassName="activeRoute">
                                 <button className='b2' >View Entries</button>
-                    </NavLink> 
+                    </NavLink> </>
+                    
                 </div>      
             }
             { props.eventType === 'season' &&
                 <div className="card-body">
+                {!eventOver &&
                     <NavLink exact to={`/${props.eventType}/${props._id}`} 
                                 className="NavButton"
                                 activeClassName="activeRoute">
-                                <button className='b1' >View Leaderboard</button>
+                                <button className='b1' >{ eventOver ? 'View Results' : 'View Leaderboard'}</button>
                     </NavLink> 
+                }
                 </div>      
             }
         </div>

@@ -235,30 +235,32 @@ class SubmissionList extends Component {
                     backgroundColor: 'transparent'
                 }}>Bookmark All</button>}
 
-                <span className="switch-label">Hide Played</span>
-                <label className="switch ">
-                    
-                    <input type="checkbox" 
-                    checked={this.state.hidePlayed} 
-                    onChange={() => {
-                        this.setState({ hidePlayed: !this.state.hidePlayed});
-                    }}
-                    />
-                    <span className="slider round"></span>
+                <div className='large'>
+                    <span className="switch-label">Hide Played</span>
+                    <label className="switch ">
+                        
+                        <input type="checkbox" 
+                        checked={this.state.hidePlayed} 
+                        onChange={() => {
+                            this.setState({ hidePlayed: !this.state.hidePlayed});
+                        }}
+                        />
+                        <span className="slider round"></span>
                 </label>
+                </div>
                 </div>
             </div>
             </div>
             <table className="table submission-header table-striped">
                 <thead>
                     <tr>
-                        <th>Played</th>
+                        <th className='large'>Played</th>
                         <th>Lookup Code</th>
                         <th>Creator</th>
                         <th>Title</th>
-                        <th>Plays</th>
-                        <th>Clear Rate</th>
-                        <th>Top Scores</th>
+                        <th className='medium'>Plays</th>
+                        <th className='medium'>Clear Rate</th>
+                        <th className='medium'>Top Scores</th>
                         {/* <th>{this.state.showVotes && <div className="col-md-2">Votes</div>}</th> */}
                         {this.state.showVotes && <th>Votes</th> }
                         {this.state.canVote && <th></th> }

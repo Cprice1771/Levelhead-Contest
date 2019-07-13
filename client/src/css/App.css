@@ -160,6 +160,26 @@ input:checked + .slider:before {
 .light-grey {
   background-color: rgba(0, 0, 0, 0.05); }
 
+@media only screen and (max-width: 1300px) {
+  .medium {
+    display: none; } }
+
+@media only screen and (max-width: 800px) {
+  .large {
+    display: none; }
+  .medium {
+    display: none; } }
+
+@media only screen and (max-width: 600px) {
+  .large {
+    display: none; }
+  .medium {
+    display: none; }
+  .small {
+    display: none; }
+  .xs {
+    font-size: 2rem !important; } }
+
 .add-level {
   color: #3b40bd;
   cursor: pointer; }

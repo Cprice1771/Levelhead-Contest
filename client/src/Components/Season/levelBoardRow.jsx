@@ -70,9 +70,9 @@ class LevelBoardRow extends Component {
 
                     return <tr key={i} >
                             <td></td>
-                            <td colSpan='2'>{x.rumpusAlias}</td>
-                            <td colSpan='2'>{this.formatSeconds(x.value)}</td>
-                            <td colSpan='4'>{this.getMedal(this.props.lvl, x.value)}</td>
+                            <td colSpan='1'>{x.rumpusAlias}</td>
+                            <td colSpan='1'>{this.formatSeconds(x.value)}</td>
+                            <td colSpan='5'>{this.getMedal(this.props.lvl, x.value)}</td>
                         </tr>});
             } else {
                 return <tr>
@@ -100,10 +100,10 @@ class LevelBoardRow extends Component {
                     </td>
                     <td>{lvl.creatorAlias}</td>
                     <td><a href={`https://lvlhd.co/+${lvl.lookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{lvl.lookupCode}</a></td>
-                    <td>{this.formatSeconds(lvl.diamondValue)}</td>
-                    <td>{this.formatSeconds(lvl.goldValue)}</td>
-                    <td>{this.formatSeconds(lvl.silverValue)}</td>
-                    <td>{this.formatSeconds(lvl.bronzeValue)}</td>
+                    <td className='medium'>{this.formatSeconds(lvl.diamondValue)}</td>
+                    <td className='medium'>{this.formatSeconds(lvl.goldValue)}</td>
+                    <td className='medium'>{this.formatSeconds(lvl.silverValue)}</td>
+                    <td className='medium'>{this.formatSeconds(lvl.bronzeValue)}</td>
                     <td>{ lvl.record &&  <><div>{lvl.record.alias}</div> <div>{this.formatSeconds(lvl.record.value)}</div></>} </td>
                     {this.props.canBookmark && <td><i className='fas fa-bookmark fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { this.props.bookmark([lvl.lookupCode])}}> </i></td>}
                 </tr>
@@ -111,9 +111,9 @@ class LevelBoardRow extends Component {
                     <>
                     <tr>
                         <th></th>
-                        <th colSpan='2'>User</th>
-                        <th colSpan='2'>Time</th>
-                        <th colSpan='4'>Award</th>
+                        <th>User</th>
+                        <th>Time</th>
+                        <th colSpan='5'>Award</th>
                     </tr>
                     {
                         this.state.scores ? 

@@ -15,8 +15,11 @@ router.use(function(req, res, next) {
 //@@ GET /api/contests/
 //@@ Display all contests
 router.get('/active', catchErrors(async function(req, res){
-    const contests = await Contest.find({ votingEndDate: { $gt : new Date() }});
-    const seasons = await Season.find({ endDate: { $gt : new Date() }});
+
+    var date = new Date();
+    date.setDate(date.getDate() - 3);
+    const contests = await Contest.find({ votingEndDate: { $gt : date }});
+    const seasons = await Season.find({ endDate: { $gt : date }});
 
     let events = [];
     events = events.concat(
