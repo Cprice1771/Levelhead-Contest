@@ -128,7 +128,7 @@ class Contest extends Component {
                             <li>Diamond: 5 points</li>
                             <li>Gold: 3 points</li>
                             <li>Silver: 2 points</li>
-                            <li>Bronze: 1 points</li>
+                            <li>Bronze: 1 point</li>
                         </ul>
                         <li>The overall winner of with the most points and lowest times across all levels will receive a Crashlands Poster.</li>
                         <li>The winner of each division will receive 10k Marketing bucks</li>
