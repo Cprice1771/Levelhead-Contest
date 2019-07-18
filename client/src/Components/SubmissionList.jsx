@@ -203,6 +203,9 @@ class SubmissionList extends Component {
             subs = subs.filter(x => !x.played);
         }
 
+        if(this.state.showVotes) {
+            subs = _.orderBy(subs, ['votes'], ['desc']);
+        }
 
         let submissions = _.map(subs, s => {
             return <Submission 
@@ -235,7 +238,7 @@ class SubmissionList extends Component {
                     backgroundColor: 'transparent'
                 }}>Bookmark All</button>}
 
-                <div className='large'>
+                <span className='large'>
                     <span className="switch-label">Hide Played</span>
                     <label className="switch ">
                         
@@ -247,7 +250,7 @@ class SubmissionList extends Component {
                         />
                         <span className="slider round"></span>
                 </label>
-                </div>
+                </span>
                 </div>
             </div>
             </div>
@@ -261,8 +264,9 @@ class SubmissionList extends Component {
                         <th className='medium'>Plays</th>
                         <th className='medium'>Clear Rate</th>
                         <th className='medium'>Top Scores</th>
-                        {/* <th>{this.state.showVotes && <div className="col-md-2">Votes</div>}</th> */}
+                        
                         {this.state.showVotes && <th>Votes</th> }
+                        {canBookmark && <th></th>}
                         {this.state.canVote && <th></th> }
                     </tr>
                 </thead>

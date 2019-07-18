@@ -225,8 +225,9 @@ class SeasonHelpers {
 
             
 
-            if(level.legendValue && level.legendValue > score.value) {
-              foundSeason.entries[entryIndex].hasLegend = true;
+            if(level.bonusAward && level.bonusAward.awardValue > score.value && 
+              (!foundSeason.entries[entryIndex].awards || foundSeason.entries[entryIndex].awards.indexOf(level.bonusAward.awardIcon) < 0)) {
+              foundSeason.entries[entryIndex].awards.push(level.bonusAward.awardIcon);
             }
 
             if(level.diamondValue > score.value) {

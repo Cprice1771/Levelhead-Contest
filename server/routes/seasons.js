@@ -257,7 +257,7 @@ router.post('/add-level', catchErrors(async (req, res) => {
         levelName: level.title,
         creatorAlias: level.alias.alias,
         lookupCode: req.body.lookupCode,
-        legendValue: req.body.legendValue,
+        bonusAward: req.body.bonusAward,
         diamondValue: req.body.diamondValue,
         goldValue: req.body.goldValue,
         silverValue: req.body.silverValue,

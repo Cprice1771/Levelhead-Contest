@@ -35,13 +35,19 @@ function EventCard(props) {
             }
             { props.eventType === 'season' &&
                 <div className="card-body">
-                {!eventOver &&
-                    <NavLink exact to={`/${props.eventType}/${props._id}`} 
+                
+                <NavLink exact to={`/${props.eventType}/${props._id}`} 
+                            className="NavButton"
+                            activeClassName="activeRoute">
+                            <button className='b1' >{ eventOver ? 'View Results' : 'View Leaderboard'}</button>
+                </NavLink> 
+                    
+            
+                <NavLink exact to={`/seasonInfo/${props._id}`} 
                                 className="NavButton"
                                 activeClassName="activeRoute">
-                                <button className='b1' >{ eventOver ? 'View Results' : 'View Leaderboard'}</button>
-                    </NavLink> 
-                }
+                                <button className='b2' >Season Info</button>
+                </NavLink>
                 </div>      
             }
         </div>

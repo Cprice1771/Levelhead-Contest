@@ -5,6 +5,9 @@ import ReactModal from 'react-modal';
 import Flatpickr from 'react-flatpickr'
 import { NotificationManager } from 'react-notifications';
 
+
+
+
 class AddLevelModal extends Component {
 
     constructor(props) {
@@ -18,6 +21,8 @@ class AddLevelModal extends Component {
             bronzeValue: 0,
             startDate: '',
             selectedLevelTitle: '',
+            bonusAward: 'NONE',
+            bonusValue: '',
         }
 
         this.isValid = this.isValid.bind(this);
@@ -35,9 +40,10 @@ class AddLevelModal extends Component {
             goldValue: 0,
             silverValue: 0,
             bronzeValue: 0,
-            legendValue: '',
             startDate: '',
             selectedLevelTitle: '',
+            bonusAward: 'NONE',
+            bonusValue: '',
         })
     }
 
@@ -68,7 +74,9 @@ class AddLevelModal extends Component {
                 +this.state.diamondValue > 0 &&
                 +this.state.goldValue > +this.state.diamondValue &&
                 +this.state.silverValue > +this.state.goldValue &&
-                +this.state.bronzeValue > +this.state.silverValue;
+                +this.state.bronzeValue > +this.state.silverValue &&
+                (this.state.bonusAward === 'NONE' || !!this.state.bonusValue)
+                ;
     }
 
     render() {
@@ -92,7 +100,7 @@ class AddLevelModal extends Component {
                Add Level
             </h3>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Lookup Code
                 </div>
                 <div className='col-md-4'>
@@ -111,15 +119,15 @@ class AddLevelModal extends Component {
                         }}
                     />
                 </div>
-                <div className='col-md-4'>
+                <div className='col-md-3'>
                     {this.state.selectedLevelTitle}
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Level Start Date
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     <Flatpickr 
                         data-enable-time 
                         options={{
@@ -132,10 +140,10 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Diamond Time
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     
                 <input type='number' className="form-control"
                         value={this.state.diamondValue} 
@@ -146,10 +154,10 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Gold Time
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     
                 <input type='number' className="form-control"
                         value={this.state.goldValue} 
@@ -160,10 +168,10 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Silver Time
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     
                 <input type='number' className="form-control"
                         value={this.state.silverValue} 
@@ -174,10 +182,10 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     Bronze Time
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     
                     <input type='number' className="form-control"
                         value={this.state.bronzeValue} 
@@ -188,15 +196,30 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-4'>
-                    Legend Time
+                <div className='col-md-5'>
+                    <select className="form-control"
+                        value={this.state.bonusAward} onChange={(e) => {
+                            this.setState({ bonusAward: e.target.value });
+                            if(e.target.value === 'NONE') {
+                                this.setState({ bonusValue: ''})
+                            }
+                        }}
+                    >   
+                        <option value='NONE'>--None--</option>
+                        {
+                            this.props.awards && this.props.awards.map(award => {
+                                return <option value={award.awardName} key={award.awardName}>{award.awardName} </option>
+                            })
+                        }
+                    </select>
                 </div>
-                <div className='col-md-8'>
+                <div className='col-md-7'>
                     
                     <input type='number' className="form-control"
-                        value={this.state.legendValue} 
+                        value={this.state.bonusValue} 
+                        disabled={this.state.bonusAward==='NONE'}
                         onChange={(e) => {
-                            this.setState({ legendValue: e.target.value });
+                            this.setState({ bonusValue: e.target.value });
                         }}
                     />
                 </div>
@@ -210,17 +233,33 @@ class AddLevelModal extends Component {
             <button 
                 className={'btn pull-right-down btn-primary'} 
                 disabled={!this.isValid()} 
-                onClick={() => { this.props.addLevel(this.state); 
-                                this.setState({
-                                    lookupCode: '',
-                                    diamondValue: 0,
-                                    goldValue: 0,
-                                    silverValue: 0,
-                                    bronzeValue: 0,
-                                    legendValue: '',
-                                    startDate: ''
-                                }); 
-                                }}>
+                onClick={() => { 
+                    
+                    let level = {
+                        lookupCode: this.state.lookupCode,
+                        diamondValue: this.state.diamondValue,
+                        goldValue: this.state.goldValue,
+                        silverValue: this.state.silverValue,
+                        bronzeValue: this.state.bronzeValue,
+                        startDate: this.state.startDate,
+                        bonusAward: this.state.bonusAward === 'NONE' ? undefined : {
+                            awardValue: this.state.bonusValue,
+                            awardName: this.state.bonusAward,
+                            awardIcon: this.props.awards.find(x => x.awardName === this.state.bonusAward).awardIcon
+                        }
+                    }
+
+                    this.props.addLevel(level); 
+                    this.setState({
+                        lookupCode: '',
+                        diamondValue: 0,
+                        goldValue: 0,
+                        silverValue: 0,
+                        bronzeValue: 0,
+                        bonusValue: '',
+                        startDate: ''
+                    }); 
+                    }}>
                 Add
             </button>
            

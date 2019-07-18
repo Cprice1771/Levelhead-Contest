@@ -17,6 +17,9 @@ let contestSchema = mongoose.Schema({
     type: String,
     // required: true
   },
+  awardsHandedOut: {
+    type: Boolean
+  },
   createdBy: {
     type: String
   },

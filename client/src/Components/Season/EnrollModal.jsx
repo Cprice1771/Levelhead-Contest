@@ -41,7 +41,7 @@ class EnrollModal extends Component {
             </h3>
             <div className='row input-group'>
                 <div className='col-md-4'>
-                    Rumpus Id
+                    Rumpus Id (<a href="https://www.bscotch.net/account" target="blank">found here</a>)
                 </div>
                 <div className='col-md-8'>
                     

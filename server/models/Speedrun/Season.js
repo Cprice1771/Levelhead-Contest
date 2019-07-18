@@ -17,6 +17,9 @@ let seasonSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    awardsHandedOut: {
+        type: Boolean
+    },
     levelsInSeason: [
         {
             levelName: {
@@ -31,6 +34,11 @@ let seasonSchema = mongoose.Schema({
             },
             legendValue: {
                 type: Number
+            },
+            bonusAward : {
+                awardValue: Number,
+                awardIcon: String,
+                awardName: String,
             },
             diamondValue: {
                 type: Number,
@@ -94,6 +102,7 @@ let seasonSchema = mongoose.Schema({
             hasLegend: {
                 type: Boolean,
             },
+            awards: [],
             totalPoints: {
                 type: Number,
                 required: true,

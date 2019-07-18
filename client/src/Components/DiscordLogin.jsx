@@ -63,7 +63,7 @@ class DiscordLogin extends Component {
                             }
 
                             { 
-                                <NavLink exact to={`/profile`} 
+                                <NavLink exact to={`/profile/${this.state.loggedInUser._id}`} 
                                     className="NavButton"
                                     activeClassName="activeRoute">
                                     <button>View Profile</button>

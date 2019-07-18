@@ -6,6 +6,7 @@ const btoa = require('btoa');
 const Axios = require('axios');
 const RumpusAPI = require('../util/rumpusAPI');
 const catchErrors = require('../util/catchErrors');
+const UserAwards = require('../models/userAward');
 
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -24,6 +25,18 @@ router.post('/discord-auth', catchErrors(async(req, res) => {
         link: `https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=token&redirect_uri=${encodeURIComponent(req.body.redirect)}`
     });
 }));
+
+//@@ GET /awards:id
+//@@ Gets a users awards
+router.get('/awards/:userId', catchErrors(async (req, res) => {
+
+    let awards = await UserAwards.find({  userId: req.params.userId });
+    res.status(200).json({
+        success: true,
+        data: awards
+    });
+}));
+
 
 //@@ POST /update-key/:id
 //@@ updates a users delegation key

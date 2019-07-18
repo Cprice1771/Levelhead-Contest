@@ -14,10 +14,15 @@ router.use(function(req, res, next) {
 
 //@@ GET /api/contests/
 //@@ Display all contests
-router.get('/active', catchErrors(async function(req, res){
+router.get('/:type', catchErrors(async function(req, res){
 
     var date = new Date();
-    date.setDate(date.getDate() - 3);
+
+    if(req.params.type === 'active') {
+        date.setDate(date.getDate() - 3);
+    } else {
+        date.setDate(date.getDate() - 365);
+    }
     const contests = await Contest.find({ votingEndDate: { $gt : date }});
     const seasons = await Season.find({ endDate: { $gt : date }});
 

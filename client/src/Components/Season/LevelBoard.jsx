@@ -57,7 +57,7 @@ function LevelBoard (props) {
                     <tr>
                         
                         <th>Title</th>
-                        <th>Creator</th>
+                        <th className='smll'>Creator</th>
                         <th>Lookup</th>
                         <th className='medium'>Diamond</th>
                         <th className='medium'>Gold</th>

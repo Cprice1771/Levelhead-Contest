@@ -175,7 +175,7 @@ input:checked + .slider:before {
     display: none; }
   .medium {
     display: none; }
-  .small {
+  .smll {
     display: none; }
   .xs {
     font-size: 2rem !important; } }

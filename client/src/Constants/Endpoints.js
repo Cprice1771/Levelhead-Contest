@@ -12,7 +12,7 @@ export const endPoints = {
     VALIDATE_LEVELS: `/api/contests/validate-levels`,
     
     //General
-    GET_ACTIVE_EVENTS: '/api/events/active',
+    GET_EVENTS: (type) =>  `/api/events/${type}`,
 
     //Submissions
     GET_SUMISSIONS_FOR_CONTEST: (contestId) => `/api/submissions/${contestId}`,
@@ -31,6 +31,7 @@ export const endPoints = {
     CREATE_UPDATE_USER: '/api/users',
     SAVE_PROFILE: (id) => `/api/users/update-key/${id}`,
     LOGIN: '/api/users/login',
+    GET_AWARDS: (userId) => `/api/users/awards/${userId}`,
 
     //Seasons
     CREATE_SEASON: '/api/seasons/create',

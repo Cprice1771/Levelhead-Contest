@@ -25,8 +25,9 @@ function Submission (props) {
                 <div className="row"><div className='col-md-12'><span role='img' aria-label="Shoes">👟</span> {submision.levelMetaData.records.FastestTime[0].rumpusName}</div></div>
                 <div className="row"><div className='col-md-12'><span role='img' aria-label="Crown">👑</span> {submision.levelMetaData.records.HighScore[0].rumpusName}</div></div>
             </td>
-            {props.canBookmark && <td><i className='fas fa-bookmark fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { props.bookmark([submision.lookupCode])}}> </i></td>}
+            
             {(props.showVotes) &&<td>{submision.votes}</td>}
+            {props.canBookmark && <td><i className='fas fa-bookmark fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { props.bookmark([submision.lookupCode])}}> </i></td>}
             {(props.canVote) &&<td>
                 <i className={"fas fa-arrow-alt-circle-up " + (props.hasVotedFor ? 'fa-arrow-alt-circle-selected' : 'fa-arrow-alt-circle-delescted')} onClick={() => {
                     

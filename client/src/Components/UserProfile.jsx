@@ -9,13 +9,15 @@ class UserProfile extends Component {
 
     constructor(props) {
         super(props);
-        this.state= { ...UserStore.getLoggedInUser() } || {};
+        this.state= { ...UserStore.getLoggedInUser(), accolades: [{}] } || { accolades: [{}] };
 
         this.onUserChange = this.onUserChange.bind(this);
+        this.getAwards = this.getAwards.bind(this);
     }
 
     componentDidMount() {
         UserStore.addChangeListener(this.onUserChange);
+        this.getAwards();
         setTimeout(this.onUserChange, 1000);
     }
 
@@ -25,6 +27,20 @@ class UserProfile extends Component {
 
     onUserChange() {
         this.setState({ ...UserStore.getLoggedInUser() })
+    }
+
+
+    async getAwards() {
+        try {
+            var res = await Axios.get(endPoints.GET_AWARDS(this.props.match.params.userId));
+            if(res.data.success) {
+                this.setState({ accolades: res.data.data });
+            } else {
+                NotificationManager.error(res.data.msg);
+            }
+        } catch(err) {
+            NotificationManager.error(`Error getting awards ${err}`);
+        }
     }
 
     handleSubmit(event) {
@@ -53,8 +69,11 @@ class UserProfile extends Component {
     }
 
     render() {
+
+        let me = this.props.match.params.userId = UserStore.getLoggedInUser() && UserStore.getLoggedInUser()._id;
         return <div className="card"> 
                 <div className="contest-body">
+                { me && <>
                 <h1>Profile</h1>
                 <Form
                     noValidate
@@ -134,8 +153,16 @@ class UserProfile extends Component {
                         </div>
                     </div>
                 </Form>
-            
-            
+                </>}
+                {/* <h1>Accolades</h1>
+                {
+                    this.state.accolades.map(a => {
+                        return <div className='row accolade-row'> 
+                        <div className='col-md-2'> <img  src={`${a.awardImage}`}  height='50'/> </div>
+                        <div className='col-md-10'> {a.award} </div>
+                        </div>
+                    })
+                } */}
             </div>
         </div>
     }

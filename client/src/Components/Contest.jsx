@@ -163,15 +163,14 @@ class Contest extends Component {
                 </div>
 
             <div className="card-rules pad-bottom">
-                {!contestOver && 
-                <>
-                <h1 style={{ textAlign: 'center' }}>Rules</h1>
-                <ReactMarkdown source={this.state.contest.rules} />
-                </> }
+                
                 { contestOver && 
                     <div>
                     <Results contestType={this.state.contest.contestType}/>
-                    </div>}
+                    </div>
+                }
+                <h1 style={{ textAlign: 'center' }}>Rules</h1>
+                <ReactMarkdown source={this.state.contest.rules} />
             </div>
             
             <ReactModal

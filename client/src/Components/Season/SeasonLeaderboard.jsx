@@ -11,7 +11,16 @@ import LevelBoard from './LevelBoard';
 import EnrollModal from './EnrollModal';
 import * as _ from 'lodash';
 import RecommendLevelModal from './RecommendLevelModal';
+import { NavLink } from 'react-router-dom';
 
+const awards = [{
+    awardName: 'Legend',
+    awardIcon: '✳️',
+},
+{
+    awardName: 'Nightmare',
+    awardIcon: '☠️'
+}];
 
 class SeasonLeaderboard extends Component {
 
@@ -107,7 +116,7 @@ class SeasonLeaderboard extends Component {
                 silverValue: level.silverValue,
                 bronzeValue: level.bronzeValue,
                 startDate: level.startDate,
-                legendValue: level.legendValue
+                bonusAward: level.bonusAward
             });
 
             NotificationManager.success('Level Added');
@@ -158,6 +167,11 @@ class SeasonLeaderboard extends Component {
             
             { this.state.loggedIn && !inSeason && <button className='b1' onClick={() => { this.enroll(null); }}>Enroll</button> }
             { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enroll</button> }
+            <NavLink exact to={`/seasonInfo/${this.props.match.params.seasonId}`} 
+                        className="NavButton"
+                        activeClassName="activeRoute">
+                        <button className='b2' >Season Info</button>
+            </NavLink>
             
             </div>
             <div className="card-rules pad-bottom">
@@ -192,6 +206,7 @@ class SeasonLeaderboard extends Component {
             />
 
             <AddLevelModal 
+                awards={awards}
                 showModal={this.state.showAddLevelModal}
                 handleCloseModal={() => { this.setState({ showAddLevelModal: false }) }}
                 addLevel={this.addLevel}

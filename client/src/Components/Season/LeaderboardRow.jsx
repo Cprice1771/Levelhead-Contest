@@ -86,7 +86,7 @@ class LeaderboardRow extends Component {
                             <td colSpan='1'>{level && level.levelName}</td>
                             <td colSpan='1'><a href={`https://lvlhd.co/+${x.levelLookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{x.levelLookupCode}</a></td>
                             <td colSpan='1'>{this.formatSeconds(x.value)}</td>
-                            <td colSpan='4'>{level && this.getMedal(level, x.value)}</td>
+                            <td colSpan='5'>{level && this.getMedal(level, x.value)}</td>
                         </tr>});
             } else {
                 return <tr>
@@ -108,7 +108,7 @@ class LeaderboardRow extends Component {
                         
                     }}>
                     <td style={{paddingTop: '0' }}>{this.getPosition(this.props.index + 1)}</td>
-                    <td>{player.rumpusAlias} {player.hasLegend && <span style={{ cursor: 'default'}} role='img' aria-label='legend'>✳️</span>}</td>
+                    <td>{player.rumpusAlias}  {player.awards && player.awards.map(award => <span style={{ cursor: 'default'}} role='img'>{award}</span>)} </td>
                     <td align='center' className='large'>{player.diamonds}</td>
                     <td align='center' className='large'>{player.golds}</td>
                     <td align='center' className='large'>{player.silvers}</td>
@@ -137,13 +137,13 @@ class LeaderboardRow extends Component {
                         <th colSpan='1'>Level</th>
                         <th colSpan='1'>Lookup</th>
                         <th colSpan='1'>Time</th>
-                        <th colSpan='4'>Award</th>
+                        <th colSpan='5'>Award</th>
                     </tr>
                     {
                         this.state.scores ? 
                             getScores(this.state.scores) : 
                             <tr>
-                                <td colSpan='8' align="center">
+                                <td colSpan='9' align="center">
                                     <i className='fas fa-spinner fa-spin fa-3x'></i>
                                 </td>
                             </tr>

@@ -12,7 +12,7 @@ import EventList from './EventList';
 
 import CreateSeason from './Season/CreateSeason';
 import SeasonLeaderboard from './Season/SeasonLeaderboard';
-
+import SeasonInfo from './Season/SeasonInfo';
 
 class Main extends Component {
 
@@ -39,12 +39,12 @@ class Main extends Component {
                     <Route path='/submissions/:contestId' component={SubmissionList} />
                     <Route path='/create-contest/' component={ContestCreator} />
                     <Route path='/login' component={LoginLanding} />
-                    <Route path='/profile' component={UserProfile} />
+                    <Route path='/profile/:userId' component={UserProfile} />
                     <Route path='/contests' component={EventList} />
 
                     <Route path='/create-season' component={CreateSeason} />
                     <Route path='/season/:seasonId' component={SeasonLeaderboard} />
-
+                    <Route path='/seasonInfo/:seasonId' component={SeasonInfo} />
 
 
                 </div>

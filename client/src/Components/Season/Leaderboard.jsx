@@ -32,7 +32,7 @@ function Leaderboard (props) {
         
         <div className='row'>
             <div className='col-8'>
-            <h1 class='xs'>Leaderboard</h1>
+            <h1 className='xs'>Leaderboard</h1>
             </div>
             <div className='col-4'>
                 <div style={{  position: 'absolute',
