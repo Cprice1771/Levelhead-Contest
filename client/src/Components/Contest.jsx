@@ -128,7 +128,8 @@ class Contest extends Component {
             <div className={"card-header-contest"}>
                 <div className="card-text">
                     <h2>{this.state.contest.name}</h2>
-                    <h3> {moment(this.state.contest.startDate).format('MMM Do')} - {moment(this.state.contest.votingEndDate).format('MMM Do')}</h3>
+                    <h3> { submissionOpen && 'Submission Deadline - ' + moment(this.state.contest.submissionEndDate).format('MMM Do')} 
+                    {votingOpen && 'Voting Ends - ' + moment(this.state.contest.votingEndDate).format('MMM Do') }</h3>
 
                     <h5><ReactMarkdown source={this.state.contest.theme} /></h5>
                    
