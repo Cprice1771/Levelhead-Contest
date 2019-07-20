@@ -130,9 +130,9 @@ class Contest extends Component {
                             <li>Silver: 2 points</li>
                             <li>Bronze: 1 point</li>
                         </ul>
-                        <li>The overall winner of with the most points and lowest times across all levels will receive a Crashlands Poster. (Poster is only available if you are within the contiguous US, otherwise you will receive a $10 amazon gift card) </li>
-                        <li>The winner of each division will receive 10k Marketing bucks</li>
-                        <li>Marketing bucks must be redeemed within 1 week of contest end</li>
+                        <li>The overall winner of with the most points and lowest times across all levels will receive a Crashlands Poster. (Poster is only available if you are within the contiguous US, otherwise you will receive a $10 amazon gift card). </li>
+                        <li>The winner of each division will receive 10k Marketing bucks.</li>
+                        <li>Marketing bucks must be redeemed within 1 week of contest end.</li>
                     </ul>
                 </div>
                 
