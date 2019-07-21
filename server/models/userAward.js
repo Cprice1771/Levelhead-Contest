@@ -13,6 +13,9 @@ let userAwardSchema = mongoose.Schema({
     },
     awardType: {
         type: String
+    },
+    description: {
+        type: String
     }
 })
 let UserAward = module.exports = mongoose.model('UserAward', userAwardSchema);

@@ -47,6 +47,40 @@ $secondaryBlue: #45A29E;
   }
 }
 
+.accolade-row {
+  border: 1px black solid;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgb(164, 140, 190);
+  //background-image: linear-gradient( rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.025) ), url('/assets/treeCropped.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.025), rgb(164, 140, 190));
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
+  background-size: 1000px;
+  border-radius: 5px;
+}
+
+
+.accolade-title {
+  font-size:30px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.accolade-description {
+  font-size:15px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.accolade-image {
+  height: 100px;
+  
+}
+
 .add-level {
   color: #3b40bd;
   cursor: pointer;

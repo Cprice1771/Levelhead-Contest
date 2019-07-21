@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { Route  } from 'react-router';
-import Contest from './Contest';
-import SubmissionList from './SubmissionList';
 import DiscordLogin from './DiscordLogin';
 import LoginLanding from './LoginLanding';
 import {NotificationContainer} from 'react-notifications';
-import ContestCreator from './ContestCreator';
-import UserProfile from './UserProfile';
+import UserProfile from './Profile/UserProfile';
 import { NavLink } from 'react-router-dom';
 import EventList from './EventList';
-
+//Season
 import CreateSeason from './Season/CreateSeason';
 import SeasonLeaderboard from './Season/SeasonLeaderboard';
 import SeasonInfo from './Season/SeasonInfo';
+//Contest
+import Contest from './Contest/Contest';
+import SubmissionList from './Contest/SubmissionList';
+import ContestCreator from './Contest/ContestCreator';
 
 class Main extends Component {
 
@@ -39,7 +40,7 @@ class Main extends Component {
                     <Route path='/submissions/:contestId' component={SubmissionList} />
                     <Route path='/create-contest/' component={ContestCreator} />
                     <Route path='/login' component={LoginLanding} />
-                    <Route path='/profile/:userId' component={UserProfile} />
+                    <Route path='/profile/:profileId' component={UserProfile} />
                     <Route path='/contests' component={EventList} />
 
                     <Route path='/create-season' component={CreateSeason} />

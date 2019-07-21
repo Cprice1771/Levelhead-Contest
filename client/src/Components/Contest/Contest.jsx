@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import ContestStore from '../Stores/ContestStore';
+import ContestStore from '../../Stores/ContestStore';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import Submit from './Submit';
 import { NavLink } from 'react-router-dom';
-import UserStore from '../Stores/UserStore';
-import LoginActions from '../actions/LoginActions';
+import UserStore from '../../Stores/UserStore';
+import LoginActions from '../../actions/LoginActions';
 import Results from './Results';
 
 class Contest extends Component {

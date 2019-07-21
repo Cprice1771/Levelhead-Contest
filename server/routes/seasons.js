@@ -31,6 +31,13 @@ router.post('/get-user-scores', catchErrors(async (req, res) => {
     });
 }));
 
+//@@ GET /api/seasons/hand-out-awards
+//@@ Get the top shoe and crown hunters for a contest
+router.get('/hand-out-awards', catchErrors(async function(req, res){
+    await SeasonHelpers.handOutAllAwards();
+    res.send({ success: true });
+  }));
+
 //@@ POST api/seasons/get-level-scores
 //@@ gets a levels scores
 router.post('/get-level-scores', catchErrors(async (req, res) => {

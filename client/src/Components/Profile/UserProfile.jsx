@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import UserStore from '../Stores/UserStore';
-import { endPoints } from '../Constants/Endpoints';
+import UserStore from '../../Stores/UserStore';
+import { endPoints } from '../../Constants/Endpoints';
 import { Form, Col } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
 import Axios from 'axios';
+import AccoladeRow from './AccoladeRow';
 
 class UserProfile extends Component {
 
     constructor(props) {
         super(props);
-        this.state= { ...UserStore.getLoggedInUser(), accolades: [{}] } || { accolades: [{}] };
+        this.state= { ...UserStore.getLoggedInUser(), accolades: [] } || { accolades: [] };
 
         this.onUserChange = this.onUserChange.bind(this);
         this.getAwards = this.getAwards.bind(this);
@@ -17,8 +18,8 @@ class UserProfile extends Component {
 
     componentDidMount() {
         UserStore.addChangeListener(this.onUserChange);
-        this.getAwards();
         setTimeout(this.onUserChange, 1000);
+        this.getAwards();
     }
 
     componentWillUnmount() {
@@ -26,13 +27,13 @@ class UserProfile extends Component {
     }
 
     onUserChange() {
-        this.setState({ ...UserStore.getLoggedInUser() })
+        this.setState({ ...UserStore.getLoggedInUser() });
     }
 
 
     async getAwards() {
         try {
-            var res = await Axios.get(endPoints.GET_AWARDS(this.props.match.params.userId));
+            var res = await Axios.get(endPoints.GET_AWARDS(this.props.match.params.profileId));
             if(res.data.success) {
                 this.setState({ accolades: res.data.data });
             } else {
@@ -154,15 +155,12 @@ class UserProfile extends Component {
                     </div>
                 </Form>
                 </>}
-                {/* <h1>Accolades</h1>
+                <h1 className='accolade-header'>Accolades</h1>
                 {
                     this.state.accolades.map(a => {
-                        return <div className='row accolade-row'> 
-                        <div className='col-md-2'> <img  src={`${a.awardImage}`}  height='50'/> </div>
-                        <div className='col-md-10'> {a.award} </div>
-                        </div>
+                        return <AccoladeRow {...a} />
                     })
-                } */}
+                }
             </div>
         </div>
     }

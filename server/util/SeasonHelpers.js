@@ -7,6 +7,27 @@ const rateLimit = require('./AxiosRateLimit')
 const Season = require('../models/Speedrun/Season');
 const UserScore = require('../models/Speedrun/userScore');
 const RumpusAPI = require('./rumpusAPI');
+const AccoladeImages = require('./AccoladeImages');
+const UserAward = require('../models/userAward');
+
+const LEAGUES = [
+  {
+    leagueId: 0,
+    name: 'Mega Jem',
+    constName: 'MEGA_JEM',
+  },
+  {
+    leagueId: 1,
+    name: 'Turbo Jem',
+    constName: 'TURBO_JEM'
+  },
+  {
+    leagueId: 2,
+    name: 'Jem',
+    constName: 'JEM'
+  },
+
+]
 
 class SeasonHelpers {
     constructor() {
@@ -15,6 +36,9 @@ class SeasonHelpers {
         this.getPlayersForNextSeason = this.getPlayersForNextSeason.bind(this);
         this.getTimeScore = this.getTimeScore.bind(this);
         this.scoreTags = this.scoreTags.bind(this);
+        this.saveAward = this.saveAward.bind(this);
+        this.handOutAwardForLeague = this.handOutAwardForLeague.bind(this);
+        this.handOutAllAwards = this.handOutAllAwards.bind(this);
     }
 
     async getRecommendations(){
@@ -223,8 +247,6 @@ class SeasonHelpers {
           for(let score of existingScoresForUser) {
             let level = foundSeason.levelsInSeason.find(x => x.lookupCode === score.levelLookupCode);
 
-            
-
             if(level.bonusAward && level.bonusAward.awardValue > score.value && 
               (!foundSeason.entries[entryIndex].awards || foundSeason.entries[entryIndex].awards.indexOf(level.bonusAward.awardIcon) < 0)) {
               foundSeason.entries[entryIndex].awards.push(level.bonusAward.awardIcon);
@@ -255,12 +277,76 @@ class SeasonHelpers {
                                                         (foundSeason.entries[entryIndex].bronzes * 1);
 
         }
-        
-
-        
         await this.UpdateLevelInfo(foundSeason);
         await foundSeason.save();
         
+    }
+
+    async saveAward(userId, awardImage, awardTitle, description) {
+      const award = new UserAward({
+        userId: userId,
+        award: awardTitle,
+        awardImage,
+        description,
+        awardType: 'season'
+      });
+
+      await award.save();
+    }
+
+    async handOutAwardForLeague(particpants, league) {
+      if(particpants.length > 0) {
+        await this.saveAward(particpants[0].userId, AccoladeImages[`${league.constName}_FIRST`], `${league.name} League 1st Place`, '');
+      }
+
+      if(particpants.length > 1) {
+        await this.saveAward(particpants[1].userId, AccoladeImages[`${league.constName}_SECOND`], `${league.name} League 2nd Place`, '');
+      }
+
+      if(particpants.length > 2) {
+        await this.saveAward(particpants[2].userId, AccoladeImages[`${league.constName}_THIRD`], `${league.name} League 3rd Place`, '');
+      }
+
+      for(let place =  3; place < particpants.length; place++) {
+        await this.saveAward(particpants[place].userId, AccoladeImages[`${league.constName}_PARTICIPANT`], `${league.name} League Participant`, '');
+      }
+    }
+
+    async handOutAllAwards() {
+      let seasons = await Season.find({ $and: [{ endDate: { $lt : new Date() } } ,{ "awardsHandedOut": { $exists: false } }] });
+      for(let season of seasons) {
+        //League placement awards
+        for(let league of LEAGUES) {
+          let results = _(season.entries)
+            .filter(x => x.timesSubmitted > 0 && x.league == league.leagueId)
+            .orderBy(
+            ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], 
+            ['desc', 'desc', 'desc', 'desc', 'desc', 'asc']).value();
+
+          await this.handOutAwardForLeague(results, league);
+        }
+
+        //Medal awards
+        let numLevels = season.levelsInSeason.length;
+        for(let entry of season.entries) {
+          if(entry.diamonds == numLevels) {
+            this.saveAward(entry.userId, AccoladeImages.FLAWLESS, "Flawless", "Get 10 diamonds in a single season")
+          }
+          else if((entry.diamonds + entry.golds) == numLevels) {
+            this.saveAward(entry.userId, AccoladeImages.GOLDEN, "Golden", "Get 10 golds or better in a single season")
+          }
+          else if((entry.diamonds + entry.golds + entry.silvers) == numLevels) {
+            this.saveAward(entry.userId, AccoladeImages.SILVER, "Silver", "Get 10 silvers or better in a single season")
+          }
+          else if((entry.diamonds + entry.golds + entry.silvers + entry.bronzes) == numLevels) {
+            this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, "Bronzed", "Get 10 bronze medals or better in a single season")
+          }
+        }
+
+        season.awardsHandedOut = true;
+        await season.save();
+        
+      }
     }
 }
 

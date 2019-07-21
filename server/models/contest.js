@@ -75,6 +75,8 @@ let contestSchema = mongoose.Schema({
   lastUpdatedScores: {
     type: Date,
   },
-
+  handedOutAwards: {
+    type: Boolean
+  }
 })
 let Contest = module.exports = mongoose.model('Contest', contestSchema);

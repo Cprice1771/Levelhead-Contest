@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { endPoints } from '../Constants/Endpoints';
+import { endPoints } from '../../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
-import UserStore from '../Stores/UserStore';
+import UserStore from '../../Stores/UserStore';
 
 class Submit extends Component {
 

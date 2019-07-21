@@ -7,12 +7,19 @@ const rateLimit = require('./AxiosRateLimit')
 const Season = require('../models/Speedrun/Season');
 const UserScore = require('../models/Speedrun/userScore');
 const RumpusAPI = require('./rumpusAPI');
+const AccoladeImages = require('./AccoladeImages');
+const UserAward = require('../models/userAward');
+const User = require('../models/user');
 
 class SeasonHelpers {
     constructor() {
 
         this.getTopScores = this.getTopScores.bind(this);
         this.updateTopScores = this.updateTopScores.bind(this);
+        this.saveAward = this.saveAward.bind(this);
+        this.handOutAwardForContest = this.handOutAwardForContest.bind(this);
+        this.handOutAwards = this.handOutAwards.bind(this);
+        this.assignPositions = this.assignPositions.bind(this);
     }
 
     async getTopScores(submissions, contest) {
@@ -117,7 +124,79 @@ class SeasonHelpers {
       await contest.save();
       return contest;
     }
+
+    async saveAward(userId, awardImage, awardTitle, description) {
+      const award = new UserAward({
+        userId: userId,
+        award: awardTitle,
+        awardImage,
+        description,
+        awardType: 'season'
+      });
+
+      await award.save();
+    }
+
+    assignPositions(submissions) {
+      if(!submissions || submissions.length <= 0) 
+        return submissions;
+
+      let position = 1;
+      submissions[0].position = position;
+      for(let index = 1; index < submissions.length; index++) {
+        if(submissions[index-1].votes !== submissions[index].votes) {
+          position = index + 1;
+        }
+        submissions[index].position = position;
+      }
+
+      return submissions;
+    }
+
+    async handOutAwardForContest(particpants, contestName) {
+      for(let participant of particpants) {
+        switch(participant.position) {
+          case 1:
+            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_WINNER, `${contestName} Winner`, 'Won the community vote for a levelcup')
+            break;
+          case 2:
+            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_SECOND, `${contestName} Runner Up`, '2nd Place in community vote')
+            break;
+          case 3:
+            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_THIRD, `${contestName}  Third Place`, '3rd Place in community vote')
+            break;
+          default:
+            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_WINNER, `${contestName} Participant`, 'Entered levelcup')
+            break;
+
+        }
+      }
+    }
     
+    async handOutAwards() {
+      let contests = await Contest.find({ $and: [{ votingEndDate: { $lt : new Date() } } ,{ "handedOutAwards": { $exists: false } }] });
+      for(let contest of contests) {
+        let contestName = contest.name;
+        //Finish awards
+        if(contest.contestType === 'building') {
+          let submissions = await Submission.find({ contestId: contest._id});
+          submissions = _(submissions).orderBy(['votes'], ['desc']).value();
+          submissions = this.assignPositions(submissions);
+          await this.handOutAwardForContest(submissions, contestName);
+        }
+
+        //Top Score
+        if(contest.topScores && contest.topScores.length > 0) {
+          let user = await User.findOne({ "rumpusId": contest.topScores[0].user });
+          if(user) {
+            await this.saveAward(user._id, AccoladeImages.CONTEST_TOP_SCORE, `${contestName} Top Score`, "Most shoes and crowns on all levelcup entries");
+          }
+        }
+        
+        contest.handedOutAwards = true;
+        await contest.save();
+      }
+    }
 }
 
 module.exports = new SeasonHelpers();

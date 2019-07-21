@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ContestStore from '../Stores/ContestStore';
+import ContestStore from '../../Stores/ContestStore';
 import * as _ from 'lodash';
 import axios from 'axios';
-import { endPoints } from '../Constants/Endpoints';
+import { endPoints } from '../../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
 import ScoreRow from './ScoreRow';
 import moment from 'moment';

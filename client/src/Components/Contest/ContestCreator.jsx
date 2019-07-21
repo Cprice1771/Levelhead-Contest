@@ -5,10 +5,10 @@ import 'flatpickr/dist/themes/material_blue.css'
  
 import Flatpickr from 'react-flatpickr'
 import Axios from 'axios';
-import { endPoints } from '../Constants/Endpoints';
+import { endPoints } from '../../Constants/Endpoints';
 import { Form, Col, Alert } from 'react-bootstrap'
 import { NotificationManager} from 'react-notifications';
-import UserStore from '../Stores/UserStore';
+import UserStore from '../../Stores/UserStore';
 
 const MAX_LEVELS_PER_CONTEST = 10;
 

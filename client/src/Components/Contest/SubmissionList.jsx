@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import SubmissionStore from '../Stores/SubmissionStore';
-import ContestStore from '../Stores/ContestStore';
+import SubmissionStore from '../../Stores/SubmissionStore';
+import ContestStore from '../../Stores/ContestStore';
 
 import Submission from './Submission';
 import * as _ from 'lodash';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
-import { endPoints } from '../Constants/Endpoints';
+import { endPoints } from '../../Constants/Endpoints';
 import { NotificationManager} from 'react-notifications';
-import UserStore from '../Stores/UserStore';
-import LoginActions from '../actions/LoginActions';
+import UserStore from '../../Stores/UserStore';
+import LoginActions from '../../actions/LoginActions';
 import TopScores from './TopScores';
 
 class SubmissionList extends Component {

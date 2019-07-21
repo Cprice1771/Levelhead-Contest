@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const path = require('path');
 const cron = require("node-cron");
-const ContestHelpers = require('./util/ContestHelpers');
+const ContestHelpers = require('./util/contestHelpers');
 const SeasonHelpers = require('./util/SeasonHelpers');
 const contest = require('./models/contest');
 const Season = require('./models/Speedrun/Season');
@@ -102,7 +102,7 @@ cron.schedule("0 * * * *", async function() {
   console.log('Updating Seasons');
   let seasons = await Season.find();
   const seasonRunDate = new Date();
-  //Make sure we run at midnight when the contest closes 1 last time.
+  //Make sure we run at midnight when the season closes 1 last time.
   seasonRunDate.setMinutes(seasonRunDate.getMinutes() - 15);
   for(const sns of seasons) {
     try {
@@ -113,6 +113,11 @@ cron.schedule("0 * * * *", async function() {
       console.log(`Error: ${err}`);
     }
   }
+
+  console.log('hand out awards');
+
+  await SeasonHelpers.handOutAllAwards();
+  await ContestHelpers.handOutAwards();
 
   console.log('Job finished');
 });

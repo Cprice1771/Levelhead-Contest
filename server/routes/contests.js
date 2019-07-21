@@ -12,7 +12,7 @@ const ResponseStatus = require('../util/responseStatus');
 const moment = require('moment');
 const catchErrors = require('../util/catchErrors');
 
-const ContestHelpers = require('../util/ContestHelpers');
+const ContestHelpers = require('../util/contestHelpers');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -69,6 +69,13 @@ router.get('/top-scores/:contestId', catchErrors(async function(req, res){
   let contest = await Contest.findById(req.params.contestId);
 
   res.send(contest.topScores);
+}));
+
+//@@ GET /api/hand-out-awards
+//@@ Get the top shoe and crown hunters for a contest
+router.get('/hand-out-awards', catchErrors(async function(req, res){
+  await ContestHelpers.handOutAwards();
+  res.send({ success: true });
 }));
 
 //@@ GET /api/contests/:contestId
