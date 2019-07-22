@@ -12,7 +12,7 @@ const ResponseStatus = require('../util/responseStatus');
 const moment = require('moment');
 const catchErrors = require('../util/catchErrors');
 
-const ContestHelpers = require('../util/contestHelpers');
+const ContestHelpers = require('../util/ContestHelpers');
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
