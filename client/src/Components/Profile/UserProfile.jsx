@@ -155,12 +155,12 @@ class UserProfile extends Component {
                     </div>
                 </Form>
                 </>}
-                <h1 className='accolade-header'>Accolades</h1>
+                {/* <h1 className='accolade-header'>Accolades</h1>
                 {
                     this.state.accolades.map(a => {
                         return <AccoladeRow {...a} />
                     })
-                }
+                } */}
             </div>
         </div>
     }

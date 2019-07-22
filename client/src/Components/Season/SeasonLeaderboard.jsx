@@ -165,8 +165,8 @@ class SeasonLeaderboard extends Component {
             </div>
             <div className="card-body">
             
-            { this.state.loggedIn && !inSeason && <button className='b1' onClick={() => { this.enroll(null); }}>Enroll</button> }
-            { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enroll</button> }
+            { !seasonOver && this.state.loggedIn && !inSeason && <button className='b1' onClick={() => { this.enroll(null); }}>Enroll</button> }
+            { !seasonOver && !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enroll</button> }
             <NavLink exact to={`/seasonInfo/${this.props.match.params.seasonId}`} 
                         className="NavButton"
                         activeClassName="activeRoute">
