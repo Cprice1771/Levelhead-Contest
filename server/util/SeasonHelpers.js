@@ -294,21 +294,21 @@ class SeasonHelpers {
       await award.save();
     }
 
-    async handOutAwardForLeague(particpants, league) {
+    async handOutAwardForLeague(particpants, league, seasonName) {
       if(particpants.length > 0) {
-        await this.saveAward(particpants[0].userId, AccoladeImages[`${league.constName}_FIRST`], `${league.name} League 1st Place`, '');
+        await this.saveAward(particpants[0].userId, AccoladeImages[`${league.constName}_FIRST`], `${seasonName} - ${league.name} League 1st Place`, '');
       }
 
       if(particpants.length > 1) {
-        await this.saveAward(particpants[1].userId, AccoladeImages[`${league.constName}_SECOND`], `${league.name} League 2nd Place`, '');
+        await this.saveAward(particpants[1].userId, AccoladeImages[`${league.constName}_SECOND`], `${seasonName} - ${league.name} League 2nd Place`, '');
       }
 
       if(particpants.length > 2) {
-        await this.saveAward(particpants[2].userId, AccoladeImages[`${league.constName}_THIRD`], `${league.name} League 3rd Place`, '');
+        await this.saveAward(particpants[2].userId, AccoladeImages[`${league.constName}_THIRD`], `${seasonName} - ${league.name} League 3rd Place`, '');
       }
 
       for(let place =  3; place < particpants.length; place++) {
-        await this.saveAward(particpants[place].userId, AccoladeImages[`${league.constName}_PARTICIPANT`], `${league.name} League Participant`, '');
+        await this.saveAward(particpants[place].userId, AccoladeImages[`${league.constName}_PARTICIPANT`], `${seasonName} - ${league.name} League Participant`, '');
       }
     }
 
@@ -323,23 +323,23 @@ class SeasonHelpers {
             ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], 
             ['desc', 'desc', 'desc', 'desc', 'desc', 'asc']).value();
 
-          await this.handOutAwardForLeague(results, league);
+          await this.handOutAwardForLeague(results, league, season.name);
         }
 
         //Medal awards
         let numLevels = season.levelsInSeason.length;
         for(let entry of season.entries) {
           if(entry.diamonds == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.FLAWLESS, "Flawless", "Get 10 diamonds in a single season")
+            this.saveAward(entry.userId, AccoladeImages.FLAWLESS, `${season.name} - Flawless`, "Get 10 diamonds in a single season")
           }
           else if((entry.diamonds + entry.golds) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.GOLDEN, "Golden", "Get 10 golds or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.GOLDEN, `${season.name} - Golden`, "Get 10 golds or better in a single season")
           }
           else if((entry.diamonds + entry.golds + entry.silvers) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.SILVER, "Silver", "Get 10 silvers or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.SILVER, `${season.name} - Silver`, "Get 10 silvers or better in a single season")
           }
           else if((entry.diamonds + entry.golds + entry.silvers + entry.bronzes) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, "Bronzed", "Get 10 bronze medals or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, `${season.name} - Bronzed`, "Get 10 bronze medals or better in a single season")
           }
         }
 

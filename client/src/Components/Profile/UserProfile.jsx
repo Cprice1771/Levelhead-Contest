@@ -28,6 +28,12 @@ class UserProfile extends Component {
         UserStore.removeChangeListener(this.onUserChange);
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+          this.getAwards();
+        }
+      }
+
     onUserChange() {
         this.setState({ ...UserStore.getLoggedInUser() });
     }
@@ -85,7 +91,7 @@ class UserProfile extends Component {
 
     render() {
 
-        let me = (UserStore.getLoggedInUser() && this.props.match.params.userId == UserStore.getLoggedInUser()._id);
+        let me = (UserStore.getLoggedInUser() && this.props.match.params.profileId === UserStore.getLoggedInUser()._id);
         let title= <></>;
 
         if(this.state.user && this.state.user.rumpusAlias) {
