@@ -1,10 +1,10 @@
 import React from 'react';
 import * as _ from 'lodash';
-
+import { NavLink } from 'react-router-dom';
 function Submission (props) {
 
     let submision = props.submission;
-    
+    console.log(submision);
     return (
         <tr className="submission-row">
             <td className='large'>
@@ -16,7 +16,14 @@ function Submission (props) {
                 </div>
             </td>
             <td><a href={`https://lvlhd.co/+${submision.lookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{submision.lookupCode}</a></td>
-            <td>{submision.rumpusUserName}</td>
+            <td>
+            
+            <NavLink exact to={`/profile/${submision.submittedByUserId}`} 
+                                className="levelLink"
+                                activeClassName="activeRoute">
+                                {submision.rumpusUserName}
+                    </NavLink> 
+            </td>
             <td>{submision.levelMetaData.title}</td>
             <td className='medium'>{submision.levelMetaData.stats.Attempts}</td>
             <td className='medium'>{submision.levelMetaData.stats.Attempts === 0 ? 0 : _.round(((submision.levelMetaData.stats.Successes / submision.levelMetaData.stats.Attempts) * 100), 2)}%</td>

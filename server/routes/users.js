@@ -37,6 +37,21 @@ router.get('/awards/:userId', catchErrors(async (req, res) => {
     });
 }));
 
+//@@ GET /awards:id
+//@@ Gets a users awards
+router.get('/info/:userId', catchErrors(async (req, res) => {
+
+    let user = await User.findById(req.params.userId);
+    res.status(200).json({
+        success: true,
+        data: {
+            discordName: user.discordDisplayName,
+            rumpusId: user.rumpusId,
+            rumpusAlias: user.rumpusAlias,
+        }
+    });
+}));
+
 
 //@@ POST /update-key/:id
 //@@ updates a users delegation key

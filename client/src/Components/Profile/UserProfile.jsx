@@ -16,10 +16,12 @@ class UserProfile extends Component {
         this.getAwards = this.getAwards.bind(this);
     }
 
+
     componentDidMount() {
         UserStore.addChangeListener(this.onUserChange);
         setTimeout(this.onUserChange, 1000);
         this.getAwards();
+        this.getUserInfo();
     }
 
     componentWillUnmount() {
@@ -30,6 +32,18 @@ class UserProfile extends Component {
         this.setState({ ...UserStore.getLoggedInUser() });
     }
 
+    async getUserInfo() {
+        try {
+            var res = await Axios.get(endPoints.GET_USER_INFO(this.props.match.params.profileId));
+            if(res.data.success) {
+                this.setState({ user: res.data.data });
+            } else {
+                NotificationManager.error(res.data.msg);
+            }
+        } catch(err) {
+            NotificationManager.error(`Error getting awards ${err}`);
+        }
+    }
 
     async getAwards() {
         try {
@@ -71,7 +85,15 @@ class UserProfile extends Component {
 
     render() {
 
-        let me = this.props.match.params.userId = UserStore.getLoggedInUser() && UserStore.getLoggedInUser()._id;
+        let me = (UserStore.getLoggedInUser() && this.props.match.params.userId == UserStore.getLoggedInUser()._id);
+        let title= <></>;
+
+        if(this.state.user && this.state.user.rumpusAlias) {
+            title = <h1> <a href={`https://www.bscotch.net/games/levelhead/players/${this.state.user.rumpusId}`} target='_blank'>{this.state.user.rumpusAlias}</a></h1> ;
+        } else if(this.state.user) {
+            title = <h1> {this.state.user.discordName}</h1>;
+        }
+
         return <div className="card"> 
                 <div className="contest-body">
                 { me && <>
@@ -143,7 +165,6 @@ class UserProfile extends Component {
                     </Form.Row>
                     </>
                     }
-
                     <div className='row'>
                         <div className='col-md-12'>
                         <button 
@@ -155,12 +176,15 @@ class UserProfile extends Component {
                     </div>
                 </Form>
                 </>}
-                {/* <h1 className='accolade-header'>Accolades</h1>
+                {
+                    !me && title
+                }
+                <h1 className='accolade-header'>Accolades</h1>
                 {
                     this.state.accolades.map(a => {
                         return <AccoladeRow {...a} />
                     })
-                } */}
+                }
             </div>
         </div>
     }

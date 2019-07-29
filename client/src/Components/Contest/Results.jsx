@@ -74,6 +74,7 @@ class Results extends Component {
                 title={res.levelMetaData.title}
                 position={res.position}
                 rumpusUserName={res.rumpusUserName}
+                submittedByUserId={res.submittedByUserId}
             />
         })
 

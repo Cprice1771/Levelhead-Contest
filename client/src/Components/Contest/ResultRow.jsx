@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 function ResultRow (props) {
     let getPosition = (position) => {
@@ -17,7 +18,13 @@ function ResultRow (props) {
     return (
         <tr className="submission-row">
             <td>{getPosition(props.position)}</td>
-            <td>{props.rumpusUserName}</td>
+            <td>
+            <NavLink exact to={`/profile/${props.submittedByUserId}`} 
+                                className="levelLink"
+                                activeClassName="activeRoute">
+                                {props.rumpusUserName}
+                    </NavLink> 
+            </td>
             <td>{props.title}</td>
             <td>{props.votes}</td>
         </tr>);

@@ -4,7 +4,7 @@ import { endPoints} from '../../Constants/Endpoints';
 import { NotificationManager } from 'react-notifications';
 import { Form } from 'react-bootstrap'
 import * as _ from 'lodash';
-
+import { NavLink } from 'react-router-dom';
 
 class LeaderboardRow extends Component {
 
@@ -108,7 +108,14 @@ class LeaderboardRow extends Component {
                         
                     }}>
                     <td style={{paddingTop: '0' }}>{this.getPosition(this.props.index + 1)}</td>
-                    <td>{player.rumpusAlias}  {player.awards && player.awards.map(award => <span style={{ cursor: 'default'}} role='img'>{award}</span>)} </td>
+                    <td>
+                    
+                    <NavLink exact to={`/profile/${player.userId}`} 
+                                className="PlayerProfileLink"
+                                activeClassName="activeRoute">
+                                {player.rumpusAlias}
+                    </NavLink> 
+                      {player.awards && player.awards.map(award => <span style={{ cursor: 'default'}} role='img'>{award}</span>)} </td>
                     <td align='center' className='large'>{player.diamonds}</td>
                     <td align='center' className='large'>{player.golds}</td>
                     <td align='center' className='large'>{player.silvers}</td>

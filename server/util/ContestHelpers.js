@@ -160,13 +160,14 @@ class SeasonHelpers {
             await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_WINNER, `${contestName} Winner`, 'Won the community vote for a levelcup')
             break;
           case 2:
-            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_SECOND, `${contestName} Runner Up`, '2nd Place in community vote')
+          //TODO: add 2nd, third and participant awards
+            //await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_SECOND, `${contestName} Runner Up`, '2nd Place in community vote')
             break;
           case 3:
-            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_THIRD, `${contestName}  Third Place`, '3rd Place in community vote')
+           // await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_THIRD, `${contestName}  Third Place`, '3rd Place in community vote')
             break;
           default:
-            await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_WINNER, `${contestName} Participant`, 'Entered levelcup')
+            //await this.saveAward(participant.submittedByUserId, AccoladeImages.CONTEST_WINNER, `${contestName} Participant`, 'Entered levelcup')
             break;
 
         }

@@ -32,6 +32,7 @@ export const endPoints = {
     SAVE_PROFILE: (id) => `/api/users/update-key/${id}`,
     LOGIN: '/api/users/login',
     GET_AWARDS: (userId) => `/api/users/awards/${userId}`,
+    GET_USER_INFO: (userId) => `/api/users/info/${userId}`,
 
     //Seasons
     CREATE_SEASON: '/api/seasons/create',
