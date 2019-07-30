@@ -59,10 +59,10 @@ function LevelBoard (props) {
                         <th>Title</th>
                         <th className='smll'>Creator</th>
                         <th>Lookup</th>
-                        <th className='medium'>Diamond</th>
-                        <th className='medium'>Gold</th>
-                        <th className='medium'>Silver</th>
-                        <th className='medium'>Bronze</th>
+                        <th className='smll'>Diamond</th>
+                        <th className='smll'>Gold</th>
+                        <th className='smll'>Silver</th>
+                        <th className='smll'>Bronze</th>
                         <th>Current WR</th>
                         {props.canBookmark && <th></th> }
                     </tr>
