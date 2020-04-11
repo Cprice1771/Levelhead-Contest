@@ -141,7 +141,6 @@ class SeasonHelpers {
 
       let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']); 
       let numPlayers = playersToEnroll.length;
-      console.log(playersToEnroll)
       if(numPlayers > 0) {
         let MegaJemCutoff = playersToEnroll[Math.min(Math.ceil(numPlayers * .1), numPlayers-1)].totalPoints;
         let turboJemCutoff = playersToEnroll[Math.min(Math.ceil(numPlayers * .5), numPlayers-1)].totalPoints;
