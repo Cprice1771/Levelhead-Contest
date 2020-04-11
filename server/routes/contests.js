@@ -23,7 +23,8 @@ router.use(function(req, res, next) {
 //@@ GET /api/contests/
 //@@ Display all contests
 router.get('/', catchErrors(async function(req, res){
-  let contests = await Contest.find(); 
+  let contests = await Contest.find();
+
   res.send(contests);
 }));
 

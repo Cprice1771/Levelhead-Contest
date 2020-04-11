@@ -141,35 +141,40 @@ class SeasonHelpers {
 
       let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']); 
       let numPlayers = playersToEnroll.length;
-      let MegaJemCutoff = playersToEnroll[Math.ceil(numPlayers * .1)].totalPoints;
-      let turboJemCutoff = playersToEnroll[Math.ceil(numPlayers * .33)].totalPoints;
+      console.log(playersToEnroll)
+      if(numPlayers > 0) {
+        let MegaJemCutoff = playersToEnroll[Math.min(Math.ceil(numPlayers * .1), numPlayers-1)].totalPoints;
+        let turboJemCutoff = playersToEnroll[Math.min(Math.ceil(numPlayers * .5), numPlayers-1)].totalPoints;
 
-      let newPlayers = playersToEnroll.map(x => {
+        let newPlayers = playersToEnroll.map(x => {
 
-        let newLeague = 0;
-        if(x.totalPoints >= MegaJemCutoff) {
-          newLeague = 0;
-        } else if(x.totalPoints >= turboJemCutoff) {
-          newLeague = 1;
-        } else {
-          newLeague = 2;
-        }
+          let newLeague = 0;
+          if(x.totalPoints >= MegaJemCutoff) {
+            newLeague = 0;
+          } else if(x.totalPoints >= turboJemCutoff) {
+            newLeague = 1;
+          } else {
+            newLeague = 2;
+          }
 
-        return {
-          userId: x.userId,
-          rumpusId: x.rumpusId,
-          rumpusAlias: x.rumpusAlias,
-          diamonds: 0,
-          golds: 0,
-          silvers: 0,
-          bronzes: 0,
-          totalPoints: 0,
-          timesSubmitted: 0,
-          league: newLeague
-        };
-      });
+          return {
+            userId: x.userId,
+            rumpusId: x.rumpusId,
+            rumpusAlias: x.rumpusAlias,
+            diamonds: 0,
+            golds: 0,
+            silvers: 0,
+            bronzes: 0,
+            totalPoints: 0,
+            timesSubmitted: 0,
+            league: newLeague
+          };
+        });
       
-      return newPlayers;
+        return newPlayers;
+      }
+
+      return [];
     }
 
     async UpdateLevelInfo(season) {

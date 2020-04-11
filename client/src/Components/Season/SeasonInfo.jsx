@@ -83,6 +83,7 @@ class Contest extends Component {
             return <div>Loading...</div>
         }
 
+        let seasonStarted =  moment(this.state.season.startDate) < moment();
         let seasonNotOver = moment(this.state.season.endDate) > moment();
  
         return <div className="card"> 
@@ -101,7 +102,7 @@ class Contest extends Component {
                     </NavLink> 
                 </div>
 
-            { seasonNotOver &&
+            { seasonNotOver && seasonStarted &&
 
             <div className="clock-container"> 
                 <h1>Time Remaining in Season</h1>

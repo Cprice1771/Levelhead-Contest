@@ -67,7 +67,12 @@ app.get('*', (req, res) => {
 });
 
 
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(
+mongoose.connect(process.env.DB_URL, { 
+  useNewUrlParser: true, 
+  keepAlive: 1, 
+  connectTimeoutMS: 30000, 
+  reconnectTries: 30, 
+  reconnectInterval: 5000 }).then(
   () => {
     console.log("Database connected...")
 
