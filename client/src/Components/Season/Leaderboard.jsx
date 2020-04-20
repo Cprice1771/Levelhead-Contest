@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import LeaderboardRow from './LeaderboardRow';
 
 function Leaderboard (props) {
-    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], ['desc', 'desc', 'desc', 'desc', 'desc', 'asc']);
+    let orderedPlayers = _.orderBy(props.entries, ['totalPoints', 'diamonds', 'platinums', 'golds', 'silvers', 'bronzes', 'totalTime'], ['desc', 'desc', 'desc', 'desc', 'desc', 'desc', 'asc']);
 
 
     let getRow = (player, index) => {
@@ -47,6 +47,7 @@ function Leaderboard (props) {
                         <th>Position</th>
                         <th>Player</th>
                         <th align='center' className='large'><span role='img' aria-label='diamond'>💎</span></th>
+                        <th align='center' className='large'><span role='img' aria-label='platinum'><img src='/assets/Platinum.jpg' heigh='16' width='16' /></span></th>
                         <th align='center' className='large'><span role='img' aria-label='gold'>🥇</span></th>
                         <th align='center' className='large'><span role='img' aria-label='silver'>🥈</span></th>
                         <th align='center' className='large'><span role='img' aria-label='bronze'>🥉</span></th>
@@ -57,7 +58,7 @@ function Leaderboard (props) {
                 </thead>
                 <thead>
                     <tr>
-                        <th className='leaderboard-header megajem' colSpan={props.admin ? '9' : '8'} >Mega Jem League</th>
+                        <th className='leaderboard-header megajem' colSpan={props.admin ? '10' : '9'} >Mega Jem League</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,7 +66,7 @@ function Leaderboard (props) {
                 </tbody>
                 <thead>
                     <tr>
-                    <th className='leaderboard-header turbojem' colSpan={props.admin ? '9' : '8'}>Turbo Jem League</th>
+                    <th className='leaderboard-header turbojem' colSpan={props.admin ? '10' : '9'}>Turbo Jem League</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +74,7 @@ function Leaderboard (props) {
                 </tbody>
                 <thead>
                     <tr>
-                        <th className='leaderboard-header jem' colSpan={props.admin ? '9' : '8'}>Jem League</th>
+                        <th className='leaderboard-header jem' colSpan={props.admin ? '10' : '9'}>Jem League</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -49,6 +49,8 @@ class LevelBoardRow extends Component {
     getMedal = (levelInfo, score) => {
         if(levelInfo.diamondValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='diamond'>💎</span>
+        } else if (levelInfo.platinumValue > score) {
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><i class="fas fa-medal"></i></span>
         } else if (levelInfo.goldValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='gold'>🥇</span>
         } else if (levelInfo.silverValue > score) {
@@ -67,7 +69,7 @@ class LevelBoardRow extends Component {
         if(scores.length > 0) {
                 return scores.map((x, i) => {
                     
-                    let cols = this.props.canBookmark ? 6 : 5
+                    let cols = this.props.canBookmark ? 7 : 6
 
                     return <tr key={i} >
                             <td className='smll'></td>
@@ -77,7 +79,7 @@ class LevelBoardRow extends Component {
                         </tr>});
             } else {
                 return <tr>
-                            <td colSpan='8' align="center">
+                            <td colSpan='9' align="center">
                                 No Scores
                             </td>
                         </tr>
@@ -102,6 +104,7 @@ class LevelBoardRow extends Component {
                     <td className='smll'>{lvl.creatorAlias}</td>
                     <td><a href={`https://lvlhd.co/+${lvl.lookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{lvl.lookupCode}</a></td>
                     <td className='smll'>{this.formatSeconds(lvl.diamondValue)}</td>
+                    <td className='smll'>{this.formatSeconds(lvl.platinumValue)}</td>
                     <td className='smll'>{this.formatSeconds(lvl.goldValue)}</td>
                     <td className='smll'>{this.formatSeconds(lvl.silverValue)}</td>
                     <td className='smll'>{this.formatSeconds(lvl.bronzeValue)}</td>

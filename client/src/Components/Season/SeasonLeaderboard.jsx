@@ -112,6 +112,7 @@ class SeasonLeaderboard extends Component {
                 seasonId : this.state.season._id,
                 lookupCode: level.lookupCode,
                 diamondValue: level.diamondValue,
+                platinumValue: level.platinumValue,
                 goldValue: level.goldValue,
                 silverValue: level.silverValue,
                 bronzeValue: level.bronzeValue,

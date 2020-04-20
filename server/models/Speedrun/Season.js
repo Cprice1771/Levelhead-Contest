@@ -44,6 +44,11 @@ let seasonSchema = mongoose.Schema({
                 type: Number,
                 required: true
             },
+            platinumValue: {
+                type: Number,
+                required: true,
+                default:0,
+            },
             goldValue: {
                 type: Number,
                 required: true
@@ -86,6 +91,11 @@ let seasonSchema = mongoose.Schema({
             diamonds: {
                 type: Number,
                 required: true,
+            },
+            platinums: {
+                type: Number,
+                required: true,
+                default: 0,
             },
             golds: {
                 type: Number,

@@ -139,7 +139,7 @@ class SeasonHelpers {
         return [];
       }
 
-      let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc']); 
+      let playersToEnroll = _.orderBy(lastSeason.entries.filter(x => x.timesSubmitted > 0), ['totalPoints', 'diamonds', 'platinums', 'golds', 'silvers', 'bronzes'], ['desc', 'desc', 'desc', 'desc', 'desc', 'desc']); 
       let numPlayers = playersToEnroll.length;
       if(numPlayers > 0) {
         let MegaJemCutoff = playersToEnroll[Math.min(Math.ceil(numPlayers * .1), numPlayers-1)].totalPoints;
@@ -244,6 +244,7 @@ class SeasonHelpers {
 
           let entryIndex = _.findIndex(foundSeason.entries, x => x.userId === userInfo.userId);
           foundSeason.entries[entryIndex].diamonds = 0;
+          foundSeason.entries[entryIndex].platinums = 0;
           foundSeason.entries[entryIndex].golds = 0;
           foundSeason.entries[entryIndex].silvers = 0;
           foundSeason.entries[entryIndex].bronzes = 0;
@@ -258,6 +259,9 @@ class SeasonHelpers {
 
             if(level.diamondValue > score.value) {
               foundSeason.entries[entryIndex].diamonds++;
+            }
+            else if(level.platinumValue > score.value) {
+              foundSeason.entries[entryIndex].platinums++;
             }
             else if(level.goldValue > score.value) {
               foundSeason.entries[entryIndex].golds++;
@@ -276,6 +280,7 @@ class SeasonHelpers {
           }
           
           foundSeason.entries[entryIndex].totalPoints = (foundSeason.entries[entryIndex].diamonds * 5) + 
+                                                        (foundSeason.entries[entryIndex].platinums * 4) +
                                                         (foundSeason.entries[entryIndex].golds * 3) +
                                                         (foundSeason.entries[entryIndex].silvers * 2) +
                                                         (foundSeason.entries[entryIndex].bronzes * 1);
@@ -324,7 +329,7 @@ class SeasonHelpers {
           let results = _(season.entries)
             .filter(x => x.timesSubmitted > 0 && x.league == league.leagueId)
             .orderBy(
-            ['totalPoints', 'diamonds', 'golds', 'silvers', 'bronzes', 'totalTime'], 
+            ['totalPoints', 'diamonds', 'platinums', 'golds', 'silvers', 'bronzes', 'totalTime'], 
             ['desc', 'desc', 'desc', 'desc', 'desc', 'asc']).value();
 
           await this.handOutAwardForLeague(results, league, season.name);
@@ -336,13 +341,13 @@ class SeasonHelpers {
           if(entry.diamonds == numLevels) {
             this.saveAward(entry.userId, AccoladeImages.FLAWLESS, `${season.name} - Flawless`, "Get 10 diamonds in a single season")
           }
-          else if((entry.diamonds + entry.golds) == numLevels) {
+          else if((entry.diamonds + entry.platinums + entry.golds) == numLevels) {
             this.saveAward(entry.userId, AccoladeImages.GOLDEN, `${season.name} - Golden`, "Get 10 golds or better in a single season")
           }
-          else if((entry.diamonds + entry.golds + entry.silvers) == numLevels) {
+          else if((entry.diamonds + entry.platinums + entry.golds + entry.silvers) == numLevels) {
             this.saveAward(entry.userId, AccoladeImages.SILVER, `${season.name} - Silver`, "Get 10 silvers or better in a single season")
           }
-          else if((entry.diamonds + entry.golds + entry.silvers + entry.bronzes) == numLevels) {
+          else if((entry.diamonds + entry.platinums + entry.golds + entry.silvers + entry.bronzes) == numLevels) {
             this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, `${season.name} - Bronzed`, "Get 10 bronze medals or better in a single season")
           }
         }

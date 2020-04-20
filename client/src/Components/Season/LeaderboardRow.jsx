@@ -63,6 +63,8 @@ class LeaderboardRow extends Component {
         if(levelInfo.diamondValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='diamond'>💎</span>
         } else if (levelInfo.goldValue > score) {
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><i class="fas fa-medal"></i></span>
+        } else if (levelInfo.platinumValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='gold'>🥇</span>
         } else if (levelInfo.silverValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='silver'>🥈</span>
@@ -86,11 +88,11 @@ class LeaderboardRow extends Component {
                             <td colSpan='1'>{level && level.levelName}</td>
                             <td colSpan='1'><a href={`https://lvlhd.co/+${x.levelLookupCode}`} target="_blank" rel="noopener noreferrer" className="levelLink">{x.levelLookupCode}</a></td>
                             <td colSpan='1'>{this.formatSeconds(x.value)}</td>
-                            <td colSpan='5'>{level && this.getMedal(level, x.value)}</td>
+                            <td colSpan='6'>{level && this.getMedal(level, x.value)}</td>
                         </tr>});
             } else {
                 return <tr>
-                            <td colSpan='8' align="center">
+                            <td colSpan='9' align="center">
                                 No Scores
                             </td>
                         </tr>
@@ -117,6 +119,7 @@ class LeaderboardRow extends Component {
                     </NavLink> 
                       {player.awards && player.awards.map(award => <span style={{ cursor: 'default'}} role='img'>{award}</span>)} </td>
                     <td align='center' className='large'>{player.diamonds}</td>
+                    <td align='center' className='large'>{player.platinums}</td>
                     <td align='center' className='large'>{player.golds}</td>
                     <td align='center' className='large'>{player.silvers}</td>
                     <td align='center' className='large'>{player.bronzes}</td>

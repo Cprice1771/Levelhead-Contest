@@ -122,11 +122,12 @@ class Contest extends Component {
                     <ul>
                         <li>To enroll in the season, login using discord and then click enroll on the Leaderboard page. You will be prompted to enter your rumpus lookup code (<a href="https://www.bscotch.net/account" target="blank">found here</a>) to link your levelcup account to your rumpus account.</li>
                         <li>New players will be entered into the Jem league, and will have a chance to progress to higher leagues by performing well.</li>
-                        <li>Every week day during the season a new level will be posted with Diamond, Gold, Silver and Bronze times.</li>
+                        <li>Every week day during the season a new level will be posted with Diamond, Platinum Gold, Silver and Bronze times.</li>
                         <li>Once enrolled, play any of the levels posted and your times will automatically be scored every hour.</li>
                         <li>Scoring works as follows</li>
                         <ul>
                             <li>Diamond: 5 points</li>
+                            <li>Platinum: 4 points</li>
                             <li>Gold: 3 points</li>
                             <li>Silver: 2 points</li>
                             <li>Bronze: 1 point</li>

@@ -16,6 +16,7 @@ class AddLevelModal extends Component {
         this.state = {
             lookupCode: '',
             diamondValue: 0,
+            platinumValue: 0,
             goldValue: 0,
             silverValue: 0,
             bronzeValue: 0,
@@ -37,6 +38,7 @@ class AddLevelModal extends Component {
         this.setState({
             lookupCode: '',
             diamondValue: 0,
+            platinumValue: 0,
             goldValue: 0,
             silverValue: 0,
             bronzeValue: 0,
@@ -72,7 +74,8 @@ class AddLevelModal extends Component {
     isValid() {
         return this.state.lookupCode.length === 7 && 
                 +this.state.diamondValue > 0 &&
-                +this.state.goldValue > +this.state.diamondValue &&
+                +this.state.platinumValue > +this.state.diamondValue &&
+                +this.state.goldValue > +this.state.platinumValue &&
                 +this.state.silverValue > +this.state.goldValue &&
                 +this.state.bronzeValue > +this.state.silverValue &&
                 (this.state.bonusAward === 'NONE' || !!this.state.bonusValue)
@@ -149,6 +152,20 @@ class AddLevelModal extends Component {
                         value={this.state.diamondValue} 
                         onChange={(e) => {
                             this.setState({ diamondValue: e.target.value });
+                        }}
+                    />
+                </div>
+            </div>
+            <div className='row input-group'>
+                <div className='col-md-5'>
+                    Platinum Time
+                </div>
+                <div className='col-md-7'>
+                    
+                <input type='number' className="form-control"
+                        value={this.state.platinumValue} 
+                        onChange={(e) => {
+                            this.setState({ platinumValue: e.target.value });
                         }}
                     />
                 </div>
@@ -238,6 +255,7 @@ class AddLevelModal extends Component {
                     let level = {
                         lookupCode: this.state.lookupCode,
                         diamondValue: this.state.diamondValue,
+                        platinumValue: this.state.platinumValue,
                         goldValue: this.state.goldValue,
                         silverValue: this.state.silverValue,
                         bronzeValue: this.state.bronzeValue,
@@ -253,6 +271,7 @@ class AddLevelModal extends Component {
                     this.setState({
                         lookupCode: '',
                         diamondValue: 0,
+                        platinumValue: 0,
                         goldValue: 0,
                         silverValue: 0,
                         bronzeValue: 0,

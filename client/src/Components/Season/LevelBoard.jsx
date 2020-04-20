@@ -60,6 +60,7 @@ function LevelBoard (props) {
                         <th className='smll'>Creator</th>
                         <th>Lookup</th>
                         <th className='smll'>Diamond</th>
+                        <th className='smll'>Platinum</th>
                         <th className='smll'>Gold</th>
                         <th className='smll'>Silver</th>
                         <th className='smll'>Bronze</th>
