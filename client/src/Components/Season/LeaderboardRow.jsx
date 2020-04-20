@@ -63,7 +63,7 @@ class LeaderboardRow extends Component {
         if(levelInfo.diamondValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='diamond'>💎</span>
         } else if (levelInfo.goldValue > score) {
-            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><i class="fas fa-medal"></i></span>
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><img src='/assets/Platinum.png' heigh='16' width='16' /></span>
         } else if (levelInfo.platinumValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='gold'>🥇</span>
         } else if (levelInfo.silverValue > score) {

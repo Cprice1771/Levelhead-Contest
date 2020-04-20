@@ -468,7 +468,7 @@ input:checked + .slider:before {
   border-radius: 5px; }
 
 .big-modal {
-  height: 470px;
+  height: 550px;
   padding: 10px; }
 
 .modalClose {
