@@ -62,9 +62,9 @@ class LeaderboardRow extends Component {
     getMedal = (levelInfo, score) => {
         if(levelInfo.diamondValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='diamond'>💎</span>
-        } else if (levelInfo.goldValue > score) {
-            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><img src='/assets/Platinum.png' heigh='16' width='16' /></span>
         } else if (levelInfo.platinumValue > score) {
+            return <span style={{ paddingLeft: '12px'}} role='img' aria-label='platinum'><img src='/assets/Platinum.png' heigh='16' width='16' /></span>
+        } else if (levelInfo.goldValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='gold'>🥇</span>
         } else if (levelInfo.silverValue > score) {
             return <span style={{ paddingLeft: '12px'}} role='img' aria-label='silver'>🥈</span>
