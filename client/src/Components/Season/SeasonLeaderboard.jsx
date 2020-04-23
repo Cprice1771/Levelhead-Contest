@@ -82,7 +82,7 @@ class SeasonLeaderboard extends Component {
     }
 
     bookmarkAll() {
-        this.bookmark(this.state.season.levelsInSeason.map(x => x.lookupCode));
+        this.bookmark(this.state.season.levelsInSeason.filter(x => new Date(x.startDate) < new Date()).map(x => x.lookupCode));
     }
 
     bookmark(lookupCodes) {
