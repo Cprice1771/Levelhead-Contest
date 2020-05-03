@@ -47,7 +47,7 @@ function Leaderboard (props) {
                         <th>Position</th>
                         <th>Player</th>
                         <th align='center' className='large'><span role='img' aria-label='diamond'>💎</span></th>
-                        <th align='center' className='large'><span role='img' aria-label='platinum'><img src='/assets/Platinum.png' heigh='16' width='16' /></span></th>
+                        <th align='center' className='large'><span role='img' aria-label='platinum'><img src='/assets/Platinum.png' heigh='16' width='16' alt='Platinum' /></span></th>
                         <th align='center' className='large'><span role='img' aria-label='gold'>🥇</span></th>
                         <th align='center' className='large'><span role='img' aria-label='silver'>🥈</span></th>
                         <th align='center' className='large'><span role='img' aria-label='bronze'>🥉</span></th>

@@ -39,18 +39,56 @@ class SeasonHelpers {
         this.saveAward = this.saveAward.bind(this);
         this.handOutAwardForLeague = this.handOutAwardForLeague.bind(this);
         this.handOutAllAwards = this.handOutAllAwards.bind(this);
+        this.getRandomLevels = this.getRandomLevels.bind(this);
+    }
+
+    async getRandomLevels() {
+      var secondsDiff = (new Date().getTime() - new Date(2019, 4, 1).getTime()) / 1000;
+      var randomSeconds = Math.floor(Math.random() * secondsDiff)
+      
+      return await RumpusAPI.searchLevels({
+        sort: '-createdAt',
+        maxDiamonds: 3,
+        limit: 32,
+        minSecondsAgo: randomSeconds,
+        includeStats: true,
+        includeRecords: true,
+      });
+    }
+
+    async getRandomSpeedrunLevel() {
+      let levels = [];
+      let attempts = 0;
+      const MAX_TRIES = 100;
+      do {
+        attempts++;
+        
+        levels.concat(await this.getRandomLevels());
+        for(let lvl of levels) {
+          lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 120, 75, 4000);
+
+          lvl.speedrunScore = (lvl.stats.HiddenGem + this.scoreTags(lvl.tags) + lvl.stats.timeScore);
+        }
+
+        levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
+        levels = levels.filter(x => x.speedrunScore < 0);
+      } while(levels.length == 0 && attempts < MAX_TRIES);
+
+      if(levels.length == 0) {
+        levels.concat(await this.getRandomLevels());
+      }
+
+      return levels[Math.floor(Math.random() * (levels.length - 1))];
     }
 
     async getRecommendations(){
       let levels = [];
       let maxHiddenGem = 1000000;
+     
       for(let i = 0; i < 3; i++) { // get 3 pages 
         levels = levels.concat(await RumpusAPI.searchLevels({
           sort: 'HiddenHem',
-          excludeTags: ['ltag_brawler','ltag_contraption', 'ltag_shop', 'ltag_long', 'ltag_dontmove', 'ltag_elite'],
-          minClearRate: 0.09,
-          minTimePerWin: 15,
-          maxTimePerWin: 300,
+          maxDiamonds: 3,
           limit: 64,
           //only grab levels that have been published for longer than 2 hours, 
           //so that when people start running it, 
@@ -58,6 +96,7 @@ class SeasonHelpers {
           maxHiddenGem: maxHiddenGem,
           minSecondsAgo: 7200,
           maxSecondsAgo: 604800, //only published this week
+          tower: true,
           includeStats: true
         }));
 
@@ -73,8 +112,6 @@ class SeasonHelpers {
       levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
 
       return levels.slice(0, 10);
-
-
     }
 
     getTimeScore(x, mean, std, multiply) {

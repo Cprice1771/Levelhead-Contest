@@ -14,6 +14,7 @@ import SeasonInfo from './Season/SeasonInfo';
 import Contest from './Contest/Contest';
 import SubmissionList from './Contest/SubmissionList';
 import ContestCreator from './Contest/ContestCreator';
+import RaceMain from './Race/RaceMain';
 
 class Main extends Component {
 
@@ -46,6 +47,7 @@ class Main extends Component {
                     <Route path='/create-season' component={CreateSeason} />
                     <Route path='/season/:seasonId' component={SeasonLeaderboard} />
                     <Route path='/seasonInfo/:seasonId' component={SeasonInfo} />
+                    <Route path='/race' component={RaceMain} />
 
 
                 </div>

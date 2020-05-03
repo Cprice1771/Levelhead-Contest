@@ -95,7 +95,7 @@ class UserProfile extends Component {
         let title= <></>;
 
         if(this.state.user && this.state.user.rumpusAlias) {
-            title = <h1> <a href={`https://www.bscotch.net/games/levelhead/players/${this.state.user.rumpusId}`} target='_blank'>{this.state.user.rumpusAlias}</a></h1> ;
+            title = <h1> <a rel="noopener noreferrer" href={`https://www.bscotch.net/games/levelhead/players/${this.state.user.rumpusId}`} target='_blank'>{this.state.user.rumpusAlias}</a></h1> ;
         } else if(this.state.user) {
             title = <h1> {this.state.user.discordName}</h1>;
         }

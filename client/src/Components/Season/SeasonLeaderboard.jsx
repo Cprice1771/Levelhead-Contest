@@ -76,7 +76,6 @@ class SeasonLeaderboard extends Component {
             }
             this.loadSeason(this.props.match.params.seasonId);
         } catch(err) {
-            console.log(err);
             NotificationManager.error('Something went wrong');
         }
     }

@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 function Submission (props) {
 
     let submision = props.submission;
-    console.log(submision);
     return (
         <tr className="submission-row">
             <td className='large'>

@@ -7,8 +7,10 @@ const path = require('path');
 const cron = require("node-cron");
 const ContestHelpers = require('./util/ContestHelpers');
 const SeasonHelpers = require('./util/SeasonHelpers');
+const MultiplayerHelpers = require('./util/MultiplayerHelpers');
 const contest = require('./models/contest');
 const Season = require('./models/Speedrun/Season');
+const Rooms = require('./models/multiplayer/room');
 
 
 require('dotenv').config()
@@ -29,13 +31,8 @@ app.use(https_redirect);
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-
 
 let users = require('./routes/users')
 app.use('/api/users', users)
@@ -54,6 +51,9 @@ app.use('/api/seasons', seasons)
 
 let events = require('./routes/events');
 app.use('/api/events', events);
+
+let multiplayer = require('./routes/multiplayer');
+app.use('/api/multiplayer', multiplayer);
 
 
 app.use(function(req, res, next) {
@@ -85,6 +85,27 @@ mongoose.connect(process.env.DB_URL, {
     console.log(err)
   }
 );
+
+//do room stuff for multiplayer every minute on the minute
+cron.schedule("* * * * *", async function() {
+  let rooms = await Rooms.find();
+  console.log('running room job');
+  // for(const room of rooms) {
+  //   if(room.nextPhaseStartTime < new Date()) {
+  //     console.log('Switching phases');
+  //     if(room.phase = 'level') {
+  //       console.log('moving to downtime');
+  //       await MultiplayerHelpers.startDowntimeForRoom(room);
+  //     } else {
+  //       console.log('starting next race');
+  //       await MultiplayerHelpers.startLevelForRoom(room);
+  //     }
+  //   }
+  // }
+
+  //TOOD: push events to clients
+
+});
 
 //Update level metadata every Hour
 cron.schedule("0 * * * *", async function() {
