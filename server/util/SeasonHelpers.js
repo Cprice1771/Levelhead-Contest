@@ -339,16 +339,16 @@ class SeasonHelpers {
         let numLevels = season.levelsInSeason.length;
         for(let entry of season.entries) {
           if(entry.diamonds == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.FLAWLESS, `${season.name} - Flawless`, "Get 10 diamonds in a single season")
+            this.saveAward(entry.userId, AccoladeImages.FLAWLESS, `${season.name} - Flawless`, "Get all diamonds in a single season")
           }
           else if((entry.diamonds + entry.platinums + entry.golds) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.GOLDEN, `${season.name} - Golden`, "Get 10 golds or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.GOLDEN, `${season.name} - Golden`, "Get all golds or better in a single season")
           }
           else if((entry.diamonds + entry.platinums + entry.golds + entry.silvers) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.SILVER, `${season.name} - Silver`, "Get 10 silvers or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.SILVER, `${season.name} - Silver`, "Get all silvers or better in a single season")
           }
           else if((entry.diamonds + entry.platinums + entry.golds + entry.silvers + entry.bronzes) == numLevels) {
-            this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, `${season.name} - Bronzed`, "Get 10 bronze medals or better in a single season")
+            this.saveAward(entry.userId, AccoladeImages.COMPLETIONIST, `${season.name} - Bronzed`, "Get all bronze medals or better in a single season")
           }
         }
 
