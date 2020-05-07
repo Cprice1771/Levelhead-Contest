@@ -13,6 +13,7 @@ const Season = require('./models/Speedrun/Season');
 const Rooms = require('./models/multiplayer/room');
 
 
+
 require('dotenv').config()
 
 var https_redirect = function(req, res, next) {
@@ -77,23 +78,36 @@ mongoose.connect(process.env.DB_URL, {
     console.log("Database connected...")
 
     //starts server, heroku needs process.env.port for port assignment
-    app.listen(process.env.PORT || port, ()=> {
+    var server = app.listen(process.env.PORT || port, ()=> {
       console.log(`App started on port ${process.env.PORT} // ${port}...`)
-    })
+    });
+
+    var io = require('socket.io').listen(server);
+    
+    io.on('connection', socket => {
+      console.log('New WS Connection...');
+      socket.send('message', 'welcome to levelcup');
+    });
   },
   err => {
     console.log(err)
   }
 );
 
+//TODO: refactor all of these jobs into their own files/classes
 //do room stuff for multiplayer every minute on the minute
 cron.schedule("* * * * *", async function() {
-  let rooms = await Rooms.find();
-  console.log('running room job');
+  // let rooms = await Rooms.find();
+  // console.log('running room job');
   // for(const room of rooms) {
+
+  //   if(room.phase === 'level') {
+  //     await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+  //   }
+
   //   if(room.nextPhaseStartTime < new Date()) {
   //     console.log('Switching phases');
-  //     if(room.phase = 'level') {
+  //     if(room.phase === 'level') {
   //       console.log('moving to downtime');
   //       await MultiplayerHelpers.startDowntimeForRoom(room);
   //     } else {
@@ -103,7 +117,7 @@ cron.schedule("* * * * *", async function() {
   //   }
   // }
 
-  //TOOD: push events to clients
+  //TOOD: socket
 
 });
 

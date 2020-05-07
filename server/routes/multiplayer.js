@@ -11,6 +11,7 @@ const moment = require('moment');
 const LevelResult = require('../models/multiplayer/levelResult');
 const Room = require('../models/multiplayer/room');
 const RoomEntrants = require('../models/multiplayer/roomEntrant');
+const User = require('../models/user');
 
 //Util
 const RumpusAPI = require('../util/rumpusAPI');
@@ -29,7 +30,7 @@ router.use(function(req, res, next) {
 //@@ GET api/multiplayer/get-current-room
 //@@ gets the current room
 router.get('/get-current-room', catchErrors(async (req, res) => {
-    let room = await Room.findOne();
+    let room = await (await Room.findOne()).toObject();
     if(!room) {
         return res.status(400).json({
             success: false,
@@ -37,8 +38,9 @@ router.get('/get-current-room', catchErrors(async (req, res) => {
         });
     }
 
-    let entrants = await RoomEntrants.find({ roomId: room.roomId })
+    let entrants = await RoomEntrants.find({ roomId: room._id });
     room.entrants = entrants;
+
     res.status(200).json({
         success: true,
         data: room
@@ -57,11 +59,15 @@ router.post('/start-next-level', catchErrors(async (req, res) => {
 
     await MultiplayerHelpers.startLevelForRoom(room);
 
+    room = room.toObject();
+    let entrants = await RoomEntrants.find({ roomId: room._id });
+    room.entrants = entrants;
+
     res.status(200).json({
         success: true,
         data: room
     });
-    //TODO: Alert clients the level has started
+    //TOOD: socket
 }));
 
 router.post('/move-to-downtime', catchErrors(async (req, res) => {
@@ -76,11 +82,15 @@ router.post('/move-to-downtime', catchErrors(async (req, res) => {
 
     await MultiplayerHelpers.startDowntimeForRoom(room);
 
+    room = room.toObject();
+    let entrants = await RoomEntrants.find({ roomId: room._id });
+    room.entrants = entrants;
+
     res.status(200).json({
         success: true,
         data: room
     });
-    //TODO: Alert clients the level has started
+    //TOOD: socket
 }));
 
 //@@ POST api/multiplayer/join-room'
@@ -107,11 +117,18 @@ router.post('/join-room', catchErrors(async (req, res) => {
     if(!!_.find(entrants, x => x.userId == req.body.userId)) {
         return res.status(400).json({
             success: false,
-            msg: 'User is already entered into this room'
+            msg: 'You are already entered into this room!'
         });
     }
 
-    let user = await User.findById(req.body.userId)
+    let user = await User.findById(req.body.userId);
+    if(!user) {
+        return res.status(400).json({
+            success: false,
+            msg: 'Unknown user'
+        });
+    }
+
     if(!user.rumpusId) {
         if(!!req.body.rumpusId) {
 
@@ -130,8 +147,7 @@ router.post('/join-room', catchErrors(async (req, res) => {
                 res.status(400).json({
                     success: false, 
                     getRumpusId: true,
-                    msg: `Hey it looks we don\'t have a rumpus id for you. 
-                            Please enter your rumpus id so we can get your scores`
+                    msg: `Invalid Rumpus ID ${req.body.rumpusId}`
                 });
                 return;
             }
@@ -139,8 +155,6 @@ router.post('/join-room', catchErrors(async (req, res) => {
             user.rumpusId = req.body.rumpusId;
             user.rumpusAlias = foundUser.alias;
             await user.save();
-            
-
         } else { 
             res.status(400).json({
                 success: false, 
@@ -153,30 +167,57 @@ router.post('/join-room', catchErrors(async (req, res) => {
 
     const entrant = new RoomEntrants({
         currentBestTime: null,
-        userId: req.userId,
-        rumpusId: '',
-        rumpusAlias: ''
+        userId: req.body.userId,
+        rumpusId: user.rumpusId,
+        rumpusAlias: user.rumpusAlias,
+        roomId: req.body.roomId,
+        lastUpdatedDate: new Date(),
     });
 
     await entrant.save();
-   
+   //TOOD: socket
+
+   room = await Room.findById(req.body.roomId);                                            
+   room = room.toObject();
+   entrants = await RoomEntrants.find({ roomId: room._id });
+   room.entrants = entrants;
+
     res.status(200).json({
         success: true,
         data: room
     });
 }));
 
-//@@ GET api/multiplayer/get-current-room
+//@@ GET api/multiplayer/leave-room
 //@@ leaves the room
-router.get('/leave-room', catchErrors(async (req, res) => {
-    await RoomEntrants.deleteOne({ $and : [{ "seasonId": req.body.seasonId  }, 
+router.post('/leave-room', catchErrors(async (req, res) => {
+    await RoomEntrants.deleteOne({ $and : [{ "roomId": req.body.roomId  }, 
                                             { "userId": req.body.userId }]});
+          
+    let room = await Room.findById(req.body.roomId);                                            
+    room = room.toObject();
+    let entrants = await RoomEntrants.find({ roomId: room._id });
+    room.entrants = entrants;
+
+    //TOOD: socket
     res.status(200).json({
         success: true,
+        data: room,
         msg: 'left room'
     });
 }));
 
+//@@ GET api/multiplayer/leave-room
+//@@ leaves the room
+router.post('/update-scores', catchErrors(async (req, res) => {
+
+    let room = await Room.findById(req.body.roomId);  
+    await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+
+    res.status(200).json({
+        success: true
+    });
+}));
 
 
 module.exports = router;

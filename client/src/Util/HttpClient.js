@@ -13,13 +13,14 @@ class HttpClient {
             var resp = await Axios.post(url, data);
             return resp.data;
         } catch (res) {
-            if(res && res.response && res.response.data)
+            if(res && res.response && res.response.data) {
                 NotificationManager.error(res.response.data.msg);
+                throw res.response.data.msg;
+            }
             else {
                 NotificationManager.error('Connection Error');
+                throw 'Connection Error';
             }
-
-            return null;
         }
     }
 
@@ -28,13 +29,14 @@ class HttpClient {
             var resp = await Axios.get(url);
             return resp.data;
         } catch (res) {
-            if(res && res.response && res.response.data)
+            if(res && res.response && res.response.data) {
                 NotificationManager.error(res.response.data.msg);
+                throw res.response.data.msg;
+            }
             else {
                 NotificationManager.error('Connection Error');
+                throw 'Connection Error';
             }
-
-            return null;
         }
     }
 }

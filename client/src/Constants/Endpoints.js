@@ -49,5 +49,7 @@ export const endPoints = {
     GET_ROOM: '/api/multiplayer/get-current-room',
     ENTER_ROOM: '/api/multiplayer/join-room',
     START_DOWNTIME: 'api/multiplayer/move-to-downtime',
+    GET_SCORES: 'api/multiplayer/update-scores',
     START_LEVEL: 'api/multiplayer/start-next-level',
+    LEAVE_RACE: 'api/multiplayer/leave-room'
 }

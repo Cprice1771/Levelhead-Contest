@@ -16,9 +16,12 @@ class MultiplayerHelpers {
     async getRandomLevels() {
       var secondsDiff = (new Date().getTime() - new Date(2019, 4, 1).getTime()) / 1000;
       var randomSeconds = Math.floor(Math.random() * secondsDiff)
+      //console.log(randomSeconds)
       return await RumpusAPI.searchLevels({
-        sort: '-createdAt',
-        maxDiamonds: 3,
+        sort: 'createdAt',
+        //maxDiamonds: 3,
+        //minDiamonds: 3,
+        tower: true,
         limit: 32,
         minSecondsAgo: randomSeconds,
         includeStats: true,
@@ -29,7 +32,7 @@ class MultiplayerHelpers {
     async getRandomSpeedrunLevel() {
       let levels = [];
       let attempts = 0;
-      const MAX_TRIES = 2;
+      const MAX_TRIES = 10;
       do {
         attempts++;
         let randomLevels = await this.getRandomLevels();
@@ -38,20 +41,36 @@ class MultiplayerHelpers {
         for(let lvl of levels) {
           lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 120, 75, 4000);
           lvl.speedrunScore = (lvl.stats.HiddenGem + this.scoreTags(lvl.tags) + lvl.stats.timeScore);
+          console.log(lvl.stats.Diamonds);
+          //TODO: remove me when the API works
+          if(lvl.stats.Diamonds === undefined || lvl.stats.Diamonds > 3) {
+            lvl.speedrunScore = -10000;
+          }
         }
 
         levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
-        levels.filter(x => x.speedrunScore < 0);
+        //console.log(levels.map(x => x.speedrunScore));
+        levels = levels.filter(x => x.speedrunScore > 0);
+        console.log(levels);
       } while(levels.length == 0 && attempts < MAX_TRIES);
 
+      
+
       if(levels.length == 0) {
-        levels.concat(await this.getRandomLevels());
+        levels = levels.concat(await this.getRandomLevels());
       }
       var index = Math.floor(Math.random() * (levels.length - 1));
       return levels[index];
     }
 
     getTimeScore(x, mean, std, multiply) {
+
+      if(x > 120) {
+        return -10000;
+      }
+
+      return 0;
+
       return multiply * (1 / (std*Math.sqrt(2 * Math.PI))) * Math.exp(-((x-mean)^2)/(2*std*std))
     }
 
@@ -113,14 +132,14 @@ class MultiplayerHelpers {
 
     async startLevelForRoom(room) {
         room.currentLevelCode = (await this.getRandomSpeedrunLevel()).levelId;
-        room.currentPhaseStartTime = room.nextPhaseStartTime;
-        room.nextPhaseStartTime = moment(room.nextPhaseStartTime).add(room.levelTime, 'seconds').toDate();
+        room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
+        room.nextPhaseStartTime = moment(room.currentPhaseStartTime).add(room.levelTime, 'seconds').toDate();
         room.phase = 'level';
         await room.save();
 
         let entrants = await RoomEntrants.find({ roomId: room._id });
         
-        for(var entry in entrants) {
+        for(var entry of entrants) {
             entry.currentBestTime = null;
             await entry.save();
         }
@@ -129,8 +148,8 @@ class MultiplayerHelpers {
     }
 
     async startDowntimeForRoom(room) {
-        room.currentPhaseStartTime = room.nextPhaseStartTime;
-        room.nextPhaseStartTime = moment(room.nextPhaseStartTime).add(room.downtime, 'seconds').toDate();
+        room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
+        room.nextPhaseStartTime = moment(room.currentPhaseStartTime).add(room.downtime, 'seconds').toDate();
         room.phase = 'downtime';
         await room.save();
     }
@@ -156,6 +175,12 @@ class MultiplayerHelpers {
           }).join(',');
           
           do {
+            console.log({ levelIds: [levelId],
+              userIds: userIds,
+              after: levelStart,
+              before: before,
+              limit: LIMIT
+            })
             var scoreResults = await RumpusAPI.getRecentRecords('FastestTime', 
               { levelIds: [levelId],
                 userIds: userIds,
@@ -171,7 +196,7 @@ class MultiplayerHelpers {
           } while(scoreResults.length >= LIMIT);
 
           for(let score of scores) {
-            let entrant = roomEntrants.find(x => x.rumpusId === score.alias.userId);
+            let entrant = roomEntrants.find(x => x.rumpusId === score.userId);
             if(!entrant) {
                 continue;
             }

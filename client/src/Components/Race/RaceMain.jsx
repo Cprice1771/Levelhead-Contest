@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
-//import ReactMarkdown from 'react-markdown'
 import ReactModal from 'react-modal';
 import UserStore from '../../Stores/UserStore';
 import LoginActions from '../../actions/LoginActions';
@@ -8,25 +7,37 @@ import { endPoints } from '../../Constants/Endpoints'
 import { NotificationManager} from 'react-notifications';
 import HttpClient from '../../Util/HttpClient';
 import * as _ from 'lodash';
+import JoinRace from './JoinRace';
+import RaceEntrants from './RaceEntrants';
+import CountDown from '../CountDown';
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "localhost:3000";
 
-class Contest extends Component {
+class RaceMain extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             room: null,
-            loggedIn: !!UserStore.getLoggedInUser(),
-            showModal: false,
+            loggedIn: UserStore.getLoggedInUser(),
+            showJoinModal: false,
         };
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.userChange = this.userChange.bind(this);
+        this.joinRace = this.joinRace.bind(this);
     }
 
     componentDidMount() {
         UserStore.addChangeListener(this.userChange);
         this.loadRoom();
+
+
+        const socket = socketIOClient(ENDPOINT);
+        socket.on('message', message => {
+            console.log(message);
+        })
     }
 
     componentWillUnmount() {
@@ -35,28 +46,36 @@ class Contest extends Component {
     }
 
     isEntered() {
-        return this.state.loggedIn && !!_.find(this.state.room.entrants, x => x.userId === UserStore.getLoggedInUser().userId)
+        return this.state.loggedIn && !!_.find(this.state.room.entrants, x => x.userId === UserStore.getLoggedInUser()._id)
     }
 
     userChange() {
-        this.setState({loggedIn: !!UserStore.getLoggedInUser()});
+        this.setState({loggedIn: UserStore.getLoggedInUser()});
     }
 
     handleOpenModal () {
-        this.setState({ showModal: true });
+        this.setState({ showJoinModal: true });
     }
     
     handleCloseModal () {
-        this.setState({ showModal: false });
+        this.setState({ showJoinModal: false });
     }
 
-    async joinRoom() {
+    async joinRace(rumpusId) {
+        if(!rumpusId && !this.state.loggedIn.rumpusId) {
+            this.setState({ showJoinModal: true });
+            return;
+        }
+
+
         if(!UserStore.getLoggedInUser()) {
             NotificationManager.error('Please login first');
         }
+
         var resp = await HttpClient.post(endPoints.ENTER_ROOM, {
             roomId: this.state.room._id,
-            userId: UserStore.getLoggedInUser().userId
+            userId: UserStore.getLoggedInUser()._id,
+            rumpusId: rumpusId,
         });
         this.setState({
             room: resp.data
@@ -72,6 +91,24 @@ class Contest extends Component {
             });
         }
         
+    }
+
+    async leaveRace() {
+        var resp = await HttpClient.post(endPoints.LEAVE_RACE, {
+            roomId: this.state.room._id,
+            userId: this.state.loggedIn._id
+        });
+
+        NotificationManager.success('Room Left')
+        this.setState({
+            room: resp.data
+        });
+    }
+
+    async updateScores() {
+        var resp = await HttpClient.post(endPoints.GET_SCORES, {
+            roomId: this.state.room._id
+        });
     }
 
     async startNextPhase() {
@@ -115,53 +152,39 @@ class Contest extends Component {
             
 
             <div className="card-body">
-                { !this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={this.handleOpenModal}>Enter</button> }
+                { this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.leaveRace()}>Leave</button> }
+                { !this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.joinRace()}>Enter</button> }
                 { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enter</button> }
 
                 <button className='b2'  onClick={() => { this.startNextPhase(); }}>Start Next Phase</button>
+                <button className='b2'  onClick={() => { this.updateScores(); }}>Update Scores</button>
             </div>
 
             <div className="card-rules pad-bottom">
                 { this.state.room.phase === 'level' && <>
                 <h1>Current Level: {this.state.room.currentLevelCode}</h1>
-                <h3>Minutes left in Level: { moment.duration(moment(this.state.room.nextPhaseStartTime).diff(moment())).asMinutes() }</h3>
+                <CountDown toDate={this.state.room.nextPhaseStartTime} title={`Time left in level`}/>
                 </>
                 }
-            </div>
 
-            <div className="card-rules pad-bottom">
                 { this.state.room.phase === 'downtime' && <>
-                <h1>Winners!</h1>
-                <h3>Next level in: { moment.duration(moment(this.state.room.nextPhaseStartTime).diff(moment())).asMinutes() }</h3>
+                <CountDown toDate={this.state.room.nextPhaseStartTime} title={`Next level starts in`}/>
                 </>
                 }
+
+                <RaceEntrants 
+                    entrants={this.state.room.entrants}
+                />
             </div>
             
-            <ReactModal
-                isOpen={this.state.showModal}
-                
-                onRequestClose={this.handleCloseModal}
-                
-                contentLabel="Enter Race"
-                className='Modal'
-                >
-                <i className="fas fa-times modalClose"  onClick={this.handleCloseModal}></i>
-                <div className='row'> 
-                <div className='col-md-6'>Enter your rumpus id:</div>
-                    <div>
-                        <input  type='text' value={this.state.rumpusId} onChange={(x) => this.setState({ rumpusId: x.target.value})} />
-                    </div>
-                </div>
-                <div>
-                    <button onClick={() => {
-                        console.log('Join!');
-                        this.handleCloseModal();
-                    }}>Join</button>
-                </div>
-            </ReactModal>
+            <JoinRace 
+                showModal={this.state.showJoinModal}
+                handleCloseModal={() => { this.setState({ showJoinModal: false }) }}
+                joinRace={this.joinRace}
+            />
         </div>
     }
 
 }
 
-export default Contest;
+export default RaceMain;
