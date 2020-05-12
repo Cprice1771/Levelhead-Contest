@@ -5,7 +5,7 @@ const btoa = require('btoa');
 const Axios = require('axios');
 const _ = require('lodash');
 const moment = require('moment');
-
+const SocketManager = require('../util/SocketManager');
 
 //Models
 const LevelResult = require('../models/multiplayer/levelResult');
@@ -63,11 +63,12 @@ router.post('/start-next-level', catchErrors(async (req, res) => {
     let entrants = await RoomEntrants.find({ roomId: room._id });
     room.entrants = entrants;
 
+    SocketManager.emit(`room-update-${room._id}`, room);
+
     res.status(200).json({
         success: true,
         data: room
     });
-    //TOOD: socket
 }));
 
 router.post('/move-to-downtime', catchErrors(async (req, res) => {
@@ -86,11 +87,12 @@ router.post('/move-to-downtime', catchErrors(async (req, res) => {
     let entrants = await RoomEntrants.find({ roomId: room._id });
     room.entrants = entrants;
 
+    SocketManager.emit(`room-update-${room._id}`, room);
+
     res.status(200).json({
         success: true,
         data: room
     });
-    //TOOD: socket
 }));
 
 //@@ POST api/multiplayer/join-room'
@@ -172,16 +174,18 @@ router.post('/join-room', catchErrors(async (req, res) => {
         rumpusAlias: user.rumpusAlias,
         roomId: req.body.roomId,
         lastUpdatedDate: new Date(),
+        lastKeepAlive: new Date(),
     });
 
     await entrant.save();
-   //TOOD: socket
+   
+    
 
-   room = await Room.findById(req.body.roomId);                                            
-   room = room.toObject();
-   entrants = await RoomEntrants.find({ roomId: room._id });
-   room.entrants = entrants;
-
+    room = await Room.findById(req.body.roomId);                                            
+    room = room.toObject();
+    entrants = await RoomEntrants.find({ roomId: room._id });
+    room.entrants = entrants;
+    SocketManager.emit(`room-update-${room._id}`, room);
     res.status(200).json({
         success: true,
         data: room
@@ -199,7 +203,7 @@ router.post('/leave-room', catchErrors(async (req, res) => {
     let entrants = await RoomEntrants.find({ roomId: room._id });
     room.entrants = entrants;
 
-    //TOOD: socket
+    SocketManager.emit(`room-update-${room._id}`, room);
     res.status(200).json({
         success: true,
         data: room,

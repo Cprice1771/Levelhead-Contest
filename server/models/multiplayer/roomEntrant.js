@@ -24,6 +24,10 @@ let roomEntrant = mongoose.Schema({
     lastUpdatedDate: {
         type: Date,
         required: true,
+    },
+    lastKeepAlive: {
+        type: Date,
+        required: false,
     }
 })
 let RoomEntrant = module.exports = mongoose.model('RoomEntrant', roomEntrant);

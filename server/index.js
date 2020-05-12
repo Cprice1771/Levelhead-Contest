@@ -11,8 +11,9 @@ const MultiplayerHelpers = require('./util/MultiplayerHelpers');
 const contest = require('./models/contest');
 const Season = require('./models/Speedrun/Season');
 const Rooms = require('./models/multiplayer/room');
-
-
+const RoomEntrants = require('./models/multiplayer/roomEntrant');
+const SocketManager = require('./util/SocketManager');
+const moment = require('moment');
 
 require('dotenv').config()
 
@@ -82,12 +83,8 @@ mongoose.connect(process.env.DB_URL, {
       console.log(`App started on port ${process.env.PORT} // ${port}...`)
     });
 
-    var io = require('socket.io').listen(server);
+    SocketManager.listen(server);
     
-    io.on('connection', socket => {
-      console.log('New WS Connection...');
-      socket.send('message', 'welcome to levelcup');
-    });
   },
   err => {
     console.log(err)
@@ -96,29 +93,28 @@ mongoose.connect(process.env.DB_URL, {
 
 //TODO: refactor all of these jobs into their own files/classes
 //do room stuff for multiplayer every minute on the minute
-cron.schedule("* * * * *", async function() {
-  // let rooms = await Rooms.find();
-  // console.log('running room job');
-  // for(const room of rooms) {
+cron.schedule("0,30 * * * * *", async function() {
+  let rooms = await Rooms.find();
+  for(const room of rooms) {
 
-  //   if(room.phase === 'level') {
-  //     await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
-  //   }
+    if(room.phase === 'level') {
+      await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+    }
 
-  //   if(room.nextPhaseStartTime < new Date()) {
-  //     console.log('Switching phases');
-  //     if(room.phase === 'level') {
-  //       console.log('moving to downtime');
-  //       await MultiplayerHelpers.startDowntimeForRoom(room);
-  //     } else {
-  //       console.log('starting next race');
-  //       await MultiplayerHelpers.startLevelForRoom(room);
-  //     }
-  //   }
-  // }
-
-  //TOOD: socket
-
+    if(room.nextPhaseStartTime < new Date()) {
+      if(room.phase === 'level') {
+        setTimeout(async () => {
+          await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+          await MultiplayerHelpers.startDowntimeForRoom(room);
+          await MultiplayerHelpers.updateRoom(room);
+        }, 15000)
+        
+      } else {
+        await MultiplayerHelpers.startLevelForRoom(room);
+      }
+    }
+    await MultiplayerHelpers.updateRoom(room);
+  }
 });
 
 //Update level metadata every Hour

@@ -160,15 +160,16 @@ input:checked + .slider:before {
 .th {
   font-weight: bold;
   font-size: 30px;
-  border-bottom: 2px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
   padding: .75rem;
   background-color: white; }
 
 .td {
-  font-size: 20px;
-  border-bottom: 2px solid #dee2e6;
-  padding: 1rem .75rem .75rem .75rem;
+  border-bottom: 1px solid #dee2e6;
   background-color: white; }
+
+.tr {
+  height: 80px; }
 
 .tr:hover .td {
   transition: .15s ease-in;
@@ -178,8 +179,175 @@ input:checked + .slider:before {
 .center-text {
   padding-top: .75rem; }
 
+.entrant-text {
+  position: absolute;
+  font-size: 25px;
+  bottom: 20px; }
+
+.first-race {
+  color: #dbcd07 !important;
+  font-size: 36px !important;
+  font-weight: 500 !important;
+  bottom: -5px;
+  position: absolute; }
+
+.second-race {
+  color: #8a9cafd3 !important;
+  font-weight: 450 !important;
+  font-size: 27px !important; }
+
+.third-race {
+  color: #836f00 !important;
+  font-weight: 450 !important;
+  font-size: 24px !important; }
+
+.other-race {
+  color: #212529 !important;
+  font-weight: 350 !important;
+  font-size: 24px !important; }
+
+.tooltiptext {
+  visibility: visible;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s; }
+
+.score-bar1 {
+  width: 100px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.025), #a48cbe);
+  border: 2px #a48cbe solid;
+  border-radius: 2px;
+  animation-duration: 4s;
+  animation-name: raise;
+  animation-fill-mode: forwards;
+  text-align: center;
+  overflow: hidden;
+  margin: auto; }
+
+.score-bar2 {
+  width: 100px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.025), #a48cbe);
+  border: 2px #a48cbe solid;
+  border-radius: 2px;
+  animation-duration: 4s;
+  animation-name: raise2;
+  animation-fill-mode: forwards;
+  text-align: center;
+  overflow: hidden;
+  margin: auto; }
+
+.score-bar3 {
+  width: 100px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.025), #a48cbe);
+  border-radius: 2px;
+  border: 2px #a48cbe solid;
+  animation-duration: 4s;
+  animation-name: raise3;
+  animation-fill-mode: forwards;
+  text-align: center;
+  overflow: hidden;
+  margin: auto; }
+
+.winner-box {
+  height: 500px;
+  position: relative; }
+
+.first-award {
+  color: #dbcd07 !important;
+  font-weight: 500 !important;
+  font-size: 50px !important;
+  overflow: hidden; }
+
+.second-award {
+  color: #8a9cafd3 !important;
+  font-weight: 500 !important;
+  font-size: 36px !important;
+  overflow: hidden; }
+
+.third-award {
+  color: #836f00 !important;
+  font-weight: 500 !important;
+  font-size: 36px !important;
+  overflow: hidden; }
+
+@keyframes raise {
+  from {
+    height: 0px; }
+  to {
+    height: 175px; } }
+
+@keyframes raise2 {
+  from {
+    height: 0px; }
+  to {
+    height: 300px; } }
+
+@keyframes raise3 {
+  from {
+    height: 0px; }
+  to {
+    height: 100px; } }
+
+.tpy-1 {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 250px; }
+
+.tpy-2 {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 37%;
+  width: 250px; }
+
+.tpy-3 {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 64%;
+  width: 250px; }
+
+.race-winner-text {
+  font-size: 25px;
+  text-align: center;
+  overflow-x: visible; }
+
+.race-bookmark {
+  height: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 25px; }
+
 .light-grey {
   background-color: rgba(0, 0, 0, 0.05); }
+
+.rotate-slide {
+  animation: rotation 1s infinite linear, slide-horizontal 2s infinite ease-in-out;
+  position: absolute; }
+
+@keyframes slide-horizontal {
+  0%, 100% {
+    left: 200px; }
+  50% {
+    left: 600px; } }
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(359deg); } }
 
 @media only screen and (max-width: 1300px) {
   .medium {
@@ -238,7 +406,7 @@ input:checked + .slider:before {
   cursor: pointer; }
 
 .spinner-container {
-  height: 100px;
+  height: 500px;
   text-align: center;
   padding: 100px; }
 
@@ -434,6 +602,20 @@ input:checked + .slider:before {
     color: #66FCF1;
     text-decoration: none; }
 
+.racelevellink:not([href]) {
+  color: #45A29E;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 100px; }
+  .racelevellink:not([href]):hover {
+    color: #66FCF1;
+    text-decoration: none; }
+  .racelevellink:not([href]) i {
+    margin-left: 10px; }
+
+.race-card h1 {
+  font-size: 50px; }
+
 .NavButton {
   color: white; }
   .NavButton:hover {
@@ -489,7 +671,7 @@ input:checked + .slider:before {
   border-radius: 5px; }
 
 .big-modal {
-  height: 550px;
+  height: 580px;
   padding: 10px; }
 
 .modalClose {

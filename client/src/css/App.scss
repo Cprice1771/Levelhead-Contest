@@ -8,10 +8,38 @@ $secondaryBlue: #45A29E;
 
 @import "Checkbox.scss" ;
 @import "toggle.scss" ;
-@import "table.scss";
+@import "RaceResultsTable.scss";
+@import "tooltip.scss";
+@import "RaceWinners.scss";
 
 .light-grey {
   background-color: rgba(0,0,0,.05);
+}
+
+.rotate-slide {
+  animation: rotation 1s infinite linear, slide-horizontal 2s infinite ease-in-out;
+  position: absolute;
+}
+
+@keyframes slide-horizontal {
+  0%, 100% {
+    left: 200px;
+  }
+  50% {
+    left: 600px;
+  }
+}
+
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+
+ 
 }
 
 @media only screen and (max-width: 1300px) {
@@ -94,7 +122,7 @@ $secondaryBlue: #45A29E;
 }
 
 .spinner-container {
-  height: 100px;
+  height: 500px;
   text-align: center;
   padding: 100px;
 }
@@ -333,6 +361,26 @@ $secondaryBlue: #45A29E;
   }
 }
 
+.racelevellink:not([href]) {
+  color: $secondaryBlue;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 100px;
+  &:hover {
+    color: $primaryBlue;
+    text-decoration: none;
+  }
+   i {
+    margin-left: 10px;
+  }
+}
+
+.race-card {
+  h1 {
+    font-size: 50px;
+  }
+}
+
 .NavButton {
   color: white;
 
@@ -401,7 +449,7 @@ $secondaryBlue: #45A29E;
 }
 
 .big-modal {
-  height: 550px;
+  height: 580px;
   padding: 10px;
 }
 
@@ -476,4 +524,6 @@ $secondaryBlue: #45A29E;
 .other-pad {
   padding-top: 30px!important;
 }
+
+
 

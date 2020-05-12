@@ -22,6 +22,12 @@ class CountDown extends Component {
     }
 
     updateTimeLeft() {
+
+        if(moment(this.props.toDate).diff(new Date(), 'seconds') === 0) {
+            var audio = new Audio('./assets/hjm-glass_bell_1.wav');
+            audio.play();
+        }
+
         this.setState({ curDate: new Date() });
     }
 

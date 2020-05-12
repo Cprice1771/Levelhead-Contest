@@ -28,6 +28,10 @@ let room = mongoose.Schema({
     maxParticipants: {
         type: Number,
         required: true,
+    },
+    levelDetails: {
+        type: Object,
+        required: false
     }
 })
 let Room = module.exports = mongoose.model('Room', room);
