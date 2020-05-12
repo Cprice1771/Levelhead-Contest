@@ -61,7 +61,10 @@ class RumpusAPI {
     async searchLevels(searchParams) {
       const httpClient = await this.getClient();
       const params = this.getUrlParams(searchParams);
-      return (await httpClient.get(`levelhead/levels?${params}`)).data.data;
+      //console.log(`levelhead/levels?${params}`);
+      let resp = (await httpClient.get(`levelhead/levels?${params}`));
+     
+      return resp.data.data;
   }
 
   async DelegationKeyPermissions(apiKey) {

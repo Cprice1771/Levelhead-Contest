@@ -31,7 +31,7 @@ class AccoladeRow extends Component {
 
     render() {
         return <ARow className='row accolade-row' pose={this.state.visible ? 'visible' : 'hidden'}> 
-                    <div className='col-md-2'> <img  src={`${this.props.awardImage}`}  className='accolade-image'/> </div>
+                    <div className='col-md-2'> <img  src={`${this.props.awardImage}`}  className='accolade-image' alt='Accolade'/> </div>
                     <div className='col-md-10'> <div className='accolade-title'>{this.props.award}</div> <div className='accolade-description'>{this.props.description}</div> </div>
                 </ARow>
     }

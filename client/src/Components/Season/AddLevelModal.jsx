@@ -5,9 +5,6 @@ import ReactModal from 'react-modal';
 import Flatpickr from 'react-flatpickr'
 import { NotificationManager } from 'react-notifications';
 
-
-
-
 class AddLevelModal extends Component {
 
     constructor(props) {
@@ -24,6 +21,7 @@ class AddLevelModal extends Component {
             selectedLevelTitle: '',
             bonusAward: 'NONE',
             bonusValue: '',
+            startType: '',
         }
 
         this.isValid = this.isValid.bind(this);
@@ -46,6 +44,7 @@ class AddLevelModal extends Component {
             selectedLevelTitle: '',
             bonusAward: 'NONE',
             bonusValue: '',
+            startType: '',
         })
     }
 
@@ -78,7 +77,9 @@ class AddLevelModal extends Component {
                 +this.state.goldValue > +this.state.platinumValue &&
                 +this.state.silverValue > +this.state.goldValue &&
                 +this.state.bronzeValue > +this.state.silverValue &&
-                (this.state.bonusAward === 'NONE' || !!this.state.bonusValue)
+                (this.state.bonusAward === 'NONE' || !!this.state.bonusValue) &&
+                this.state.startType !== '' && 
+                (this.state.startType === 'NOW' || this.state.startDate)
                 ;
     }
 
@@ -127,21 +128,40 @@ class AddLevelModal extends Component {
                 </div>
             </div>
             <div className='row input-group'>
-                <div className='col-md-5'>
-                    Level Start Date
-                </div>
+                <div className='col-md-5'>Start level</div>
                 <div className='col-md-7'>
-                    <Flatpickr 
-                        data-enable-time 
-                        options={{
-                            dateFormat: 'm/d/Y h:i K',
+                <select className="form-control"
+                        value={this.state.startType} onChange={(e) => {
+                            this.setState({ startType: e.target.value });
+                            if(e.target.value === 'NONE') {
+                                this.setState({ startType: ''})
+                            }
                         }}
-                        placeholder='Now'
-                        value={this.state.startDate}
-                        onChange={date => { this.setState({ startDate: date[0] })}}
-                    />
+                    >   
+                        <option value='NONE'></option>
+                        <option value='NOW'>Immediatly</option>
+                        <option value='SCHEDULE'>Schedule</option>
+                    </select>
                 </div>
             </div>
+            { this.state.startType === 'SCHEDULE' &&
+                <div className='row input-group'>
+                    <div className='col-md-5'>
+                        Level Start Date
+                    </div>
+                    <div className='col-md-7'>
+                        <Flatpickr 
+                            data-enable-time 
+                            options={{
+                                dateFormat: 'm/d/Y h:i K',
+                            }}
+                            placeholder='Pick a date'
+                            value={this.state.startDate}
+                            onChange={date => { this.setState({ startDate: date[0] })}}
+                        />
+                    </div>
+                </div>
+            }
             <div className='row input-group'>
                 <div className='col-md-5'>
                     Diamond Time
@@ -259,7 +279,7 @@ class AddLevelModal extends Component {
                         goldValue: this.state.goldValue,
                         silverValue: this.state.silverValue,
                         bronzeValue: this.state.bronzeValue,
-                        startDate: this.state.startDate,
+                        startDate: this.state.startType === 'SCHEDULE' ?  this.state.startDate : undefined,
                         bonusAward: this.state.bonusAward === 'NONE' ? undefined : {
                             awardValue: this.state.bonusValue,
                             awardName: this.state.bonusAward,
@@ -276,7 +296,8 @@ class AddLevelModal extends Component {
                         silverValue: 0,
                         bronzeValue: 0,
                         bonusValue: '',
-                        startDate: ''
+                        startDate: '',
+                        startType: ''
                     }); 
                     }}>
                 Add

@@ -44,4 +44,12 @@ export const endPoints = {
     GET_USER_SCORES: '/api/seasons/get-user-scores',
     GET_RECOMMENDED_LEVELS: '/api/seasons/suggest-levels',
     GET_LEVEL_SCORES: `/api/seasons/get-level-scores`,
+
+    //Race
+    GET_ROOM: '/api/multiplayer/get-current-room',
+    ENTER_ROOM: '/api/multiplayer/join-room',
+    START_DOWNTIME: 'api/multiplayer/move-to-downtime',
+    GET_SCORES: 'api/multiplayer/update-scores',
+    START_LEVEL: 'api/multiplayer/start-next-level',
+    LEAVE_RACE: 'api/multiplayer/leave-room'
 }

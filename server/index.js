@@ -7,9 +7,13 @@ const path = require('path');
 const cron = require("node-cron");
 const ContestHelpers = require('./util/ContestHelpers');
 const SeasonHelpers = require('./util/SeasonHelpers');
+const MultiplayerHelpers = require('./util/MultiplayerHelpers');
 const contest = require('./models/contest');
 const Season = require('./models/Speedrun/Season');
-
+const Rooms = require('./models/multiplayer/room');
+const RoomEntrants = require('./models/multiplayer/roomEntrant');
+const SocketManager = require('./util/SocketManager');
+const moment = require('moment');
 
 require('dotenv').config()
 
@@ -29,13 +33,8 @@ app.use(https_redirect);
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-
 
 let users = require('./routes/users')
 app.use('/api/users', users)
@@ -54,6 +53,9 @@ app.use('/api/seasons', seasons)
 
 let events = require('./routes/events');
 app.use('/api/events', events);
+
+let multiplayer = require('./routes/multiplayer');
+app.use('/api/multiplayer', multiplayer);
 
 
 app.use(function(req, res, next) {
@@ -77,14 +79,43 @@ mongoose.connect(process.env.DB_URL, {
     console.log("Database connected...")
 
     //starts server, heroku needs process.env.port for port assignment
-    app.listen(process.env.PORT || port, ()=> {
+    var server = app.listen(process.env.PORT || port, ()=> {
       console.log(`App started on port ${process.env.PORT} // ${port}...`)
-    })
+    });
+
+    SocketManager.listen(server);
+    
   },
   err => {
     console.log(err)
   }
 );
+
+//TODO: refactor all of these jobs into their own files/classes
+//do room stuff for multiplayer every minute on the minute
+cron.schedule("0,30 * * * * *", async function() {
+  let rooms = await Rooms.find();
+  for(const room of rooms) {
+
+    if(room.phase === 'level') {
+      await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+    }
+
+    if(room.nextPhaseStartTime < new Date()) {
+      if(room.phase === 'level') {
+        setTimeout(async () => {
+          await MultiplayerHelpers.getScoresForLevel(room.currentLevelCode, room.currentPhaseStartTime, room._id);
+          await MultiplayerHelpers.startDowntimeForRoom(room);
+          await MultiplayerHelpers.updateRoom(room);
+        }, 15000)
+        
+      } else {
+        await MultiplayerHelpers.startLevelForRoom(room);
+      }
+    }
+    await MultiplayerHelpers.updateRoom(room);
+  }
+});
 
 //Update level metadata every Hour
 cron.schedule("0 * * * *", async function() {

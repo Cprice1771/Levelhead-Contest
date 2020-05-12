@@ -59,11 +59,11 @@ class Contest extends Component {
 
     handleOpenModal () {
         this.setState({ showModal: true });
-      }
-      
-      handleCloseModal () {
+    }
+    
+    handleCloseModal () {
         this.setState({ showModal: false });
-      }
+    }
 
     formatTime(num) {
         return ('0' + num).substr(-2);

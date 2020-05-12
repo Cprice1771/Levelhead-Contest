@@ -178,7 +178,7 @@ router.post('/enroll', catchErrors(async (req, res) => {
     if(_.find(curSeason.entries, x => x.userId === req.body.userId)) {
         res.status(400).json({
             success: false, 
-            msg: `This user is already enrolled in this season`
+            msg: `You are already enrolled in this season!`
         });
         return;
     }

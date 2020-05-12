@@ -29,7 +29,6 @@ class RecommendLevelModal extends Component {
 
             if(resp.data.success) {
                 this.setState({ levels: resp.data.levels })
-                console.log(resp.data.levels.length);
             } else {
                 NotificationManager.error('Failed to get recommended levels');
             }
