@@ -56,13 +56,17 @@ class MultiplayerHelpers {
       const MAX_TRIES = 10;
       do {
         attempts++;
-        let randomLevels = await this.getRandomLevels(2);
+        let randomLevels = await this.getRandomLevels(2);//Math.floor(Math.random() * 2) +
         levels = levels.concat(randomLevels);
   
         for(let lvl of levels) {
           lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 80, 75, 4000);
           lvl.speedrunScore = (this.scoreTags(lvl.tags) + lvl.stats.timeScore);
           //lvl.speedrunScore = 10;
+
+          if(lvl.records.FastestTime[0].value < 5) {
+            lvl.speedrunScore = -100;
+          }
         }
 
         levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
