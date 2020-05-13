@@ -18,6 +18,8 @@ function RaceEntrants (props) {
         return <h1 style={{ width: '100%', textAlign: 'center' }}>No Entrants Yet</h1>
     }
 
+
+    
     let entrants = _.sortBy(props.entrants, (x => x.currentBestTime));
 
     // entrants = [{
@@ -29,38 +31,59 @@ function RaceEntrants (props) {
     //     rumpusAlias: 'Spekio'
     // },
     // {
-    //     currentBestTime: 145,
+    //     currentBestTime: 146,
     //     rumpusAlias: 'Cprice'
     // },
     // {
-    //     currentBestTime: 145,
+    //     currentBestTime: 146,
     //     rumpusAlias: 'Levelheader'
     // },
     // {
-    //     currentBestTime: 145,
+    //     currentBestTime: 147,
     //     rumpusAlias: 'TripleB'
     // },
     // {
     //     rumpusAlias: 'QuantumAnomly'
     // }]
 
-    return (
-    
-    <>
-    <div className='row rh'>
-        <div className='col-md-2 th'>Position</div>
-        <div className='col-md-6 th'>Player</div>
-        <div className='col-md-4 th'>Best Time</div>
-    </div>
-    {entrants.map((x, i) => {
-        
+    let assignPlace = (results, column) => {
+        if(results.length === 0) {
+            return;
+        }
 
-        return (
-        <div className='row tr' key={i}>
-            <div className='col-md-2 td'><div className='entrant-text'>{!!x.currentBestTime ? getPosition(i + 1) : ''}</div></div>
-            <div className='col-md-6 td'><div className='entrant-text'>{x.rumpusAlias}</div></div>
-            <div className='col-md-4 td'><div className='entrant-text'>{x.currentBestTime !== null ? `${x.currentBestTime} s` : ''}</div></div>
-        </div>);
+        let currentPlace = 1;
+
+        results[0].position = currentPlace;
+        for(var i = 1; i < results.length; i++) {
+            if(results[i][column] > results[i-1][column]) {
+                currentPlace = i+1;
+            }
+
+            results[i].position = currentPlace;
+        }
+
+        return results;
+    }
+
+    entrants = assignPlace(entrants, 'currentBestTime');    
+
+    return (
+        
+        <>
+        <div className='row rh'>
+            <div className='col-md-2 th'>Position</div>
+            <div className='col-md-5 th'>Player</div>
+            <div className='col-md-3 th'>Best Time</div>
+            <div className='col-md-2 th'>Wins</div>
+        </div>
+        {entrants.map((x, i) => {
+            return (
+            <div className='row tr' key={i}>
+                <div className='col-md-2 td'><div className='entrant-text'>{!!x.currentBestTime ? getPosition(x.position) : ''}</div></div>
+                <div className='col-md-5 td'><div className='entrant-text'>{x.rumpusAlias || x.discordDisplayName}</div></div>
+                <div className='col-md-3 td'><div className='entrant-text'>{(x.currentBestTime !== undefined && x.currentBestTime !== null) ? `${x.currentBestTime} s` : ''}</div></div>
+            <div className='col-md-2 td'><div className='entrant-text'>{x.wins}</div></div>
+            </div>);
     })}
     </>
     );

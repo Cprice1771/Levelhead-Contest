@@ -21,6 +21,10 @@ let roomEntrant = mongoose.Schema({
         type: String,
         required: false
     },
+    discordDisplayName: {
+        type: String,
+        required: false
+    },
     lastUpdatedDate: {
         type: Date,
         required: true,
@@ -28,6 +32,10 @@ let roomEntrant = mongoose.Schema({
     lastKeepAlive: {
         type: Date,
         required: false,
+    },
+    wins: {
+        type: Number,
+        required: false
     }
 })
 let RoomEntrant = module.exports = mongoose.model('RoomEntrant', roomEntrant);

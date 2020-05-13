@@ -28,12 +28,12 @@ class RaceWinners extends Component {
         }
 
         return (<>
-            <div style={{ textAlign: 'center'}}><h1>Winners!</h1></div>
+            <div style={{ textAlign: 'center', paddingBottom: '50px'}}><h1 style={{fontWeight: '800', fontSize: '70px'}}>Winners!</h1></div>
             <div className='winner-box'>
                
                 <div className='tpy-1'>
                     { winners.length > 1 && <> 
-                    <div className='race-winner-text'>{winners[1].rumpusAlias}</div>
+                    <div className='race-winner-text'>{winners[1].rumpusAlias || winners[1].discordDisplayName}</div>
                     <img src="./assets/item_gr-18_0.png" width="100"/>
                     </>
                     }
@@ -41,7 +41,7 @@ class RaceWinners extends Component {
                 </div>
                 <div className='tpy-2'>
                 { winners.length > 0 && <> 
-                    <div className='race-winner-text'>{winners[0].rumpusAlias}</div>
+                    <div className='race-winner-text'>{winners[0].rumpusAlias || winners[0].discordDisplayName}</div>
                     <img src="./assets/item_gr-18_1.png" width="100"/>
                     </>
                 }
@@ -50,7 +50,7 @@ class RaceWinners extends Component {
                 </div>
                 <div className='tpy-3'>
                 { winners.length > 2 && <> 
-                    <div className='race-winner-text'>{winners[2].rumpusAlias}</div>
+                    <div className='race-winner-text'>{winners[2].rumpusAlias || winners[2].discordDisplayName}</div>
                     <img src="./assets/item_gr-18_2.png" width="100"/>
                     </>
                 }

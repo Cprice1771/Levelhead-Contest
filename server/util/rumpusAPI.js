@@ -131,7 +131,7 @@ class RumpusAPI {
     async getRecentRecords(recordType, params) {
       const httpClient = await this.getClient();
       const formattedParams = this.getUrlParams(params);
-      return (await httpClient.get(`levelhead/recent-records/${recordType}?${formattedParams}`)).data.data;
+      return (await httpClient.get(`levelhead/recent-records/${recordType}?${formattedParams}&DieBlopfish=${new Date().getTime()}`)).data.data;
     }
 
     

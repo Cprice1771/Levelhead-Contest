@@ -46,13 +46,20 @@ class ContestList extends Component {
     
     render() {
 
-        let events = this.state.events.map(x => {
+        let events = [];
+
+        events.push(<EventCard 
+            _id=''
+            eventType='race'
+            name='Levelhead Race'
+            subtitle='Race against your friends!'
+        />);
+        
+        events = events.concat(this.state.events.map(x => {
             return <EventCard 
                 {...x}
             />
-        })
-        
-        
+        }));
 
         return <>
         <div className='pull-right'><span>
