@@ -4,6 +4,9 @@ const RoomEntrants = require('../models/multiplayer/roomEntrant');
 const Room = require('../models/multiplayer/room');
 const moment = require('moment');
 const SocketManager = require('./SocketManager');
+const { Random } = require("random-js");
+
+
 class MultiplayerHelpers {
     constructor() {
         this.getRandomSpeedrunLevel = this.getRandomSpeedrunLevel.bind(this);
@@ -14,23 +17,20 @@ class MultiplayerHelpers {
         this.startDowntimeForRoom = this.startDowntimeForRoom.bind(this);
         this.updateRoom = this.updateRoom.bind(this);
         this.hasAnyonePlayed = this.hasAnyonePlayed.bind(this);
+
+        this.random = new Random(); // uses the nativeMath engine
     }
 
-    async getRandomLevels(diamonds) {
-      var secondsDiff = (new Date().getTime() - new Date(2020, 4, 1).getTime()) / 1000;
-      var randomSeconds = Math.floor(Math.random() * secondsDiff);
-      var randomGem = (Math.random() * 200) + 100;
+    async getRandomLevels(diamonds, maxGem, tiebreakerItemId = null) {
       return await RumpusAPI.searchLevels({
-        sort: 'HiddenGem', //-createdAt TODO
-        //levelIds: ['mznrg6z', 'dnclz0w', 'mmbmcff', '9r0tl65', 'cl21zht', 'mcw8f6q', '409vd9j'],//TODO remove me
-        Diamonds: diamonds,
-        //tower: true,
+        sort: 'HiddenGem',
+        maxDiamonds: diamonds,
+        tower: true,
         limit: 32,
-        //minSecondsAgo: randomSeconds,
-        maxSecondsAgo: 86400 * 10,
-        maxHiddenGem: randomGem,
+        maxHiddenGem: maxGem,
         includeStats: true,
         includeRecords: true,
+        tiebreakerItemId: tiebreakerItemId
       });
     }
 
@@ -50,20 +50,38 @@ class MultiplayerHelpers {
       SocketManager.emit(`room-update-${room._id}`, roomResp);
     }
 
-    async getRandomSpeedrunLevel(userIds) {
+    async getRandomSpeedrunLevel(room, userIds) {
+
+      if(room.levelsInQueue && room.levelsInQueue.length > 0) {
+        do{
+          let idToPlay = room.levelsInQueue.shift();
+          if(!(await this.hasAnyonePlayed(idToPlay, userIds))) {
+            var level = await RumpusAPI.searchLevels({
+              levelIds: [idToPlay],
+              includeStats: true,
+              includeRecords: true,
+            });
+            
+            return level[0];
+          }
+        } while(room.levelsInQueue.length > 0)
+      }
+
       let levels = [];
       let attempts = 0;
-      const MAX_TRIES = 10;
+      const MAX_TRIES = 20;
+      let maxGem = 10000;
+      let tieBreakerId = null;
       do {
         attempts++;
-        let randomLevels = await this.getRandomLevels(2);//Math.floor(Math.random() * 2) +
+        let randomLevels = await this.getRandomLevels(2, maxGem, tieBreakerId);
+        maxGem = randomLevels[randomLevels.length - 1].stats.HiddenGem;
+        tieBreakerId = randomLevels[randomLevels.length - 1]._id
         levels = levels.concat(randomLevels);
   
         for(let lvl of levels) {
-          lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin, 80, 75, 4000);
+          lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin);
           lvl.speedrunScore = (this.scoreTags(lvl.tags) + lvl.stats.timeScore);
-          //lvl.speedrunScore = 10;
-
           if(lvl.records.FastestTime[0].value < 5) {
             lvl.speedrunScore = -100;
           }
@@ -71,32 +89,21 @@ class MultiplayerHelpers {
 
         levels = _.orderBy(levels, ['speedrunScore'], ['desc']);
         levels = levels.filter(x => x.speedrunScore >= 0);
-      } while(levels.length < 160 && attempts < MAX_TRIES);
-      if(levels.length == 0) {
-        levels = levels.concat(await this.getRandomLevels(2));
-      }
-      levels = _.shuffle(levels);
+      } while(attempts < MAX_TRIES);
 
-      var levelToPick = 0;
-      for(levelToPick = 0; levelToPick < levels.length; levelToPick++) {
-        if(!await this.hasAnyonePlayed(levels[levelToPick].levelId, userIds)) {
-          break;
-        }
-      }
-    
-      if(levelToPick >= levels.length) {
-        levelToPick = 0; 
-      }
-
-      return levels[levelToPick];
+      let levelToPlay = levels.shift();
+      room.levelsInQueue = levels.map(x => x.levelId);
+      //await room.save();
+      return levelToPlay;
     }
 
-    getTimeScore(x, mean, std, multiply) {
+    getTimeScore(averageTimePerWin) {
 
-      if(x > 180 || x < 15) {
+      if(averageTimePerWin > 180 || averageTimePerWin < 15) {
         return -10000;
       }
-      return multiply * (1 / (std*Math.sqrt(2 * Math.PI))) * Math.exp(-((x-mean)^2)/(2*std*std))
+
+      return 0;
     }
 
     scoreTags(tags) {
@@ -117,22 +124,22 @@ class MultiplayerHelpers {
         ltag_choice: 0,
         ltag_raceway: 10,
         ltag_traps: 0,
-        ltag_brawler: -1000,
+        ltag_brawler: 0,
         ltag_eye: 0,
         ltag_paced: 10,
         ltag_puzzle: -5,
         ltag_bombs: 0,
         ltag_blasters: 0,
         ltag_paths: 0,
-        ltag_contraption: -100,
+        ltag_contraption: 0,
         ltag_clever: 5,
         ltag_elite: -20,
         ltag_musicbox: 0,
-        ltag_chase: -10,
+        ltag_chase: 0,
         ltag_powerup: 0,
-        ltag_complex: -5,
-        ltag_throwing: -5,
-        ltag_explore: -10,
+        ltag_complex: 0,
+        ltag_throwing: 0,
+        ltag_explore: 0,
         ltag_switch: 0,
         ltag_igneum: 0,
         ltag_kaizo: 0,
@@ -140,12 +147,12 @@ class MultiplayerHelpers {
         ltag_juicefusion: 0,
         ltag_quick: 10,
         ltag_long: -10,
-        ltag_shop: -10,
+        ltag_shop: 0,
         ltag_faceblaster: 0,
-        ltag_onescreen: -10,
+        ltag_onescreen: 0,
         ltag_troll: -10000,
-        ltag_teach: -10,
-        ltag_boss: -20,
+        ltag_teach: 10,
+        ltag_boss: 0,
       }
 
       for(var tag in tags) {
@@ -157,7 +164,7 @@ class MultiplayerHelpers {
 
     async startLevelForRoom(room) {
         var users = (await RoomEntrants.find({ roomId: room._id })).map(x => x.rumpusId);
-        let level = (await this.getRandomSpeedrunLevel(users));
+        let level = (await this.getRandomSpeedrunLevel(room, users));
         room.currentLevelCode = level.levelId;
         room.levelDetails = level;
         room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
@@ -166,7 +173,8 @@ class MultiplayerHelpers {
         await room.save();
 
         let entrants = await RoomEntrants.find({ roomId: room._id });
-        
+
+
         for(var entry of entrants) {
             entry.currentBestTime = null;
             await entry.save();
@@ -176,6 +184,19 @@ class MultiplayerHelpers {
     }
 
     async startDowntimeForRoom(room) {
+
+        let entrants = await RoomEntrants.find({ roomId: room._id });
+          
+        entrants = _.sortBy(entrants, (x => x.currentBestTime));
+
+        if(entrants.length > 0 && entrants[0].currentBestTime != null) {
+          if(!entrants[0].wins) {
+            entrants[0].wins = 0;
+          }
+          entrants[0].wins++;
+          await entrants[0].save();
+        }
+
         room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
         room.nextPhaseStartTime = moment(room.currentPhaseStartTime).add(room.downtime, 'seconds').toDate();
         room.phase = 'downtime';
@@ -185,7 +206,7 @@ class MultiplayerHelpers {
 
     async hasAnyonePlayed(levelId, userIds) {
       const LIMIT = 128;
-
+      
       if(!userIds || userIds.length === 0) {
         return false;
       }

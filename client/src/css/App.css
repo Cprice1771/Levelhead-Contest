@@ -259,7 +259,7 @@ input:checked + .slider:before {
   margin: auto; }
 
 .winner-box {
-  height: 500px;
+  height: 350px;
   position: relative; }
 
 .first-award {
@@ -284,19 +284,19 @@ input:checked + .slider:before {
   from {
     height: 0px; }
   to {
-    height: 175px; } }
+    height: 125px; } }
 
 @keyframes raise2 {
   from {
     height: 0px; }
   to {
-    height: 300px; } }
+    height: 200px; } }
 
 @keyframes raise3 {
   from {
     height: 0px; }
   to {
-    height: 100px; } }
+    height: 75px; } }
 
 .tpy-1 {
   text-align: center;

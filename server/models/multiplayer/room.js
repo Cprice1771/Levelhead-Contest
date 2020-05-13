@@ -32,6 +32,10 @@ let room = mongoose.Schema({
     levelDetails: {
         type: Object,
         required: false
+    },
+    levelsInQueue: {
+        type: Array,
+        required: false
     }
 })
 let Room = module.exports = mongoose.model('Room', room);

@@ -113,7 +113,7 @@ class ContestCreator extends Component {
 
     getReasonableDates() {
         return moment().diff(moment(this.state.startDate), 'days') <= 7  && 
-                Math.abs(moment(this.state.startDate).diff(moment(this.state.votingEndDate), 'days')) <= 28
+                Math.abs(moment(this.state.startDate).diff(moment(this.state.votingEndDate), 'days')) <= 84
     }
 
     handleSubmit(event) {
@@ -353,7 +353,7 @@ class ContestCreator extends Component {
                 }
                 {!this.getReasonableDates() && 
                     <Alert variant='danger'>
-                        Contests must start within a week and must not run more than 4 weeks
+                        Contests must start within a week and must not run more than 8 weeks
                     </Alert>
                 }
                 </Form.Row>

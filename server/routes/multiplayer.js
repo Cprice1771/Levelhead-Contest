@@ -58,7 +58,6 @@ router.post('/start-next-level', catchErrors(async (req, res) => {
     }
 
     await MultiplayerHelpers.startLevelForRoom(room);
-
     room = room.toObject();
     let entrants = await RoomEntrants.find({ roomId: room._id });
     room.entrants = entrants;
@@ -172,6 +171,7 @@ router.post('/join-room', catchErrors(async (req, res) => {
         userId: req.body.userId,
         rumpusId: user.rumpusId,
         rumpusAlias: user.rumpusAlias,
+        discordDisplayName: user.discordDisplayName,
         roomId: req.body.roomId,
         lastUpdatedDate: new Date(),
         lastKeepAlive: new Date(),

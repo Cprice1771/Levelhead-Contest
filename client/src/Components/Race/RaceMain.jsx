@@ -209,66 +209,66 @@ class RaceMain extends Component {
                     <h2>Multiplayer Race</h2>  
                 </div>
             </div>
-            { (new Date() > new Date(this.state.room.nextPhaseStartTime))  ? this.waiting() : 
+            { moment(this.state.room.nextPhaseStartTime).diff(new Date(), 'seconds') <= 0 ? this.waiting() : 
             <>
-            <div className="card-body">
-                { this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.leaveRace()}>Leave</button> }
-                { !this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.joinRace()}>Enter</button> }
-                { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enter</button> }
+                <div className="card-body">
+                    { this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.leaveRace()}>Leave</button> }
+                    { !this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.joinRace()}>Enter</button> }
+                    { !this.state.loggedIn && <button className='b1'  onClick={() => { LoginActions.initiateLogin(); }}>Login to Enter</button> }
 
-                {/* <button className='b2'  onClick={() => { this.startNextPhase(); }}>Start Next Phase</button>
-                <button className='b2'  onClick={() => { this.updateScores(); }}>Update Scores</button> */}
-            </div>
+                    {/* <button className='b2'  onClick={() => { this.startNextPhase(); }}>Start Next Phase</button>
+                    <button className='b2'  onClick={() => { this.updateScores(); }}>Update Scores</button> */}
+                </div>
 
-            <div className="card-rules pad-bottom">
-                { this.state.room.phase === 'level' && <>
-
-                
-                    <div className='row justify-content-center'>
-                        <h1>{this.state.room.levelDetails ? this.state.room.levelDetails.title : ''}</h1>
-                    </div>
-                    <div className='row justify-content-center'>
-                        <a className='racelevellink' ref={this.tooptipRef}
-                        onBlur={() => { this.setState({showTooltip: false}) }}
-                            onClick={(e) => {
-                                navigator.clipboard.writeText(this.state.room.currentLevelCode);
-                                this.setState({ showTooltip: true });
-                                setTimeout(() => {
-                                    this.setState({ showTooltip: false });
-                                }, 1000);
-                            }}>
-                                {this.state.room.currentLevelCode}<i className="fas fa-copy"></i>
-                        </a>
-                        { this.canBookmark && 
-                            <span className='race-bookmark'><i className='fas fa-bookmark fa-5x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { this.bookmark([this.state.room.currentLevelCode])}}> </i></span>
-                        }
-                   
-                        <Overlay target={this.tooptipRef.current} show={this.state.showTooltip}  placement="right">
-                            {(props) => (
-                            <Tooltip id="overlay-example" {...props}>
-                                <span style={{ fontSize: '25px' }}>Copied</span>
-                            </Tooltip>
-                            )}
-                        </Overlay>
-                    </div>
+                <div className="card-rules pad-bottom">
+                    { this.state.room.phase === 'level' && <>
+                        <div className='row justify-content-center'>
+                            <h1>{this.state.room.levelDetails ? this.state.room.levelDetails.title : ''}</h1>
+                        </div>
+                        <div className='row justify-content-center'>
+                            <a className='racelevellink' ref={this.tooptipRef}
+                            onBlur={() => { this.setState({showTooltip: false}) }}
+                                onClick={(e) => {
+                                    navigator.clipboard.writeText(this.state.room.currentLevelCode);
+                                    this.setState({ showTooltip: true });
+                                    setTimeout(() => {
+                                        this.setState({ showTooltip: false });
+                                    }, 1000);
+                                }}>
+                                    {this.state.room.currentLevelCode}<i className="fas fa-copy"></i>
+                            </a>
+                            { this.canBookmark && 
+                                <span className='race-bookmark'><i className='fas fa-bookmark fa-5x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={() => { this.bookmark([this.state.room.currentLevelCode])}}> </i></span>
+                            }
                     
-                
-                <CountDown toDate={this.state.room.nextPhaseStartTime} title={``}/>
-                </>
-                }
+                            <Overlay target={this.tooptipRef.current} show={this.state.showTooltip}  placement="right">
+                                {(props) => (
+                                <Tooltip id="overlay-example" {...props}>
+                                    <span style={{ fontSize: '25px' }}>Copied</span>
+                                </Tooltip>
+                                )}
+                            </Overlay>
+                        </div>
 
-                { this.state.room.phase === 'downtime' && <>
-                <RaceWinners winners={this.state.room.entrants} />
-                <CountDown toDate={this.state.room.nextPhaseStartTime} title={`Next level starts in`}/>
-                </>
-                }
+                        <CountDown toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
 
-                <RaceEntrants 
-                    entrants={this.state.room.entrants}
-                />
-            </div>
+                            this.setState({ forceRender: new Date().getTime() }) }} title={``}/>
+                        </>
+                    }
+
+                    { this.state.room.phase === 'downtime' && <>
+                    <RaceWinners winners={this.state.room.entrants} />
+                    <CountDown toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
+                        this.setState({ forceRender: new Date().getTime() }) }} title={`Next level starts in`}/>
+                    </>
+                    }
+
+                    <RaceEntrants 
+                        entrants={this.state.room.entrants}
+                    />
+                </div>
             </>
-    }
+        }
             
             <JoinRace 
                 showModal={this.state.showJoinModal}
