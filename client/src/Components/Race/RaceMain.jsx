@@ -120,6 +120,12 @@ class RaceMain extends Component {
                 }
             });
             socket.on(`room-update-${resp.data._id}`, room => {
+
+                if(this.state.room.phase === 'downtime' && room.phase === 'level') {
+                    var audio = new Audio('/assets/hjm-glass_bell_1.wav');
+                    audio.play();
+                }
+
                 this.setState({
                     room
                 });
@@ -192,7 +198,7 @@ class RaceMain extends Component {
         return (<div>
             { this.state.room && this.state.room.phase === 'downtime' && <span style={{ width: '100%', textAlign:'center' }}><h1>Finding next level...</h1></span>}
             { this.state.room && this.state.room.phase === 'level' && <span style={{ width: '100%', textAlign:'center' }}><h1>Getting scores...</h1></span>}
-            <div className='spinner-container'><img className='rotate-slide' width='100' height='100' src='./assets/item_whizblade_0.png' /></div>
+            <div className='spinner-container'><img className='rotate-slide' width='100' height='100' src='/assets/item_whizblade_0.png' /></div>
         
         </div>
         )
@@ -250,17 +256,16 @@ class RaceMain extends Component {
                             </Overlay>
                         </div>
 
-                        <CountDown toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
-
+                        <CountDown playSound toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
                             this.setState({ forceRender: new Date().getTime() }) }} title={``}/>
                         </>
                     }
 
                     { this.state.room.phase === 'downtime' && <>
-                    <RaceWinners winners={this.state.room.entrants} />
-                    <CountDown toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
-                        this.setState({ forceRender: new Date().getTime() }) }} title={`Next level starts in`}/>
-                    </>
+                        <RaceWinners winners={this.state.room.entrants} />
+                        <CountDown toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
+                            this.setState({ forceRender: new Date().getTime() }) }} title={`Next level starts in`}/>
+                        </>
                     }
 
                     <RaceEntrants 

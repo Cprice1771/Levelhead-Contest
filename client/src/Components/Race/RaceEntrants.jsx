@@ -72,17 +72,21 @@ function RaceEntrants (props) {
         <>
         <div className='row rh'>
             <div className='col-md-2 th'>Position</div>
-            <div className='col-md-5 th'>Player</div>
+            <div className='col-md-4 th'>Player</div>
             <div className='col-md-3 th'>Best Time</div>
-            <div className='col-md-2 th'>Wins</div>
+            <div className='col-md-1 th'>🥇</div>
+            <div className='col-md-1 th'>🥈</div>
+            <div className='col-md-1 th'>🥉</div>
         </div>
         {entrants.map((x, i) => {
             return (
             <div className='row tr' key={i}>
                 <div className='col-md-2 td'><div className='entrant-text'>{!!x.currentBestTime ? getPosition(x.position) : ''}</div></div>
-                <div className='col-md-5 td'><div className='entrant-text'>{x.rumpusAlias || x.discordDisplayName}</div></div>
+                <div className='col-md-4 td'><div className='entrant-text'>{x.rumpusAlias || x.discordDisplayName}</div></div>
                 <div className='col-md-3 td'><div className='entrant-text'>{(x.currentBestTime !== undefined && x.currentBestTime !== null) ? `${x.currentBestTime} s` : ''}</div></div>
-            <div className='col-md-2 td'><div className='entrant-text'>{x.wins}</div></div>
+                <div className='col-md-1 td'><div className='entrant-text'>{x.golds}</div></div>
+                <div className='col-md-1 td'><div className='entrant-text'>{x.silvers}</div></div>
+                <div className='col-md-1 td'><div className='entrant-text'>{x.bronzes}</div></div>
             </div>);
     })}
     </>

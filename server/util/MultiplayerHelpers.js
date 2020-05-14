@@ -110,12 +110,12 @@ class MultiplayerHelpers {
       var score = 0;
       
       let tagScoreSheet = {
-        ltag_elite: -15,
+        ltag_elite: -100,
         ltag_newbie: 5,
         ltag_simple: 5,
         ltag_casual: 10,
         ltag_panic: 0,
-        ltag_pjp: -5,
+        ltag_pjp: 0,
         ltag_precise: 10,
         ltag_precarious: 10,
         ltag_electrodongle: 5,
@@ -124,18 +124,17 @@ class MultiplayerHelpers {
         ltag_choice: 0,
         ltag_raceway: 10,
         ltag_traps: 0,
-        ltag_brawler: 0,
+        ltag_brawler: -100,
         ltag_eye: 0,
         ltag_paced: 10,
-        ltag_puzzle: -5,
+        ltag_puzzle: -100,
         ltag_bombs: 0,
         ltag_blasters: 0,
         ltag_paths: 0,
-        ltag_contraption: 0,
+        ltag_contraption: -100,
         ltag_clever: 5,
-        ltag_elite: -20,
         ltag_musicbox: 0,
-        ltag_chase: 0,
+        ltag_chase: -100,
         ltag_powerup: 0,
         ltag_complex: 0,
         ltag_throwing: 0,
@@ -146,7 +145,7 @@ class MultiplayerHelpers {
         ltag_dontmove: -100000,
         ltag_juicefusion: 0,
         ltag_quick: 10,
-        ltag_long: -10,
+        ltag_long: 0,
         ltag_shop: 0,
         ltag_faceblaster: 0,
         ltag_onescreen: 0,
@@ -190,11 +189,27 @@ class MultiplayerHelpers {
         entrants = _.sortBy(entrants, (x => x.currentBestTime));
 
         if(entrants.length > 0 && entrants[0].currentBestTime != null) {
-          if(!entrants[0].wins) {
-            entrants[0].wins = 0;
+          if(!entrants[0].golds) {
+            entrants[0].golds = 0;
           }
-          entrants[0].wins++;
+          entrants[0].golds++;
           await entrants[0].save();
+        }
+
+        if(entrants.length > 1 && entrants[1].currentBestTime != null) {
+          if(!entrants[1].silvers) {
+            entrants[1].silvers = 0;
+          }
+          entrants[1].silvers++;
+          await entrants[1].save();
+        }
+
+        if(entrants.length > 2 && entrants[2].currentBestTime != null) {
+          if(!entrants[2].bronzes) {
+            entrants[2].bronzes = 0;
+          }
+          entrants[2].bronzes++;
+          await entrants[2].save();
         }
 
         room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
