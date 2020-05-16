@@ -28,7 +28,7 @@ class RaceWinners extends Component {
         }
 
         return (<>
-            <div style={{ textAlign: 'center', paddingBottom: '50px'}}><h1 style={{fontWeight: '800', fontSize: '70px'}}>Winners!</h1></div>
+            <div style={{ textAlign: 'center', paddingBottom: '50px'}}><h1 className='winner-text'>Winners!</h1></div>
             <div className='winner-box'>
                
                 <div className='tpy-1'>

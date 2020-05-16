@@ -47,6 +47,7 @@ class RaceMain extends Component {
     componentWillUnmount() {
         UserStore.removeChangeListener(this.userChange);
         clearInterval(this.keepAliveInterval);
+        this.state.socket.close();
     }
 
     isEntered() {
@@ -215,7 +216,7 @@ class RaceMain extends Component {
                     <h2>Multiplayer Race</h2>  
                 </div>
             </div>
-            { moment(this.state.room.nextPhaseStartTime).diff(new Date(), 'seconds') <= 0 ? this.waiting() : 
+            { moment(this.state.room.nextPhaseStartTime).diff(new Date(), 'seconds') <= 0  ? this.waiting() : 
             <>
                 <div className="card-body">
                     { this.isEntered() && this.state.loggedIn && <button className='b1'  onClick={() => this.leaveRace()}>Leave</button> }
@@ -255,7 +256,7 @@ class RaceMain extends Component {
                                 )}
                             </Overlay>
                         </div>
-
+ 
                         <CountDown playSound toDate={this.state.room.nextPhaseStartTime} onTimeRunOut={() =>{ 
                             this.setState({ forceRender: new Date().getTime() }) }} title={``}/>
                         </>

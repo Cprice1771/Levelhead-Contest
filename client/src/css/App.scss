@@ -365,7 +365,7 @@ $secondaryBlue: #45A29E;
   color: $secondaryBlue;
   cursor: pointer;
   margin-left: 10px;
-  font-size: 100px;
+  font-size: 7rem;
   &:hover {
     color: $primaryBlue;
     text-decoration: none;
@@ -374,6 +374,25 @@ $secondaryBlue: #45A29E;
     margin-left: 10px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .racelevellink:not([href]) {
+    color: $secondaryBlue;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 4rem;
+    &:hover {
+      color: $primaryBlue;
+      text-decoration: none;
+    }
+     i {
+      margin-left: 10px;
+    }
+  }
+
+}
+
+
 
 .race-card {
   h1 {

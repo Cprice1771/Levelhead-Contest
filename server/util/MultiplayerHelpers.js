@@ -197,18 +197,42 @@ class MultiplayerHelpers {
         }
 
         if(entrants.length > 1 && entrants[1].currentBestTime != null) {
-          if(!entrants[1].silvers) {
-            entrants[1].silvers = 0;
+
+          if(entrants[1].currentBestTime === entrants[0].currentBestTime) {
+            if(!entrants[1].golds) {
+              entrants[1].golds = 0;
+            }
+            entrants[1].golds++;
+          } else {
+
+            if(!entrants[1].silvers) {
+              entrants[1].silvers = 0;
+            }
+            entrants[1].silvers++;
           }
-          entrants[1].silvers++;
           await entrants[1].save();
         }
 
         if(entrants.length > 2 && entrants[2].currentBestTime != null) {
-          if(!entrants[2].bronzes) {
-            entrants[2].bronzes = 0;
+
+          if(entrants[2].currentBestTime === entrants[0].currentBestTime) {
+            if(!entrants[2].golds) {
+              entrants[2].golds = 0;
+            }
+            entrants[2].golds++;
+          } else if(entrants[2].currentBestTime === entrants[1].currentBestTime){
+
+            if(!entrants[2].silvers) {
+              entrants[2].silvers = 0;
+            }
+            entrants[2].silvers++;
+          } else {
+
+            if(!entrants[2].bronzes) {
+              entrants[2].bronzes = 0;
+            }
+            entrants[2].bronzes++;
           }
-          entrants[2].bronzes++;
           await entrants[2].save();
         }
 
