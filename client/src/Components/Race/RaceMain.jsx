@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
-import ReactModal from 'react-modal';
 import UserStore from '../../Stores/UserStore';
 import LoginActions from '../../actions/LoginActions';
 import { endPoints } from '../../Constants/Endpoints'
@@ -14,8 +13,6 @@ import socketIOClient from "socket.io-client";
 import { Overlay, Tooltip } from 'react-bootstrap'
 import RaceWinners from './RaceWinners';
 import ConfigStore from '../../Stores/ConfigStore';
-
-const ENDPOINT = "localhost:3000";
 
 class RaceMain extends Component {
 
@@ -123,8 +120,12 @@ class RaceMain extends Component {
             socket.on(`room-update-${resp.data._id}`, room => {
 
                 if(this.state.room.phase === 'downtime' && room.phase === 'level') {
-                    var audio = new Audio('/assets/hjm-glass_bell_1.wav');
-                    audio.play();
+                    try {
+                        var audio = new Audio('/assets/hjm-glass_bell_1.wav');
+                        audio.play();
+                    } catch(err) {
+
+                    }
                 }
 
                 this.setState({
@@ -168,30 +169,20 @@ class RaceMain extends Component {
     }
 
     async updateScores() {
-        var resp = await HttpClient.post(endPoints.GET_SCORES, {
+        await HttpClient.post(endPoints.GET_SCORES, {
             roomId: this.state.room._id
         });
     }
 
     async startNextPhase() {
         if(this.state.room.phase === 'level') {
-            var resp = await HttpClient.post(endPoints.START_DOWNTIME, {
+            await HttpClient.post(endPoints.START_DOWNTIME, {
                 roomId: this.state.room._id
             });
-            // if(!!resp) {
-            //     this.setState({
-            //         room: resp.data
-            //     });
-            // }
         } else {
-            var startResp = await HttpClient.post(endPoints.START_LEVEL, {
+            await HttpClient.post(endPoints.START_LEVEL, {
                 roomId: this.state.room._id
             });
-            // if(!!startResp) {
-            //     this.setState({
-            //         room: startResp.data
-            //     });
-            // }
         }
     }
 
@@ -199,7 +190,7 @@ class RaceMain extends Component {
         return (<div>
             { this.state.room && this.state.room.phase === 'downtime' && <span style={{ width: '100%', textAlign:'center' }}><h1>Finding next level...</h1></span>}
             { this.state.room && this.state.room.phase === 'level' && <span style={{ width: '100%', textAlign:'center' }}><h1>Getting scores...</h1></span>}
-            <div className='spinner-container'><img className='rotate-slide' width='100' height='100' src='/assets/item_whizblade_0.png' /></div>
+            <div className='spinner-container'><img className='rotate-slide' width='100' height='100' src='/assets/item_whizblade_0.png' alt='whizz blade'/></div>
         
         </div>
         )

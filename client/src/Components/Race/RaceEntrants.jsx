@@ -92,9 +92,9 @@ function RaceEntrants (props) {
             {/* <div className='col-md-1 col-1 th'></div> */}
             <div className='col-md-5 col-6 th'>Player</div>
             <div className='col-md-2 col-3 th'>Best Time</div>
-            <div className='col-md-1 d-none d-md-block th'>🥇</div>
-            <div className='col-md-1 d-none d-md-block th'>🥈</div>
-            <div className='col-md-1 d-none d-md-block th'>🥉</div>
+            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='gold-medals'>🥇</span></div>
+            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='silver-medals'>🥈</span></div>
+            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='bronze-medals'>🥉</span></div>
         </div>
         {entrants.map((x, i) => {
             return (

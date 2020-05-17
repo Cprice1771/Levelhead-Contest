@@ -7,28 +7,32 @@ class CountDown extends Component {
         super(props);
 
         this.state = {
-            intervalHandle: null
         }
 
         this.updateTimeLeft = this.updateTimeLeft.bind(this);
+        this.intervalHandle = null;
     };
     
     componentDidMount() {
-        if(this.state.intervalHandle) {
+        if(this.intervalHandle) {
             clearInterval(this.state.intervalHandle);
         }
-        this.setState({intervalHandle: setInterval(this.updateTimeLeft, 1000)});
+        this.intervalHandle = setInterval(this.updateTimeLeft, 1000)
     }
     
     componentWillUnmount() {
-        clearInterval(this.state.intervalHandle);
+        clearInterval(this.intervalHandle);
     }
 
     updateTimeLeft() {
 
         if(this.props.playSound && moment(this.props.toDate).diff(new Date(), 'seconds') === 0) {
-            var audio = new Audio('/assets/hjm-glass_bell_1.wav');
-            audio.play();
+            try {
+                var audio = new Audio('/assets/hjm-glass_bell_1.wav');
+                audio.play();
+            } catch(err) {
+
+            }
             if(this.props.onTimeRunOut) {
                 this.props.onTimeRunOut();
             }

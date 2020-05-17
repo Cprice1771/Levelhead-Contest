@@ -34,7 +34,7 @@ class RaceWinners extends Component {
                 <div className='tpy-1'>
                     { winners.length > 1 && <> 
                     <div className='race-winner-text'>{winners[1].rumpusAlias || winners[1].discordDisplayName}</div>
-                    <img src="/assets/item_gr-18_0.png" width="100"/>
+                    <img src="/assets/item_gr-18_0.png" width="100" alt='gr-18'/>
                     </>
                     }
                     <div className="score-bar1">{ getPosition(2) }</div>
@@ -42,7 +42,7 @@ class RaceWinners extends Component {
                 <div className='tpy-2'>
                 { winners.length > 0 && <> 
                     <div className='race-winner-text'>{winners[0].rumpusAlias || winners[0].discordDisplayName}</div>
-                    <img src="/assets/item_gr-18_1.png" width="100"/>
+                    <img src="/assets/item_gr-18_1.png" width="100" alt='gr-18'/>
                     </>
                 }
                     <div className="score-bar2">{ getPosition(1) }</div>
@@ -51,7 +51,7 @@ class RaceWinners extends Component {
                 <div className='tpy-3'>
                 { winners.length > 2 && <> 
                     <div className='race-winner-text'>{winners[2].rumpusAlias || winners[2].discordDisplayName}</div>
-                    <img src="/assets/item_gr-18_2.png" width="100"/>
+                    <img src="/assets/item_gr-18_2.png" width="100" alt='gr-18'/>
                     </>
                 }
                     <div className="score-bar3">{ getPosition(3) }</div>
