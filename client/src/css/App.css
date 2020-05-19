@@ -159,7 +159,7 @@ input:checked + .slider:before {
 
 .th {
   font-weight: bold;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   padding: .75rem;
   background-color: white;
   color: black; }

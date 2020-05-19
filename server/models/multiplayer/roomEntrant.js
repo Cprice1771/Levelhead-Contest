@@ -48,6 +48,10 @@ let roomEntrant = mongoose.Schema({
     golds: {
         type: Number,
         required: false
+    },
+    avatarId: {
+        type: String,
+        required: false,
     }
 })
 let RoomEntrant = module.exports = mongoose.model('RoomEntrant', roomEntrant);

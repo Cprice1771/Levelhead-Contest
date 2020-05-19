@@ -89,8 +89,8 @@ function RaceEntrants (props) {
         <>
         <div className='row rh'>
             <div className='col-md-2 col-3 th'>Position</div>
-            {/* <div className='col-md-1 col-1 th'></div> */}
-            <div className='col-md-5 col-6 th'>Player</div>
+             <div className='col-md-1 d-none d-md-block th'></div> 
+            <div className='col-md-4 col-6 th'>Player</div>
             <div className='col-md-2 col-3 th'>Best Time</div>
             <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='gold-medals'>🥇</span></div>
             <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='silver-medals'>🥈</span></div>
@@ -100,8 +100,8 @@ function RaceEntrants (props) {
             return (
             <div className='row tr justify-content-center align-items-center' key={i}>
                 <div className='col-md-2 col-3 td center'>{!!x.currentBestTime ? getPosition(x.position) : ''}</div>
-                {/* <div className='col-md-1 col-1 td center'><img height='64' src='https://img.bscotch.net/eyJidWNrZXQiOiJydW1wdXMtaW1hZ2VzIiwia2V5IjoiYXZhdGFycy9ncjE4LXNlcmlvdXMucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjoyNTYsImhlaWdodCI6MjU2LCJmaXQiOiJjb250YWluIiwiYmFja2dyb3VuZCI6IiMwMDAwMDAwMCJ9fX0=' /></div> */}
-                <div className='col-md-5 col-6 td'>{x.rumpusAlias || x.discordDisplayName}</div>
+               <div className='col-md-1 d-none d-md-block td center'><img height='64' src={`https://img.bscotch.net/fit-in/64x64/avatars/${x.avatarId || 'bureau-employee'}.webp`} /></div>
+                <div className='col-md-4 col-5 td'>{x.rumpusAlias || x.discordDisplayName}</div>
                 <div className='col-md-2 col-3 td' style={{ textAlign:'right' }}>{(x.currentBestTime !== undefined && x.currentBestTime !== null) ? `${formatSeconds(x.currentBestTime)}` : ''}</div>
                 <div className='col-md-1 d-none d-md-block td medal-col'><div className='medal-text'>{x.golds}</div></div>
                 <div className='col-md-1 d-none d-md-block td medal-col-2'><div className='medal-text'>{x.silvers}</div></div>

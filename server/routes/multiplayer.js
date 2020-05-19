@@ -133,15 +133,15 @@ router.post('/join-room', catchErrors(async (req, res) => {
     if(!user.rumpusId) {
         if(!!req.body.rumpusId) {
 
-            let existingUsers = await User.find({ rumpusId: req.body.rumpusId });
-            if(existingUsers.length > 0) {
-                res.status(400).json({
-                    success: false, 
-                    msg: `That rumpus user already has an account registered! 
-                        If you think this is incorrect please contact us to get this resolved.`
-                });
-                return;
-            }
+            // let existingUsers = await User.find({ rumpusId: req.body.rumpusId });
+            // if(existingUsers.length > 0) {
+            //     res.status(400).json({
+            //         success: false, 
+            //         msg: `That rumpus user already has an account registered! 
+            //             If you think this is incorrect please contact us to get this resolved.`
+            //     });
+            //     return;
+            // }
 
             let foundUser = await RumpusAPI.getUser(req.body.rumpusId);
             if(!foundUser) {
@@ -166,6 +166,18 @@ router.post('/join-room', catchErrors(async (req, res) => {
         }
     }
 
+    let rumpusUser = await RumpusAPI.getUser(user.rumpusId);
+    if(!rumpusUser) {
+        res.status(400).json({
+            success: false, 
+            getRumpusId: true,
+            msg: `Invalid Rumpus ID ${req.body.rumpusId}`
+        });
+        return;
+    }
+
+    
+
     const entrant = new RoomEntrants({
         currentBestTime: null,
         userId: req.body.userId,
@@ -175,6 +187,7 @@ router.post('/join-room', catchErrors(async (req, res) => {
         roomId: req.body.roomId,
         lastUpdatedDate: new Date(),
         lastKeepAlive: new Date(),
+        avatarId: rumpusUser.avatarId,
     });
 
     await entrant.save();

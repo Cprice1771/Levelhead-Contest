@@ -39,7 +39,7 @@ class MultiplayerHelpers {
       let entrants = (await RoomEntrants.find({ roomId: room._id }));
       let activeEntrants = [];
       for(const entrant of entrants) {
-        if(!entrant.lastKeepAlive || moment().diff(moment(entrant.lastKeepAlive), 'seconds') > 120) {
+        if((!entrant.lastKeepAlive || moment().diff(moment(entrant.lastKeepAlive), 'seconds') > 120) || (entrant.lastUpdatedDate && moment().diff(moment(entrant.lastKeepAlive), 'seconds') > 1800)) {
           await RoomEntrants.deleteOne({ _id: entrant._id });
         } else {
           activeEntrants.push(entrant);
