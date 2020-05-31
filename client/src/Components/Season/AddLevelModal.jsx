@@ -30,6 +30,11 @@ class AddLevelModal extends Component {
 
     componentDidMount() {
        this.clearState();
+       if(this.props.editing) {
+           this.setState({...this.props.editing, startType: 'SCHEDULE', 
+           bonusAward:  this.props.editing.bonusAward ? this.props.editing.bonusAward.awardName : 'NONE', 
+           bonusValue: this.props.editing.bonusAward ? this.props.editing.bonusAward.awardValue : '' });
+       }
     }
 
     clearState() {
@@ -111,6 +116,7 @@ class AddLevelModal extends Component {
                     
                     <input type='text' className="form-control"
                         value={this.state.lookupCode} 
+                        disabled={this.props.editing}
                         onChange={(e) => {
                             let newVal = e.target.value;
                             newVal = newVal.substring(0, Math.min(newVal.length, 7))
@@ -300,7 +306,7 @@ class AddLevelModal extends Component {
                         startType: ''
                     }); 
                     }}>
-                Add
+                { this.props.editing ? 'Edit' : 'Add' }
             </button>
            
             

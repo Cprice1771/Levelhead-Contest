@@ -30,6 +30,7 @@ class SeasonLeaderboard extends Component {
         this.state = {
             season: null,
             showEnrollModal: false,
+            toDelete: null,
         }
 
         this.loadSeason = this.loadSeason.bind(this);
@@ -106,25 +107,40 @@ class SeasonLeaderboard extends Component {
 
     async addLevel(level) {
         try {
-            await axios.post(endPoints.ADD_LEVEL, {
-                addedBy : this.state.loggedIn._id,
-                seasonId : this.state.season._id,
-                lookupCode: level.lookupCode,
-                diamondValue: level.diamondValue,
-                platinumValue: level.platinumValue,
-                goldValue: level.goldValue,
-                silverValue: level.silverValue,
-                bronzeValue: level.bronzeValue,
-                startDate: level.startDate,
-                bonusAward: level.bonusAward
-            });
+            if(this.state.selectedLevel) {
+                await axios.post(endPoints.EDIT_LEVEL, {
+                    addedBy : this.state.loggedIn._id,
+                    seasonId : this.state.season._id,
+                    lookupCode: level.lookupCode,
+                    diamondValue: level.diamondValue,
+                    platinumValue: level.platinumValue,
+                    goldValue: level.goldValue,
+                    silverValue: level.silverValue,
+                    bronzeValue: level.bronzeValue,
+                    startDate: level.startDate,
+                    bonusAward: level.bonusAward
+                });
+            } else {
+                await axios.post(endPoints.ADD_LEVEL, {
+                    addedBy : this.state.loggedIn._id,
+                    seasonId : this.state.season._id,
+                    lookupCode: level.lookupCode,
+                    diamondValue: level.diamondValue,
+                    platinumValue: level.platinumValue,
+                    goldValue: level.goldValue,
+                    silverValue: level.silverValue,
+                    bronzeValue: level.bronzeValue,
+                    startDate: level.startDate,
+                    bonusAward: level.bonusAward
+                });
+            }
 
             NotificationManager.success('Level Added');
             this.loadSeason(this.props.match.params.seasonId);
         } catch(err) {
             NotificationManager.error(`Error addning level: ${err}`);
         }
-        this.setState({ showAddLevelModal : false});
+        this.setState({ showAddLevelModal : false, selectedLevel: null});
     }
 
     async enroll(rumpusId) {
@@ -181,6 +197,21 @@ class SeasonLeaderboard extends Component {
                     levels={this.state.season.levelsInSeason}
                     addLevel={()=> { this.setState({ showAddLevelModal : true })}}
                     admin={admin}
+                    onEdit={(level)=>  { this.setState({ showAddLevelModal: true, selectedLevel:level })}}
+                    onDelete={async (lvl) =>  { 
+                        let toDel = prompt('Please enter the level code id of the leve you wish to delete');
+                        if(lvl.lookupCode === toDel) {
+                            let res = await axios.post(endPoints.DELETE_LEVEL, {...lvl, seasonId: this.props.match.params.seasonId});
+                            if(res.data.success) {
+                                NotificationManager.success(`Deleted ${lvl.lookupCode}`);
+                            } else {
+                                NotificationManager.error('Something went wrong');
+                            }
+                            this.loadSeason(this.props.match.params.seasonId);
+                        } else {
+                            NotificationManager.error('Level code entered did not match one selected for deletion');
+                        }
+                    }}
                     canBookmark={canBookmark}
                     bookmark={this.bookmark}
                     bookmarkAll={this.bookmarkAll}
@@ -205,12 +236,15 @@ class SeasonLeaderboard extends Component {
                 enroll={this.enroll}
             />
 
+            {this.state.showAddLevelModal && 
             <AddLevelModal 
                 awards={awards}
+                editing={this.state.selectedLevel}
                 showModal={this.state.showAddLevelModal}
                 handleCloseModal={() => { this.setState({ showAddLevelModal: false }) }}
                 addLevel={this.addLevel}
             />
+            }
 
             {this.state.showRecommendLevelModal && 
                 <RecommendLevelModal 

@@ -66,6 +66,7 @@ function LevelBoard (props) {
                         <th className='smll'>Bronze</th>
                         <th>Current WR</th>
                         {props.canBookmark && <th></th> }
+                        { props.admin && !props.seasonOver && <th></th>}
                     </tr>
                 </thead>
                 <tbody>

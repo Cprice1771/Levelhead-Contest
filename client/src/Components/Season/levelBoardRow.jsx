@@ -113,6 +113,14 @@ class LevelBoardRow extends Component {
                         e.preventDefault();
                         e.stopPropagation();
                         this.props.bookmark([lvl.lookupCode])}}> </i></td>}
+                    {this.props.admin &&  <td>
+                        { !this.props.seasonOver &&  new Date(lvl.startDate) > new Date() &&
+                        <>
+                        <i className='fas fa-edit fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={x => { this.props.onEdit(lvl) }}> </i>
+                        <i className='fas fa-trash fa-2x' style={{color: '#7D6B91', cursor: 'pointer'}} onClick={x => { this.props.onDelete(lvl) }}> </i>
+                        </>
+                        }
+                        </td>}
                 </tr>
                 { this.state.showScores &&
                     <>

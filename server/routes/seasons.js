@@ -251,7 +251,7 @@ router.post('/add-level', catchErrors(async (req, res) => {
     }
 
 
-    var levelIndex = _.findIndex(foundSeason.entries.levelsInSeason, x => x.lookupCode === req.body.lookupCode);
+    var levelIndex = _.findIndex(foundSeason.levelsInSeason, x => x.lookupCode === req.body.lookupCode);
     if(levelIndex >= 0) {
         res.status(400).json({
             success: false,
@@ -274,6 +274,110 @@ router.post('/add-level', catchErrors(async (req, res) => {
         addedBy: req.body.addedBy,
         startDate: req.body.startDate || new Date()
     });
+    await foundSeason.save();
+
+    SeasonHelpers.updateSeasonLeaderboard(req.body.seasonId);
+
+    res.status(200).json({
+        success: true,
+        data: foundSeason
+    });
+}));
+
+//@@ post api/seasons/edit-level
+//@@ update a level in a season
+router.post('/edit-level', catchErrors(async (req, res) => {
+    let foundSeason = await Season.findById(req.body.seasonId);
+    if(!foundSeason) {
+        res.status(400).json({
+            success: false,
+            msg: `Could not find season ${req.body.seasonId}`
+        });
+        return;
+    }
+
+    console.log(foundSeason.levelsInSeason);
+    var levelIndex = _.findIndex(foundSeason.levelsInSeason, x => x.lookupCode === req.body.lookupCode);
+    if(levelIndex < 0) {
+        res.status(400).json({
+            success: false,
+            msg: 'Could not find level'
+        });
+        return;
+    }
+
+    let level = await RumpusAPI.getLevel(req.body.lookupCode);
+
+    if(!level) {
+        res.status(400).json({
+            success: false,
+            msg: `Level ${req.body.lookupCode} does not exist in levelhead`
+        });
+        return;
+    }
+
+    if(foundSeason.levelsInSeason[levelIndex].startDate < new Date()) {
+        res.status(400).json({
+            success: false,
+            msg: 'Cannot edit level that has already started'
+        });
+        return;
+    }
+
+    foundSeason.levelsInSeason[levelIndex].levelName = level.title;
+    foundSeason.levelsInSeason[levelIndex].creatorAlias = level.alias.alias;
+    foundSeason.levelsInSeason[levelIndex].lookupCode = req.body.lookupCode;
+    foundSeason.levelsInSeason[levelIndex].bonusAward = req.body.bonusAward;
+    foundSeason.levelsInSeason[levelIndex].diamondValue = req.body.diamondValue;
+    foundSeason.levelsInSeason[levelIndex].platinumValue = req.body.platinumValue;
+    foundSeason.levelsInSeason[levelIndex].goldValue = req.body.goldValue;
+    foundSeason.levelsInSeason[levelIndex].silverValue = req.body.silverValue;
+    foundSeason.levelsInSeason[levelIndex].bronzeValue = req.body.bronzeValue;
+    foundSeason.levelsInSeason[levelIndex].addedBy = req.body.addedBy;
+    foundSeason.levelsInSeason[levelIndex].startDate = req.body.startDate || new Date()
+    
+    await foundSeason.save();
+
+    SeasonHelpers.updateSeasonLeaderboard(req.body.seasonId);
+
+    res.status(200).json({
+        success: true,
+        data: foundSeason
+    });
+}));
+
+//@@ post api/seasons/delete-level
+//@@ deletes a level from a a season
+router.post('/delete-level', catchErrors(async (req, res) => {
+    let foundSeason = await Season.findById(req.body.seasonId);
+    if(!foundSeason) {
+        res.status(400).json({
+            success: false,
+            msg: `Could not find season ${req.body.seasonId}`
+        });
+        return;
+    }
+
+
+    var levelIndex = _.findIndex(foundSeason.levelsInSeason, x => x.lookupCode === req.body.lookupCode);
+    if(levelIndex < 0) {
+        res.status(400).json({
+            success: false,
+            msg: 'Could not find level'
+        });
+        return;
+    }
+
+    if(foundSeason.levelsInSeason[levelIndex].startDate < new Date()) {
+        res.status(400).json({
+            success: false,
+            msg: 'Cannot delete level that has already started'
+        });
+        return;
+    }
+
+    foundSeason.levelsInSeason.splice(levelIndex, 1);
+    
     await foundSeason.save();
 
     SeasonHelpers.updateSeasonLeaderboard(req.body.seasonId);

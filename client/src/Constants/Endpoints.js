@@ -39,6 +39,8 @@ export const endPoints = {
     GET_SEASON: (seasonId) =>  `/api/seasons/${seasonId}`,
     SET_LEAGUE: '/api/seasons/set-league',
     ADD_LEVEL: '/api/seasons/add-level',
+    EDIT_LEVEL: '/api/seasons/edit-level',
+    DELETE_LEVEL: '/api/seasons/delete-level',
     UPDATE_LEADERBOARD: (seasonId) => `/api/seasons/update-leaderboard/${seasonId}`,
     ENROLL: '/api/seasons/enroll',
     GET_USER_SCORES: '/api/seasons/get-user-scores',
