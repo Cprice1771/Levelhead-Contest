@@ -176,7 +176,23 @@ router.post('/join-room', catchErrors(async (req, res) => {
         return;
     }
 
-    
+    if(!user.currentRaceRecords) {
+        user.currentRaceRecords = {
+            golds: 0,
+            silvers: 0, 
+            bronzes: 0,
+            points: 0,
+        }
+
+        user.raceRecords = {
+            golds: 0,
+            silvers: 0, 
+            bronzes: 0,
+            points: 0,
+        }
+
+        await user.save();
+    }
 
     const entrant = new RoomEntrants({
         currentBestTime: null,
@@ -188,12 +204,11 @@ router.post('/join-room', catchErrors(async (req, res) => {
         lastUpdatedDate: new Date(),
         lastKeepAlive: new Date(),
         avatarId: rumpusUser.avatarId,
+        points: user.currentRaceRecords.points
     });
 
     await entrant.save();
    
-    
-
     room = await Room.findById(req.body.roomId);                                            
     room = room.toObject();
     entrants = await RoomEntrants.find({ roomId: room._id });

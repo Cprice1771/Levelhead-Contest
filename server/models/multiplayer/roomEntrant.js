@@ -33,10 +33,6 @@ let roomEntrant = mongoose.Schema({
         type: Date,
         required: false,
     },
-    wins: {
-        type: Number,
-        required: false
-    },
     bronzes: {
         type: Number,
         required: false
@@ -52,6 +48,10 @@ let roomEntrant = mongoose.Schema({
     avatarId: {
         type: String,
         required: false,
+    },
+    points: {
+        type: Number,
+        required: false
     }
 })
 let RoomEntrant = module.exports = mongoose.model('RoomEntrant', roomEntrant);

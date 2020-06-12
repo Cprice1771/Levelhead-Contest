@@ -5,6 +5,7 @@ const Room = require('../models/multiplayer/room');
 const moment = require('moment');
 const SocketManager = require('./SocketManager');
 const { Random } = require("random-js");
+const User = require('../models/user');
 
 
 class MultiplayerHelpers {
@@ -17,7 +18,7 @@ class MultiplayerHelpers {
         this.startDowntimeForRoom = this.startDowntimeForRoom.bind(this);
         this.updateRoom = this.updateRoom.bind(this);
         this.hasAnyonePlayed = this.hasAnyonePlayed.bind(this);
-
+        this.handoutAwardsForRoom = this.handoutAwardsForRoom.bind(this);
         this.random = new Random(); // uses the nativeMath engine
     }
 
@@ -182,60 +183,62 @@ class MultiplayerHelpers {
         return room;
     }
 
+    async handoutAwardsForRoom(room) {
+      let entrants = await RoomEntrants.find({ roomId: room._id });
+          
+        entrants = _.sortBy(entrants.filter(x => !!x.currentBestTime), (x => x.currentBestTime));
+
+        for(var i = 0; i < entrants.length; i++) {
+          var user = await User.findById(entrants[i].userId);
+          var pos = i;
+          for(var x = i; x > 0; x--) {
+            if(entrants[i].currentBestTime == entrants[x].currentBestTime) {
+              pos = x;
+            } else {
+              break;
+            }
+          }
+
+          entrants[i].points += entrants.length - pos;
+          user.raceRecords.points += entrants.length - pos;
+          user.currentRaceRecords.points += entrants.length - pos;
+          user.markModified('currentRaceRecords');
+          user.markModified('raceRecords');
+
+          if(pos == 0) {
+            if(!entrants[i].golds) {
+              entrants[i].golds = 0;
+            }
+            entrants[i].golds++;
+            user.raceRecords.golds++;
+            user.currentRaceRecords.golds++;
+
+            
+          } else if (pos==1) {
+            if(!entrants[i].silvers) {
+              entrants[i].silvers = 0;
+            }
+            entrants[i].silvers++;
+            user.raceRecords.silvers++;
+            user.currentRaceRecords.silvers++;
+            
+          } else if(pos==2) {
+            if(!entrants[i].bronzes) {
+              entrants[i].bronzes = 0;
+            }
+            entrants[i].bronzes++;
+            user.raceRecords.bronzes++;
+            user.currentRaceRecords.bronzes++;
+          }
+          await entrants[i].save();
+          await user.save();
+        }
+    }
+
     async startDowntimeForRoom(room) {
 
-        let entrants = await RoomEntrants.find({ roomId: room._id });
-          
-        entrants = _.sortBy(entrants, (x => x.currentBestTime));
-
-        if(entrants.length > 0 && entrants[0].currentBestTime != null) {
-          if(!entrants[0].golds) {
-            entrants[0].golds = 0;
-          }
-          entrants[0].golds++;
-          await entrants[0].save();
-        }
-
-        if(entrants.length > 1 && entrants[1].currentBestTime != null) {
-
-          if(entrants[1].currentBestTime === entrants[0].currentBestTime) {
-            if(!entrants[1].golds) {
-              entrants[1].golds = 0;
-            }
-            entrants[1].golds++;
-          } else {
-
-            if(!entrants[1].silvers) {
-              entrants[1].silvers = 0;
-            }
-            entrants[1].silvers++;
-          }
-          await entrants[1].save();
-        }
-
-        if(entrants.length > 2 && entrants[2].currentBestTime != null) {
-
-          if(entrants[2].currentBestTime === entrants[0].currentBestTime) {
-            if(!entrants[2].golds) {
-              entrants[2].golds = 0;
-            }
-            entrants[2].golds++;
-          } else if(entrants[2].currentBestTime === entrants[1].currentBestTime){
-
-            if(!entrants[2].silvers) {
-              entrants[2].silvers = 0;
-            }
-            entrants[2].silvers++;
-          } else {
-
-            if(!entrants[2].bronzes) {
-              entrants[2].bronzes = 0;
-            }
-            entrants[2].bronzes++;
-          }
-          await entrants[2].save();
-        }
-
+        
+        await this.handoutAwardsForRoom(room);
         room.currentPhaseStartTime = moment(new Date()).startOf('minute').toDate();//room.nextPhaseStartTime; TODO figure this out
         room.nextPhaseStartTime = moment(room.currentPhaseStartTime).add(room.downtime, 'seconds').toDate();
         room.phase = 'downtime';

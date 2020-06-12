@@ -14,6 +14,39 @@ function RaceEntrants (props) {
         }
     }
 
+    let getRanks = (points) => {
+        var percent;
+        if(points < 50) {
+            percent = points / 50;
+            return <div>
+                    <span className='medal-text'><img height='32' src='/assets/1_diamonds.webp'/></span>
+                    <div className='backgroundBar'><div className='pointsBar' style={{ width: `${percent * 100}%` }}></div></div>
+                    </div>;
+        } else if (points < 150) {
+            percent = (points - 50) / 100;
+            return <div>
+            <span className='medal-text'><img height='32' src='/assets/2_diamonds.webp'/></span>
+            <div className='backgroundBar'><div className='pointsBar' style={{ width: `${percent * 100}%` }}></div></div>
+            </div>;
+        } else if (points < 250) {
+            percent = (points - 150) / 100;
+            return <div>
+            <span className='medal-text'><img height='32' src='/assets/3_diamonds.webp'/></span>
+            <div className='backgroundBar'><div className='pointsBar' style={{ width: `${percent * 100}%` }}></div></div>
+            </div>;
+        } else if (points < 500) {
+            percent = (points - 250) / 250;
+            return <div>
+            <span className='medal-text'><img height='32' src='/assets/4_diamonds.webp'/></span>
+            <div className='backgroundBar'><div className='pointsBar' style={{ width: `${percent * 100}%` }}></div></div>
+            </div>;
+        } else {
+            return <div>
+            <span className='medal-text'><img height='32' src='/assets/5_diamonds.webp'/></span>
+            </div>;
+        }
+    }
+
     if(!props.entrants || props.entrants.length === 0) {
         return <h1 style={{ width: '100%', textAlign: 'center' }}>No Entrants Yet</h1>
     }
@@ -90,22 +123,33 @@ function RaceEntrants (props) {
         <div className='row rh'>
             <div className='col-md-2 col-3 th'>Position</div>
              <div className='col-md-1 d-none d-md-block th'></div> 
-            <div className='col-md-4 col-6 th'>Player</div>
+            <div className='col-md-3 col-6 th'>Player</div>
             <div className='col-md-2 col-3 th'>Best Time</div>
-            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='gold-medals'>🥇</span></div>
-            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='silver-medals'>🥈</span></div>
-            <div className='col-md-1 d-none d-md-block th'><span role='img' aria-label='bronze-medals'>🥉</span></div>
+            <div className='col-md-2 d-none d-md-block th'>
+                <div className='row rh'>
+                    <div className='col-md-4 d-none d-md-block th'><span role='img' aria-label='gold-medals'>🥇</span></div>
+                    <div className='col-md-4 d-none d-md-block th'><span role='img' aria-label='silver-medals'>🥈</span></div>
+                    <div className='col-md-4 d-none d-md-block th'><span role='img' aria-label='bronze-medals'>🥉</span></div>
+                </div>
+            </div>
+            
+            <div className='col-md-2 d-none d-md-block th'></div>
         </div>
         {entrants.map((x, i) => {
             return (
             <div className='row tr justify-content-center align-items-center' key={i}>
                 <div className='col-md-2 col-3 td center'>{!!x.currentBestTime ? getPosition(x.position) : ''}</div>
                <div className='col-md-1 d-none d-md-block td center'><img height='64' src={`https://img.bscotch.net/fit-in/64x64/avatars/${x.avatarId || 'bureau-employee'}.webp`} /></div>
-                <div className='col-md-4 col-5 td'>{x.rumpusAlias || x.discordDisplayName}</div>
+                <div className='col-md-3 col-5 td'>{x.rumpusAlias || x.discordDisplayName}</div>
                 <div className='col-md-2 col-3 td' style={{ textAlign:'right' }}>{(x.currentBestTime !== undefined && x.currentBestTime !== null) ? `${formatSeconds(x.currentBestTime)}` : ''}</div>
-                <div className='col-md-1 d-none d-md-block td medal-col'><div className='medal-text'>{x.golds}</div></div>
-                <div className='col-md-1 d-none d-md-block td medal-col-2'><div className='medal-text'>{x.silvers}</div></div>
-                <div className='col-md-1 d-none d-md-block td medal-col'><div className='medal-text'>{x.bronzes}</div></div>
+                <div className='col-md-2 d-none d-md-block td'>
+                    <div className='row'>
+                        <div className='medal-text col-md-4 td'>{x.golds}</div>
+                        <div className='medal-text col-md-4 td'>{x.silvers}</div>
+                        <div className='medal-text col-md-4 td'>{x.bronzes}</div>
+                    </div>
+                </div>
+                <div className='col-md-2 d-none d-md-block td'>{getRanks(x.points)}</div>
             </div>);
     })}
     </>

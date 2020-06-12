@@ -30,5 +30,12 @@ let userSchema = mongoose.Schema({
     keyPermissions: {
         type: Array,
     },
+    raceRecords: {
+        type: Object
+    },
+    currentRaceRecords: {
+        type: Object
+    }
+
 })
 let User = module.exports = mongoose.model('User', userSchema);
