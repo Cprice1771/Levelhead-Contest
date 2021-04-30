@@ -62,6 +62,17 @@ function EventCard(props) {
                     
                 </div>      
             }
+            { props.eventType === 'quiz' &&
+                <div className="card-body">
+                
+                <NavLink exact to={`/quiz`} 
+                            className="NavButton"
+                            activeClassName="activeRoute">
+                            <button className='b1' >Take Quiz</button>
+                </NavLink> 
+                    
+                </div>      
+            }
         </div>
 }
 

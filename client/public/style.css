@@ -103,6 +103,18 @@ body {
 }
 
 
+.card-header-quiz {
+  background: linear-gradient( rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40) ), url('./assets/treeCropped.png');
+  background-size: cover;
+
+  height: 250px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .card-header-race {
   background: linear-gradient( rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40) ), url('./assets/alienCropped.png');
   background-size: cover;

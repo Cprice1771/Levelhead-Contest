@@ -30,19 +30,21 @@ const options = {
 
 const QuizQuestions = [
     {
-        Question: 'What do you want for christmas?',
+        Question: 'Someone just jumped on your head!',
         Answers: [
-            { AnswerText: 'To go home', Results: { GROLD: 3 }},
-            { AnswerText: 'A hotwheels car', Results: { Lizumi: 2 }},
-            { AnswerText: 'A pogo stick', Results: { FlapJack: 1 }},
-            { AnswerText: 'A pancake flipper', Results: { FlipWhip: 1 }},
-            { AnswerText: 'A suction cleaning device', Results: { Vacrat: 1 }},
-            { AnswerText: 'New glasses', Results: { Ocula: 2 }},
-            { AnswerText: 'Happy Customers', Results: { GR: 1, MAYA: 1, Package: 1 }},
-            { AnswerText: 'Friends', Results: { Blopfish: 1 }},
-            { AnswerText: 'Death to all robots', Results: { Swoop: 1, Canoodle: 1, Popjaw: 1, Jabber: 1 }},
-            { AnswerText: 'Peace and quiet', Results: { Peanut: 1, Scrubb: 1 }},
-            { AnswerText: 'To make my owner happy', Results: { Package: 1 }},
+            { AnswerText: 'Better lay down hopefully nobody picks me up', Results: { Scrubb: 2, Ocula: 2 }},
+            { AnswerText: 'I\'m SO ANGRY', Results: { MAYA: 1, Swoop: 1,  Jabber: 1, Vacrat: 1, Lizumi: 1, Canoodle: 1, FlipWhip: 1, FlapJack: 1, Popjaw: 1, Peanut: 1 }},
+            { AnswerText: 'It\'s cool I guess.', Results: { Package: 1, GROLD: 1, GR: 1, Blopfish: 1 }},
+        ]
+    },
+    {
+        Question: 'What is your favorite Food?',
+        Answers: [
+            { AnswerText: 'Burritos', Results: { GR: 1, }},
+            { AnswerText: 'Noodles', Results: { Canoodle: 2, }},
+            { AnswerText: 'Robots', Results: { FlipWhip: 1, Swoop: 1, Popjaw: 1, Scrubb: 1, Vacrat: 1, FlapJack: 1, Jabber: 1, Ocula: 1, Lizumi: 1, Peanut: 1, Blopfish: 1 }},
+            { AnswerText: 'Pancakes', Results: { FlipWhip: 1 }},
+            { AnswerText: 'I don\'t eat', Results: { MAYA: 1, Package: 1, GROLD: 1 }},
         ]
     },
     {
@@ -56,16 +58,7 @@ const QuizQuestions = [
             { AnswerText: 'Super Strength', Results: { Scrubb: 1, Ocula: 1, Vacrat: 1, FlipWhip: 1, FlapJack: 1, Canoodle: 1, Peanut: 1 }},
         ]
     },
-    {
-        Question: 'What is your favorite Food?',
-        Answers: [
-            { AnswerText: 'Burritos', Results: { GR: 1, }},
-            { AnswerText: 'Noodles', Results: { Canoodle: 2, }},
-            { AnswerText: 'Robots', Results: { FlipWhip: 1, Swoop: 1, Popjaw: 1, Scrubb: 1, Vacrat: 1, FlapJack: 1, Jabber: 1, Ocula: 1, Lizumi: 1, Peanut: 1, Blopfish: 1 }},
-            { AnswerText: 'Pancakes', Results: { FlipWhip: 1 }},
-            { AnswerText: 'I don\'t eat', Results: { MAYA: 1, Package: 1, GROLD: 1 }},
-        ]
-    },
+    
     {
         Question: 'You would be most hurt if a person called you',
         Answers: [
@@ -103,11 +96,18 @@ const QuizQuestions = [
         ]
     },
     {
-        Question: 'Someone just jumped on your head!',
+        Question: 'What do you want for christmas?',
         Answers: [
-            { AnswerText: 'Better lay down hopefully nobody picks me up', Results: { Scrubb: 2, Ocula: 2 }},
-            { AnswerText: 'I\'m SO ANGRY', Results: { MAYA: 1, Swoop: 1,  Jabber: 1, Vacrat: 1, Lizumi: 1, Canoodle: 1, FlipWhip: 1, FlapJack: 1, Popjaw: 1, Peanut: 1 }},
-            { AnswerText: 'It\'s cool I guess.', Results: { Package: 1, GROLD: 1, GR: 1, Blopfish: 1 }},
+            { AnswerText: 'To go home', Results: { GROLD: 3 }},
+            { AnswerText: 'A hotwheels car', Results: { Lizumi: 2 }},
+            { AnswerText: 'A pogo stick', Results: { FlapJack: 1 }},
+            { AnswerText: 'A pancake flipper', Results: { FlipWhip: 1 }},
+            { AnswerText: 'A suction cleaning device', Results: { Vacrat: 1 }},
+            { AnswerText: 'New glasses', Results: { Ocula: 2 }},
+            { AnswerText: 'Happy Customers', Results: { GR: 1, MAYA: 1, Package: 1 }},
+            { AnswerText: 'Friends', Results: { Blopfish: 1 }},
+            { AnswerText: 'Death to all robots', Results: { Swoop: 1, Canoodle: 1, Popjaw: 1, Jabber: 1 }},
+            { AnswerText: 'Peace and quiet', Results: { Peanut: 1, Scrubb: 1 }},
         ]
     },
     {

@@ -54,6 +54,13 @@ class ContestList extends Component {
             name='Levelhead Race'
             subtitle='Race against your friends!'
         />);
+
+        events.push(<EventCard 
+            _id=''
+            eventType='quiz'
+            name='Levelhead quiz'
+            subtitle='Find out what levelhead character you are!'
+        />);
         
         events = events.concat(this.state.events.map(x => {
             return <EventCard 
