@@ -23,16 +23,25 @@ class MultiplayerHelpers {
     }
 
     async getRandomLevels(diamonds, maxGem, tiebreakerItemId = null) {
-      return await RumpusAPI.searchLevels({
-        sort: 'HiddenGem',
+
+      var date = new Date();
+      var maxMonthsAgo = Math.abs(moment().diff(new Date(2019, 4, 1), 'months'))
+      var randMonths = Math.floor((maxMonthsAgo * Math.random()))
+
+      const fromDate = moment().add(-1 * randMonths, 'M')
+      const toDate = moment(fromDate).add(1, 'M')
+      var reqParams = {
+        sort: 'createdAt',
         maxDiamonds: diamonds,
+        minCreatedAt: fromDate.toISOString(),
+        maxCreatedAt: toDate.toISOString(),
         tower: true,
         limit: 32,
-        maxHiddenGem: maxGem,
+        maxHiddenGem: 10000,
         includeStats: true,
         includeRecords: true,
-        tiebreakerItemId: tiebreakerItemId
-      });
+      };
+      return await RumpusAPI.searchLevels(reqParams);
     }
 
     async updateRoom(room) {
