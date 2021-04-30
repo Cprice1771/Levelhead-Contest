@@ -296,7 +296,7 @@ router.post('/edit-level', catchErrors(async (req, res) => {
         return;
     }
 
-    console.log(foundSeason.levelsInSeason);
+    //console.log(foundSeason.levelsInSeason);
     var levelIndex = _.findIndex(foundSeason.levelsInSeason, x => x.lookupCode === req.body.lookupCode);
     if(levelIndex < 0) {
         res.status(400).json({
