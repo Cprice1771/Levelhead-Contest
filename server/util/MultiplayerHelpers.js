@@ -19,6 +19,7 @@ class MultiplayerHelpers {
         this.updateRoom = this.updateRoom.bind(this);
         this.hasAnyonePlayed = this.hasAnyonePlayed.bind(this);
         this.handoutAwardsForRoom = this.handoutAwardsForRoom.bind(this);
+        this.getReplayScore = this.getReplayScore.bind(this);
         this.random = new Random(); // uses the nativeMath engine
     }
 
@@ -91,9 +92,13 @@ class MultiplayerHelpers {
   
         for(let lvl of levels) {
           lvl.stats.timeScore = this.getTimeScore(lvl.stats.TimePerWin);
-          lvl.speedrunScore = (this.scoreTags(lvl.tags) + lvl.stats.timeScore);
-          if(lvl.records.FastestTime[0].value < 5) {
-            lvl.speedrunScore = -100;
+          lvl.speedrunScore = (this.scoreTags(lvl.tags) + lvl.stats.timeScore + this.getReplayScore(lvl.stats.ReplayValue));
+          if(lvl.records.FastestTime[0].value <= 10) {
+            lvl.speedrunScore = -100000;
+          }
+
+          if(lvl.requiredPlayers > 1) {
+            lvl.speedrunScore = -1000000;
           }
         }
 
@@ -105,6 +110,10 @@ class MultiplayerHelpers {
       room.levelsInQueue = levels.map(x => x.levelId);
       //await room.save();
       return levelToPlay;
+    }
+
+    getReplayScore(replay) {
+      return (replay - 150) / 10
     }
 
     getTimeScore(averageTimePerWin) {
@@ -120,7 +129,7 @@ class MultiplayerHelpers {
       var score = 0;
       
       let tagScoreSheet = {
-        ltag_elite: -100,
+        ltag_elite: -10000,
         ltag_newbie: 5,
         ltag_simple: 5,
         ltag_casual: 10,
@@ -134,17 +143,17 @@ class MultiplayerHelpers {
         ltag_choice: 0,
         ltag_raceway: 10,
         ltag_traps: 0,
-        ltag_brawler: -100,
+        ltag_brawler: -100000,
         ltag_eye: 0,
         ltag_paced: 10,
-        ltag_puzzle: -100,
+        ltag_puzzle: -100000,
         ltag_bombs: 0,
         ltag_blasters: 0,
         ltag_paths: 0,
-        ltag_contraption: -100,
+        ltag_contraption: -100000,
         ltag_clever: 5,
         ltag_musicbox: 0,
-        ltag_chase: -100,
+        ltag_chase: -100000,
         ltag_powerup: 0,
         ltag_complex: 0,
         ltag_throwing: 0,
@@ -159,7 +168,7 @@ class MultiplayerHelpers {
         ltag_shop: 0,
         ltag_faceblaster: 0,
         ltag_onescreen: 0,
-        ltag_troll: -10000,
+        ltag_troll: -1000000,
         ltag_teach: 10,
         ltag_boss: 0,
       }
