@@ -126,14 +126,14 @@ if(existingSubmissions.length > 0) {
   newSubmission.rumpusCreatorId = levelResult.userId;
   newSubmission.levelMetaData = levelResult;
 
-  let existingRumpusUser = await User.find( {$and:[{ rumpusId: newSubmission.rumpusCreatorId}]});
-  if(existingRumpusUser.length > 0 && 
-    existingRumpusUser[0].id != newSubmission.submittedByUserId) {
-      res.status(200).json({ 
-        success: false,
-        msg: 'Another user has already claimed this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
-      return;
-  }
+  // let existingRumpusUser = await User.find( {$and:[{ rumpusId: newSubmission.rumpusCreatorId}]});
+  // if(existingRumpusUser.length > 0 && 
+  //   existingRumpusUser[0].id != newSubmission.submittedByUserId) {
+  //     res.status(200).json({ 
+  //       success: false,
+  //       msg: 'Another user has already claimed this rumpus user. If you are the owner of this rumpus account please contact us to verify.'});
+  //     return;
+  // }
 
   let existingUser = await User.findById(newSubmission.submittedByUserId)
 
