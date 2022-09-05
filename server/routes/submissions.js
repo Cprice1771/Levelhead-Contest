@@ -126,7 +126,7 @@ if(existingSubmissions.length > 0) {
   newSubmission.rumpusCreatorId = levelResult.userId;
   newSubmission.levelMetaData = levelResult;
 
-  //disable this because it causes more issues than it solves
+  //disable this because it causes more issues than it solves 
   // let existingRumpusUser = await User.find( {$and:[{ rumpusId: newSubmission.rumpusCreatorId}]});
   // if(existingRumpusUser.length > 0 && 
   //   existingRumpusUser[0].id != newSubmission.submittedByUserId) {
